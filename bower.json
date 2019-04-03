@@ -1,0 +1,25 @@
+{
+  "name": "n-tracking",
+  "description": "",
+  "main": "dist/main.js",
+  "authors": [
+    "Ifeanyi Isitor <ifeanyi.isitor@ft.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Financial-Times/n-tracking",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "o-tracking": "^1.6.0",
+    "ftdomdelegate": "^3.0.0"
+  },
+  "resolutions": {
+    "ftdomdelegate": "^3.0.0"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@financial-times/n-tracking",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "dist/main.js",
+  "repository": "Financial-Times/n-tracking.git",
+  "scripts": {
+    "precommit": "secret-squirrel",
+    "commitmsg": "secret-squirrel-commitmsg",
+    "prepush": "make verify -j3",
+    "test": "jest"
+  },
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-plugin-module-resolver": "^3.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@financial-times/n-gage": "^3.4.0",
+    "babel-jest": "^24.7.1",
+    "jest": "^24.7.1"
+  },
+  "config": {},
+  "engines": {
+    "node": ">=6.1.0"
+  }
+}
