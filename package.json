@@ -2,7 +2,7 @@
   "name": "@financial-times/n-tracking",
   "version": "0.0.0",
   "license": "MIT",
-  "main": "dist/main.js",
+  "main": "dist/index.js",
   "repository": "Financial-Times/n-tracking.git",
   "scripts": {
     "precommit": "secret-squirrel",
@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "babel": "^6.23.0",
-    "babel-plugin-module-resolver": "^3.2.0"
+    "babel-plugin-module-resolver": "^3.2.0",
+    "n-ui-foundations": "^3.0.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",
