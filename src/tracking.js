@@ -57,8 +57,11 @@ export class Tracking {
 	}
 
 	getConnectionType() {
-		// TODO: IMPLEMENT
-		return {};
+		return (
+			navigator.connection ||
+			navigator.mozConnection ||
+			navigator.webkitConnection
+		);
 	}
 
 	prepareContext() {
