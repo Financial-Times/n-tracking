@@ -1,5 +1,7 @@
 import "./types";
 
+import oGrid from "o-grid";
+import oViewport from "o-viewport";
 import oTracking from "o-tracking";
 import { broadcast } from "n-ui-foundations";
 
@@ -41,6 +43,20 @@ export class Tracking {
 	}
 
 	getUserData() {
+		const userData = {
+			layout: oGrid.getCurrentLayout(),
+			orientation: oViewport.getOrientation()
+		};
+		const connectionType = this.getConnectionType();
+
+		if (connectionType) {
+			userData.connectionType = connectionType;
+		}
+
+		return userData;
+	}
+
+	getConnectionType() {
 		// TODO: IMPLEMENT
 		return {};
 	}
