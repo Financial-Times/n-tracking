@@ -16,12 +16,23 @@ jest.mock("n-ui-foundations", () => ({ broadcast: jest.fn() }), {
 });
 
 const flags = {
-	get: value => `flag::${value}`
+	get: value => {
+		switch (value) {
+			case "oTracking":
+				return true;
+			case "sendBeacon":
+				return "sendBeacon";
+			default:
+				return true;
+		}
+	}
 };
 
 const appInfo = { appInfo: "appInfo" };
 
 describe("Tracking", () => {
+	afterEach(() => jest.clearAllMocks());
+
 	describe(".init()", () => {
 		it("should initialise `oTracking` with the correct parameters", () => {
 			const context = { context: "" };
@@ -42,11 +53,42 @@ describe("Tracking", () => {
 				useSendBeacon: flags.get("sendBeacon")
 			});
 		});
+
+		it("does nothing when the flag has not been set", () => {
+			const flags = {
+				get: jest.fn(flag => (flag === "oTracking" ? false : true))
+			};
+			const tracking = new Tracking(flags, appInfo);
+
+			// Stub out helper methods
+			tracking.getUserData = jest.fn();
+			tracking.prepareContext = jest.fn();
+
+			tracking.init();
+
+			expect(flags.get).toHaveBeenCalledTimes(1);
+			expect(flags.get).toHaveBeenCalledWith("oTracking");
+			expect(oTracking.init).not.toHaveBeenCalled();
+			expect(tracking.getUserData).not.toHaveBeenCalled();
+			expect(tracking.prepareContext).not.toHaveBeenCalled();
+		});
+
+		it("does nothing when flags have not been supplied", () => {
+			const tracking = new Tracking(null, appInfo);
+
+			// Stub out helper methods
+			tracking.getUserData = jest.fn();
+			tracking.prepareContext = jest.fn();
+
+			tracking.init();
+
+			expect(oTracking.init).not.toHaveBeenCalled();
+			expect(tracking.getUserData).not.toHaveBeenCalled();
+			expect(tracking.prepareContext).not.toHaveBeenCalled();
+		});
 	});
 
 	describe(".userData", () => {
-		afterEach(() => jest.clearAllMocks());
-
 		const userData = {
 			layout: "layoutUserData",
 			orientation: "orientationUserData",
