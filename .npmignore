@@ -1,0 +1,8 @@
+bower_components
+.circleci
+.babelrc
+.npmrc
+.eslintrc.js
+secret-squirrel.js
+Makefile
+bower.json
