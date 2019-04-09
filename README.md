@@ -1,6 +1,6 @@
 # n-tracking
 
-...
+Client-side tracking for `next` apps
 
 ## Installation
 
@@ -12,10 +12,6 @@ npm install --save @financial-times/n-tracking
 
 ```js
 import tracking from "@financial-times/n-tracking";
-import scrollTracking from "@financial-times/n-tracking/scroll";
-import copyTracking from "@financial-times/n-tracking/copy";
 
-const events = [scrollTracking, copyTracking];
-
-tracking.init({ events });
+tracking.init({ flags, appInfo });
 ```

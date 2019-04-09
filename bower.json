@@ -1,6 +1,6 @@
 {
   "name": "n-tracking",
-  "description": "",
+  "description": "Client-side tracking for next apps",
   "main": "dist/index.js",
   "authors": ["Ifeanyi Isitor <ifeanyi.isitor@ft.com>"],
   "license": "MIT",
