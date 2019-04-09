@@ -1,7 +1,8 @@
 import oGrid from "o-grid";
 import oViewport from "o-viewport";
 import oTracking from "o-tracking";
-import { Tracking, SPOOR_API_INGEST_URL } from "../tracking";
+import { broadcast } from "n-ui-foundations";
+import { Tracking, SPOOR_API_INGEST_URL, ERROR_MSG } from "../tracking";
 
 jest.mock("o-grid", () => ({ getCurrentLayout: jest.fn() }), { virtual: true });
 
@@ -85,6 +86,24 @@ describe("Tracking", () => {
 			expect(oTracking.init).not.toHaveBeenCalled();
 			expect(tracking.getUserData).not.toHaveBeenCalled();
 			expect(tracking.prepareContext).not.toHaveBeenCalled();
+		});
+
+		it("should broadcast an error if one occurs", () => {
+			const error = new Error("Something went wrong");
+			const tracking = new Tracking(flags, appInfo);
+
+			// Stub out helper methods
+			tracking.getUserData = () => {
+				throw error;
+			};
+
+			tracking.init();
+
+			expect(broadcast).toHaveBeenCalledTimes(1);
+			expect(broadcast).toHaveBeenCalledWith("oErrors.log", {
+				error,
+				info: { message: ERROR_MSG }
+			});
 		});
 	});
 
