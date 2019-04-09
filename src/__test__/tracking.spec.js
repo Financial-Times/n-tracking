@@ -123,4 +123,28 @@ describe("Tracking", () => {
 			expect(result).toBeUndefined();
 		});
 	});
+
+	describe(".prepareContextAppInfo()", () => {
+		it("should prepare the `app info` portion of the context", () => {
+			const appInfo = { product: "foo", name: "bar", version: "1.0.0" };
+			const tracking = new Tracking(flags, appInfo);
+			const result = tracking.prepareContextAppInfo();
+			expect(result).toEqual({
+				product: "foo",
+				app: "bar",
+				appVersion: "1.0.0"
+			});
+		});
+
+		it("should set the `product` value as `next` is `appInfo.product` has not been specified", () => {
+			const appInfo = { name: "bar", version: "1.0.0" };
+			const tracking = new Tracking(flags, appInfo);
+			const result = tracking.prepareContextAppInfo();
+			expect(result).toEqual({
+				product: "next",
+				app: "bar",
+				appVersion: "1.0.0"
+			});
+		});
+	});
 });
