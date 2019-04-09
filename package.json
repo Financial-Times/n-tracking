@@ -19,6 +19,7 @@
     "@babel/preset-env": "^7.4.3",
     "@financial-times/n-gage": "^3.5.0",
     "babel-jest": "^24.7.1",
+    "bower": "^1.8.8",
     "jest": "^24.7.1"
   },
   "config": {},
