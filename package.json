@@ -11,8 +11,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "babel": "^6.23.0",
-    "babel-plugin-module-resolver": "^3.2.0",
     "n-ui-foundations": "^3.0.5"
   },
   "devDependencies": {
