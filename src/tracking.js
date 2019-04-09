@@ -1,12 +1,12 @@
-import "./types";
+import './types';
 
-import oGrid from "o-grid";
-import oViewport from "o-viewport";
-import oTracking from "o-tracking";
-import { broadcast } from "n-ui-foundations";
+import oGrid from 'o-grid';
+import oViewport from 'o-viewport';
+import oTracking from 'o-tracking';
+import { broadcast } from 'n-ui-foundations';
 
-export const ERROR_MSG = "Failed to init o-tracking";
-export const SPOOR_API_INGEST_URL = "https://spoor-api.ft.com/ingest";
+export const ERROR_MSG = 'Failed to init o-tracking';
+export const SPOOR_API_INGEST_URL = 'https://spoor-api.ft.com/ingest';
 
 export class Tracking {
 	/**
@@ -14,14 +14,14 @@ export class Tracking {
 	 * @param {Flags} flags
 	 * @param {AppInfo} appInfo
 	 */
-	constructor(flags, appInfo = {}) {
+	constructor (flags, appInfo = {}) {
 		this.flags = flags;
 		this.appInfo = appInfo;
 	}
 
-	init() {
+	init () {
 		try {
-			if (!this.flags || !this.flags.get("oTracking")) {
+			if (!this.flags || !this.flags.get('oTracking')) {
 				return;
 			}
 
@@ -32,17 +32,17 @@ export class Tracking {
 				server: SPOOR_API_INGEST_URL,
 				context: context,
 				user: userData,
-				useSendBeacon: this.flags.get("sendBeacon")
+				useSendBeacon: this.flags.get('sendBeacon')
 			});
 		} catch (error) {
-			broadcast("oErrors.log", {
+			broadcast('oErrors.log', {
 				error: error,
 				info: { message: ERROR_MSG }
 			});
 		}
 	}
 
-	getUserData() {
+	getUserData () {
 		const userData = {
 			layout: oGrid.getCurrentLayout(),
 			orientation: oViewport.getOrientation()
@@ -56,7 +56,7 @@ export class Tracking {
 		return userData;
 	}
 
-	getConnectionType() {
+	getConnectionType () {
 		return (
 			navigator.connection ||
 			navigator.mozConnection ||
@@ -64,7 +64,7 @@ export class Tracking {
 		);
 	}
 
-	prepareContext() {
+	prepareContext () {
 		return {
 			...(this.prepareContextAppInfo() || {}),
 			...(this.prepareContextContentInfo() || {}),
@@ -78,30 +78,30 @@ export class Tracking {
 		};
 	}
 
-	prepareContextAppInfo() {
+	prepareContextAppInfo () {
 		return {
-			product: this.appInfo.product || "next",
+			product: this.appInfo.product || 'next',
 			app: this.appInfo.name,
 			appVersion: this.appInfo.version
 		};
 	}
 
-	prepareContextContentInfo() {
-		const contentId = this.getRootData("content-id");
+	prepareContextContentInfo () {
+		const contentId = this.getRootData('content-id');
 		if (contentId) return { rootContentId: contentId };
 	}
 
-	prepareContextConceptInfo() {
-		const conceptId = this.getRootData("concept-id");
+	prepareContextConceptInfo () {
+		const conceptId = this.getRootData('concept-id');
 		if (conceptId) {
 			return {
 				rootConceptId: conceptId,
-				rootTaxonomy: this.getRootData("taxonomy")
+				rootTaxonomy: this.getRootData('taxonomy')
 			};
 		}
 	}
 
-	prepareContextErrorInfo() {
+	prepareContextErrorInfo () {
 		const errorStatus = (/nextErrorStatus=(\d{3})/.exec(
 			window.location.search
 		) || [])[1];
@@ -128,22 +128,22 @@ export class Tracking {
 		}
 	}
 
-	prepareContextEditionInfo() {
-		const edition = document.querySelector("[data-next-edition]");
-		if (edition) return { edition: edition.getAttribute("data-next-edition") };
+	prepareContextEditionInfo () {
+		const edition = document.querySelector('[data-next-edition]');
+		if (edition) return { edition: edition.getAttribute('data-next-edition') };
 	}
 
-	prepareContextSegmentInfo() {
-		const segmentId = this.findInQueryString("segmentId");
-		if (segmentId) return { ["marketing_segment_id"]: segmentId };
+	prepareContextSegmentInfo () {
+		const segmentId = this.findInQueryString('segmentId');
+		if (segmentId) return { ['marketing_segment_id']: segmentId };
 	}
 
-	prepareContextCPCInfo() {
-		const cpcCampaign = this.findInQueryString("cpccampaign");
-		if (cpcCampaign) return { ["cpc_campaign"]: cpcCampaign };
+	prepareContextCPCInfo () {
+		const cpcCampaign = this.findInQueryString('cpccampaign');
+		if (cpcCampaign) return { ['cpc_campaign']: cpcCampaign };
 	}
 
-	prepareContextPageMetaInfo() {
+	prepareContextPageMetaInfo () {
 		const pageMeta = window.FT && window.FT.pageMeta;
 		if (pageMeta && pageMeta === Object(pageMeta)) {
 			const info = {};
@@ -154,33 +154,33 @@ export class Tracking {
 		}
 	}
 
-	prepareContextABStateInfo() {
-		const abState = this.getRootData("ab-state");
+	prepareContextABStateInfo () {
+		const abState = this.getRootData('ab-state');
 		if (abState) {
 			let ammitAllocations = abState;
 
-			if (abState !== "-") {
+			if (abState !== '-') {
 				ammitAllocations = {};
-				abState.split(",").forEach(flag => {
-					const [name, value] = flag.split(":");
+				abState.split(',').forEach(flag => {
+					const [name, value] = flag.split(':');
 					ammitAllocations[name] = value;
 				});
 			}
 
-			return { ["active_ammit_flags"]: ammitAllocations };
+			return { ['active_ammit_flags']: ammitAllocations };
 		}
 	}
 
-	getRootData(name) {
+	getRootData (name) {
 		return document.documentElement.getAttribute(`data-${name}`);
 	}
 
-	findInQueryString(name) {
+	findInQueryString (name) {
 		let exp = new RegExp(`[?&]${name}=([^?&]+)`);
 		return (String(window.location.search).match(exp) || [])[1];
 	}
 
-	static init(flags, appInfo) {
+	static init (flags, appInfo) {
 		return new Tracking(flags, appInfo).init();
 	}
 }

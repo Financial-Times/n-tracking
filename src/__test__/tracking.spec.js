@@ -1,43 +1,43 @@
-import oGrid from "o-grid";
-import oViewport from "o-viewport";
-import oTracking from "o-tracking";
-import { broadcast } from "n-ui-foundations";
-import { Tracking, SPOOR_API_INGEST_URL, ERROR_MSG } from "../tracking";
+import oGrid from 'o-grid';
+import oViewport from 'o-viewport';
+import oTracking from 'o-tracking';
+import { broadcast } from 'n-ui-foundations';
+import { Tracking, SPOOR_API_INGEST_URL, ERROR_MSG } from '../tracking';
 
-jest.mock("o-grid", () => ({ getCurrentLayout: jest.fn() }), { virtual: true });
+jest.mock('o-grid', () => ({ getCurrentLayout: jest.fn() }), { virtual: true });
 
-jest.mock("o-tracking", () => ({ init: jest.fn() }), { virtual: true });
+jest.mock('o-tracking', () => ({ init: jest.fn() }), { virtual: true });
 
-jest.mock("o-viewport", () => ({ getOrientation: jest.fn() }), {
+jest.mock('o-viewport', () => ({ getOrientation: jest.fn() }), {
 	virtual: true
 });
 
-jest.mock("n-ui-foundations", () => ({ broadcast: jest.fn() }), {
+jest.mock('n-ui-foundations', () => ({ broadcast: jest.fn() }), {
 	virtual: true
 });
 
 const flags = {
 	get: value => {
 		switch (value) {
-			case "oTracking":
+			case 'oTracking':
 				return true;
-			case "sendBeacon":
-				return "sendBeacon";
+			case 'sendBeacon':
+				return 'sendBeacon';
 			default:
 				return true;
 		}
 	}
 };
 
-const appInfo = { appInfo: "appInfo" };
+const appInfo = { appInfo: 'appInfo' };
 
-describe("Tracking", () => {
+describe('Tracking', () => {
 	afterEach(() => jest.clearAllMocks());
 
-	describe(".init()", () => {
-		it("should initialise `oTracking` with the correct parameters", () => {
-			const context = { context: "" };
-			const userData = { userData: "" };
+	describe('.init()', () => {
+		it('should initialise `oTracking` with the correct parameters', () => {
+			const context = { context: '' };
+			const userData = { userData: '' };
 			const tracking = new Tracking(flags, appInfo);
 
 			// Stub out helper methods
@@ -51,13 +51,13 @@ describe("Tracking", () => {
 				server: SPOOR_API_INGEST_URL,
 				context: context,
 				user: userData,
-				useSendBeacon: flags.get("sendBeacon")
+				useSendBeacon: flags.get('sendBeacon')
 			});
 		});
 
-		it("does nothing when the flag has not been set", () => {
+		it('does nothing when the flag has not been set', () => {
 			const flags = {
-				get: jest.fn(flag => (flag === "oTracking" ? false : true))
+				get: jest.fn(flag => (flag === 'oTracking' ? false : true))
 			};
 			const tracking = new Tracking(flags, appInfo);
 
@@ -68,13 +68,13 @@ describe("Tracking", () => {
 			tracking.init();
 
 			expect(flags.get).toHaveBeenCalledTimes(1);
-			expect(flags.get).toHaveBeenCalledWith("oTracking");
+			expect(flags.get).toHaveBeenCalledWith('oTracking');
 			expect(oTracking.init).not.toHaveBeenCalled();
 			expect(tracking.getUserData).not.toHaveBeenCalled();
 			expect(tracking.prepareContext).not.toHaveBeenCalled();
 		});
 
-		it("does nothing when flags have not been supplied", () => {
+		it('does nothing when flags have not been supplied', () => {
 			const tracking = new Tracking(null, appInfo);
 
 			// Stub out helper methods
@@ -88,8 +88,8 @@ describe("Tracking", () => {
 			expect(tracking.prepareContext).not.toHaveBeenCalled();
 		});
 
-		it("should broadcast an error if one occurs", () => {
-			const error = new Error("Something went wrong");
+		it('should broadcast an error if one occurs', () => {
+			const error = new Error('Something went wrong');
 			const tracking = new Tracking(flags, appInfo);
 
 			// Stub out helper methods
@@ -100,21 +100,21 @@ describe("Tracking", () => {
 			tracking.init();
 
 			expect(broadcast).toHaveBeenCalledTimes(1);
-			expect(broadcast).toHaveBeenCalledWith("oErrors.log", {
+			expect(broadcast).toHaveBeenCalledWith('oErrors.log', {
 				error,
 				info: { message: ERROR_MSG }
 			});
 		});
 	});
 
-	describe(".userData", () => {
+	describe('.userData', () => {
 		const userData = {
-			layout: "layoutUserData",
-			orientation: "orientationUserData",
-			connectionType: "connectionTypeUserData"
+			layout: 'layoutUserData',
+			orientation: 'orientationUserData',
+			connectionType: 'connectionTypeUserData'
 		};
 
-		it("should return the correct user data", () => {
+		it('should return the correct user data', () => {
 			const tracking = new Tracking(flags, appInfo);
 
 			oGrid.getCurrentLayout.mockReturnValue(userData.layout);
@@ -126,7 +126,7 @@ describe("Tracking", () => {
 			expect(result).toEqual(userData);
 		});
 
-		it("should return a user data object without a `connectionType` prop when there is no connection Type ", () => {
+		it('should return a user data object without a `connectionType` prop when there is no connection Type ', () => {
 			const tracking = new Tracking(flags, appInfo);
 
 			oGrid.getCurrentLayout.mockReturnValue(userData.layout);
@@ -139,9 +139,9 @@ describe("Tracking", () => {
 		});
 	});
 
-	describe(".getConnectionType()", () => {
-		it("should return the correct connection info for the browser", () => {
-			navigator.connection = "connection";
+	describe('.getConnectionType()', () => {
+		it('should return the correct connection info for the browser', () => {
+			navigator.connection = 'connection';
 			navigator.mozConnection = undefined;
 			navigator.webkitConnection = undefined;
 
@@ -151,10 +151,10 @@ describe("Tracking", () => {
 			expect(result).toBe(navigator.connection);
 		});
 
-		it("should return `mozConnection` if applicable", () => {
+		it('should return `mozConnection` if applicable', () => {
 			navigator.connection = undefined;
-			navigator.mozConnection = "mozConnection";
-			navigator.webkitConnection = "webkitConnection";
+			navigator.mozConnection = 'mozConnection';
+			navigator.webkitConnection = 'webkitConnection';
 
 			const tracking = new Tracking(flags, appInfo);
 			const result = tracking.getConnectionType();
@@ -162,10 +162,10 @@ describe("Tracking", () => {
 			expect(result).toBe(navigator.mozConnection);
 		});
 
-		it("should return `webkitConnection` if applicable", () => {
+		it('should return `webkitConnection` if applicable', () => {
 			navigator.connection = undefined;
 			navigator.mozConnection = undefined;
-			navigator.webkitConnection = "webkitConnection";
+			navigator.webkitConnection = 'webkitConnection';
 
 			const tracking = new Tracking(flags, appInfo);
 			const result = tracking.getConnectionType();
@@ -173,7 +173,7 @@ describe("Tracking", () => {
 			expect(result).toBe(navigator.webkitConnection);
 		});
 
-		it("should return `undefined` if not available", () => {
+		it('should return `undefined` if not available', () => {
 			navigator.connection = undefined;
 			navigator.mozConnection = undefined;
 			navigator.webkitConnection = undefined;
@@ -185,26 +185,26 @@ describe("Tracking", () => {
 		});
 	});
 
-	describe(".prepareContextAppInfo()", () => {
-		it("should prepare the `app info` portion of the context", () => {
-			const appInfo = { product: "foo", name: "bar", version: "1.0.0" };
+	describe('.prepareContextAppInfo()', () => {
+		it('should prepare the `app info` portion of the context', () => {
+			const appInfo = { product: 'foo', name: 'bar', version: '1.0.0' };
 			const tracking = new Tracking(flags, appInfo);
 			const result = tracking.prepareContextAppInfo();
 			expect(result).toEqual({
-				product: "foo",
-				app: "bar",
-				appVersion: "1.0.0"
+				product: 'foo',
+				app: 'bar',
+				appVersion: '1.0.0'
 			});
 		});
 
-		it("should set the `product` value as `next` is `appInfo.product` has not been specified", () => {
-			const appInfo = { name: "bar", version: "1.0.0" };
+		it('should set the `product` value as `next` is `appInfo.product` has not been specified', () => {
+			const appInfo = { name: 'bar', version: '1.0.0' };
 			const tracking = new Tracking(flags, appInfo);
 			const result = tracking.prepareContextAppInfo();
 			expect(result).toEqual({
-				product: "next",
-				app: "bar",
-				appVersion: "1.0.0"
+				product: 'next',
+				app: 'bar',
+				appVersion: '1.0.0'
 			});
 		});
 	});
