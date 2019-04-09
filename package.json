@@ -19,7 +19,7 @@
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
-    "@financial-times/n-gage": "^3.4.0",
+    "@financial-times/n-gage": "^3.5.0",
     "babel-jest": "^24.7.1",
     "jest": "^24.7.1"
   },
