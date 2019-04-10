@@ -1,7 +1,6 @@
 import oTracking from 'o-tracking';
 import { getRootData } from '../helpers/dom';
 import { getErrorStatus } from '../helpers/error';
-import { getTeaserTestContext } from '../helpers/ab-test';
 import { prepareContextErrorInfo } from '../helpers/context';
 
 export default class PageViewTracking {
@@ -18,7 +17,6 @@ export default class PageViewTracking {
 		return {
 			...(this.prepareContextAudioInfo() || {}),
 			...(this.prepareContextErrorInfo() || {}),
-			...(this.prepareContextHomepageInfo() || {}),
 			...(this.prepareContextBarrierInfo() || {})
 		};
 	}
@@ -35,12 +33,6 @@ export default class PageViewTracking {
 	prepareContextErrorInfo () {
 		if (getErrorStatus()) {
 			return prepareContextErrorInfo();
-		}
-	}
-
-	prepareContextHomepageInfo () {
-		if (location.pathname === '/') {
-			return { ['teaser_tests']: getTeaserTestContext() };
 		}
 	}
 
@@ -67,4 +59,5 @@ export default class PageViewTracking {
 	}
 }
 
-// TODO: Should homepage context and barrier context be extracted to separate trackers
+// TODO: Test this
+// TODO: Should barrier context be extracted to separate trackers
