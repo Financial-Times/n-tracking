@@ -14,6 +14,11 @@ export default class HomepageViewTracking extends PageViewTracking {
 			return { ['teaser_tests']: getTeaserTestContext() };
 		}
 	}
+
+	static init () {
+		return new HomepageViewTracking.init();
+	}
 }
 
 // TODO: Test this
+// TODO: See if the init function can be made generic

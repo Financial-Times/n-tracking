@@ -16,8 +16,7 @@ export default class PageViewTracking {
 	prepareContext () {
 		return {
 			...(this.prepareContextAudioInfo() || {}),
-			...(this.prepareContextErrorInfo() || {}),
-			...(this.prepareContextBarrierInfo() || {})
+			...(this.prepareContextErrorInfo() || {})
 		};
 	}
 
@@ -36,16 +35,6 @@ export default class PageViewTracking {
 		}
 	}
 
-	prepareContextBarrierInfo () {
-		const barrierType = document.querySelector('[data-barrier]');
-		if (barrierType) {
-			return {
-				barrier: true,
-				barrierType: barrierType.getAttribute('data-barrier')
-			};
-		}
-	}
-
 	isFrameset () {
 		return window === window.top;
 	}
@@ -60,4 +49,3 @@ export default class PageViewTracking {
 }
 
 // TODO: Test this
-// TODO: Should barrier context be extracted to separate trackers
