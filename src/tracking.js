@@ -2,6 +2,9 @@ import oGrid from 'o-grid';
 import oViewport from 'o-viewport';
 import oTracking from 'o-tracking';
 import { broadcast } from 'n-ui-foundations';
+import { getErrorStatus } from './helpers/error';
+import { prepareContextErrorInfo } from './helpers/context';
+import { getRootData, findInQueryString } from './helpers/dom';
 
 export const ERROR_MSG = 'Failed to init o-tracking';
 export const SPOOR_API_INGEST_URL = 'https://spoor-api.ft.com/ingest';
@@ -80,44 +83,27 @@ export class Tracking {
 	}
 
 	prepareContextContentInfo () {
-		const contentId = this.getRootData('content-id');
+		const contentId = getRootData('content-id');
 		if (contentId) return { rootContentId: contentId };
 	}
 
 	prepareContextConceptInfo () {
-		const conceptId = this.getRootData('concept-id');
+		const conceptId = getRootData('concept-id');
 		if (conceptId) {
 			return {
 				rootConceptId: conceptId,
-				rootTaxonomy: this.getRootData('taxonomy')
+				rootTaxonomy: getRootData('taxonomy')
 			};
 		}
 	}
 
 	prepareContextErrorInfo () {
-		const errorStatus = (/nextErrorStatus=(\d{3})/.exec(
-			window.location.search
-		) || [])[1];
-
+		const errorStatus = getErrorStatus();
 		if (errorStatus) {
-			const info = {};
-
-			const errorReason = (/nextErrorReason=(\w+)/.exec(
-				window.location.search
-			) || [])[1];
-
-			// TODO after https://github.com/Financial-Times/o-tracking/issues/122#issuecomment-194970465
-			// this should be redundant as context would propagate down to each event in its entirety
-			info.url = window.parent.location.toString();
-			info.referrer = window.parent.document.referrer;
-			info.errorStatus = errorStatus;
-			info.metricName = `page-error.${this.appInfo.name}.${errorStatus}`;
-
-			if (errorReason) {
-				info.errorReason = errorReason;
-			}
-
-			return info;
+			return {
+				...prepareContextErrorInfo(),
+				metricName: `page-error.${this.appInfo.name}.${errorStatus}`
+			};
 		}
 	}
 
@@ -127,12 +113,12 @@ export class Tracking {
 	}
 
 	prepareContextSegmentInfo () {
-		const segmentId = this.findInQueryString('segmentId');
+		const segmentId = findInQueryString('segmentId');
 		if (segmentId) return { ['marketing_segment_id']: segmentId };
 	}
 
 	prepareContextCPCInfo () {
-		const cpcCampaign = this.findInQueryString('cpccampaign');
+		const cpcCampaign = findInQueryString('cpccampaign');
 		if (cpcCampaign) return { ['cpc_campaign']: cpcCampaign };
 	}
 
@@ -148,7 +134,7 @@ export class Tracking {
 	}
 
 	prepareContextABStateInfo () {
-		const abState = this.getRootData('ab-state');
+		const abState = getRootData('ab-state');
 		if (abState) {
 			let ammitAllocations = abState;
 
@@ -162,15 +148,6 @@ export class Tracking {
 
 			return { ['active_ammit_flags']: ammitAllocations };
 		}
-	}
-
-	getRootData (name) {
-		return document.documentElement.getAttribute(`data-${name}`);
-	}
-
-	findInQueryString (name) {
-		let exp = new RegExp(`[?&]${name}=([^?&]+)`);
-		return (String(window.location.search).match(exp) || [])[1];
 	}
 
 	static init (flags, appInfo) {
