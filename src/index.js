@@ -1,3 +1,1 @@
-import { Tracking } from './tracking';
-
-export default Tracking;
+export { default } from './tracking';
