@@ -1,3 +1,7 @@
+export function nodesToArray (nodelist) {
+	return [].slice.call(nodelist);
+}
+
 export function getRootData (name) {
 	return document.documentElement.getAttribute(`data-${name}`);
 }
