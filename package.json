@@ -9,7 +9,7 @@
     "precommit": "secret-squirrel",
     "commitmsg": "secret-squirrel-commitmsg",
     "prepush": "make verify -j3",
-    "test": "jest"
+    "test": "jest --config jest.config.js"
   },
   "dependencies": {
     "n-ui-foundations": "^3.0.5"

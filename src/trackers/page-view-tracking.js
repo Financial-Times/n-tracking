@@ -22,8 +22,8 @@ export default class PageViewTracking {
 
 	prepareContextAudioInfo () {
 		if (
-			getRootData('content-type') === 'podcast' ||
-			getRootData('content-type') === 'audio'
+			this.getContentType() === 'podcast' ||
+			this.getContentType() === 'audio'
 		) {
 			return { content: { asset_type: 'audio' } };
 		}
@@ -35,8 +35,12 @@ export default class PageViewTracking {
 		}
 	}
 
+	getContentType () {
+		return getRootData('content-type');
+	}
+
 	isFrameset () {
-		return window === window.top;
+		return window !== window.top;
 	}
 
 	isInErrorDomain () {
@@ -47,5 +51,3 @@ export default class PageViewTracking {
 		return new PageViewTracking.init();
 	}
 }
-
-// TODO: Test this
