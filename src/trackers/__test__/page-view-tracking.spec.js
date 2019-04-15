@@ -1,10 +1,9 @@
-/* global jsdom */
-
 import oTracking from 'o-tracking';
 import PageViewTracking from '../page-view-tracking';
+import { getRootData } from '../../helpers/dom';
 import { getErrorStatus } from '../../helpers/error';
 import { prepareContextErrorInfo } from '../../helpers/context';
-import { getRootData } from '../../helpers/dom';
+import { withReconfiguredWindowSettings } from '../../__test__/helpers';
 
 jest.mock('o-tracking', () => ({ page: jest.fn() }), { virtual: true });
 jest.mock('../../helpers/dom', () => ({ getRootData: jest.fn() }));
@@ -183,16 +182,15 @@ describe('PageViewTracking', () => {
 
 	describe('.isInErrorDomain()', () => {
 		it('should return `true` if the hostname of the page is that of an FT error page ', () => {
-			const href = window.location.href;
-			const tracking = new PageViewTracking();
-
-			// SEE: https://github.com/jsdom/jsdom#reconfiguring-the-jsdom-with-reconfiguresettings
-			// SEE: https://github.com/facebook/jest/issues/5124
-			jsdom.reconfigure({ url: 'http://errors-next.ft.com/foo' });
-
-			expect(tracking.isInErrorDomain()).toBe(true);
-
-			jsdom.reconfigure({ url: href });
+			withReconfiguredWindowSettings({
+				settings: {
+					url: 'http://errors-next.ft.com/foo'
+				},
+				assertion: () => {
+					const tracking = new PageViewTracking();
+					expect(tracking.isInErrorDomain()).toBe(true);
+				}
+			});
 		});
 
 		it('should return `false` if the hostname of the page is not that of an FT error page ', () => {

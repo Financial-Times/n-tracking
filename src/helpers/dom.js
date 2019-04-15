@@ -11,4 +11,9 @@ export function findInQueryString (name) {
 	return (String(window.location.search).match(exp) || [])[1];
 }
 
+export function selectEachAttributeValue (attr) {
+	const offers = document.querySelectorAll(`[${attr}]`);
+	return nodesToArray(offers).map(e => e.getAttribute(attr));
+}
+
 // TODO: Test these functions

@@ -5,13 +5,10 @@ import { broadcast } from 'n-ui-foundations';
 import { Tracking, SPOOR_API_INGEST_URL, ERROR_MSG } from '../tracking';
 
 jest.mock('o-grid', () => ({ getCurrentLayout: jest.fn() }), { virtual: true });
-
 jest.mock('o-tracking', () => ({ init: jest.fn() }), { virtual: true });
-
 jest.mock('o-viewport', () => ({ getOrientation: jest.fn() }), {
 	virtual: true
 });
-
 jest.mock('n-ui-foundations', () => ({ broadcast: jest.fn() }), {
 	virtual: true
 });
