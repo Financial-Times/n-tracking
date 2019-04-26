@@ -1,7 +1,7 @@
 import oTracking from 'o-tracking';
 import { getRootData } from '../helpers/dom';
 import { getErrorStatus } from '../helpers/error';
-import { prepareContextErrorInfo } from '../helpers/context';
+import { prepareErrorInfoForContext } from '../helpers/context';
 
 export default class PageViewTracking {
 	init () {
@@ -31,7 +31,7 @@ export default class PageViewTracking {
 
 	prepareContextErrorInfo () {
 		if (getErrorStatus()) {
-			return prepareContextErrorInfo();
+			return prepareErrorInfoForContext();
 		}
 	}
 

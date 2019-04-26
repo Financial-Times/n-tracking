@@ -2,14 +2,14 @@ import oTracking from 'o-tracking';
 import PageViewTracking from '../page-view-tracking';
 import { getRootData } from '../../helpers/dom';
 import { getErrorStatus } from '../../helpers/error';
-import { prepareContextErrorInfo } from '../../helpers/context';
+import { prepareErrorInfoForContext } from '../../helpers/context';
 import { withReconfiguredWindowSettings } from '../../__test__/helpers';
 
 jest.mock('o-tracking', () => ({ page: jest.fn() }), { virtual: true });
 jest.mock('../../helpers/dom', () => ({ getRootData: jest.fn() }));
 jest.mock('../../helpers/error', () => ({ getErrorStatus: jest.fn() }));
 jest.mock('../../helpers/context', () => ({
-	prepareContextErrorInfo: jest.fn()
+	prepareErrorInfoForContext: jest.fn()
 }));
 
 describe('PageViewTracking', () => {
@@ -128,7 +128,7 @@ describe('PageViewTracking', () => {
 			const errorInfo = { error: 'info' };
 
 			getErrorStatus.mockReturnValue('foo');
-			prepareContextErrorInfo.mockReturnValue(errorInfo);
+			prepareErrorInfoForContext.mockReturnValue(errorInfo);
 
 			expect(tracking.prepareContextErrorInfo()).toEqual(errorInfo);
 		});
@@ -138,7 +138,7 @@ describe('PageViewTracking', () => {
 			const errorInfo = { error: 'info' };
 
 			getErrorStatus.mockReturnValue(undefined);
-			prepareContextErrorInfo.mockReturnValue(errorInfo);
+			prepareErrorInfoForContext.mockReturnValue(errorInfo);
 
 			expect(tracking.prepareContextErrorInfo()).toBeUndefined();
 		});

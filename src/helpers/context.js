@@ -1,6 +1,6 @@
 import { getErrorStatus, getErrorReason } from './error';
 
-export function prepareContextErrorInfo () {
+export function prepareErrorInfoForContext () {
 	const info = {};
 	const errorReason = getErrorReason();
 
