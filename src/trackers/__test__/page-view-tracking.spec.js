@@ -166,17 +166,15 @@ describe('PageViewTracking', () => {
 		});
 
 		it('should return `true` if the script is not running within an iframe', () => {
-			const top = window.top;
-			const tracking = new PageViewTracking();
-
-			Object.defineProperty(window, 'top', {
-				writable: true,
-				value: {}
+			withReconfiguredWindowSettings({
+				settings: {
+					windowTop: {}
+				},
+				assertion: () => {
+					const tracking = new PageViewTracking();
+					expect(tracking.isFrameset()).toBe(true);
+				}
 			});
-
-			expect(tracking.isFrameset()).toBe(true);
-
-			window.top = top;
 		});
 	});
 
