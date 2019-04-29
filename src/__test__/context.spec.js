@@ -213,7 +213,6 @@ describe('prepareContext(appInfo)', () => {
 	});
 });
 
-// TODO: Make sure you test the getErrorStatus function
 // TODO: Make sure you test prepareErrorInfoForContext function
 // TODO: Install the jsdom lib directly
 // TODO: Test when the appInfo does not have a product
