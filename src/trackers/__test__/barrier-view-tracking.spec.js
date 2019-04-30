@@ -169,3 +169,5 @@ describe('BarrierViewTracking', () => {
 		});
 	});
 });
+
+// TODO: Complete the tests for this. Test the `init` method

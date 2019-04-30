@@ -1,5 +1,5 @@
-import { withDocument } from '../../__test__/helpers';
-import { prepareErrorInfoForContext } from '../context';
+import { withDocument } from '../../../__test__/helpers';
+import { prepareErrorInfoForContext } from '../prepare-error-info-for-context';
 
 const referrer = 'foo-referrer';
 const errorStatus = '503';

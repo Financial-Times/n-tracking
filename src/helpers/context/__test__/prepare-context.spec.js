@@ -2,16 +2,16 @@ import {
 	withHTML,
 	withDocumentInnerHTML,
 	withReconfiguredWindowSettings
-} from './helpers';
-import { prepareContext } from '../context';
-import { getErrorStatus } from '../helpers/error';
-import { prepareErrorInfoForContext } from '../helpers/context';
+} from '../../../__test__/helpers';
+import { getErrorStatus } from '../../error';
+import { prepareContext } from '../prepare-context';
+import { prepareErrorInfoForContext } from '..';
 
-jest.mock('../helpers/error', () => ({
+jest.mock('../../error', () => ({
 	getErrorStatus: jest.fn()
 }));
 
-jest.mock('../helpers/context', () => ({
+jest.mock('..', () => ({
 	prepareErrorInfoForContext: jest.fn()
 }));
 
@@ -212,7 +212,3 @@ describe('prepareContext(appInfo)', () => {
 		});
 	});
 });
-
-// TODO: Make sure you test prepareErrorInfoForContext function
-// TODO: Install the jsdom lib directly
-// TODO: Test when the appInfo does not have a product

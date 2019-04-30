@@ -1,4 +1,4 @@
-import { getErrorStatus, getErrorReason } from './error';
+import { getErrorStatus, getErrorReason } from '../error';
 
 export function prepareErrorInfoForContext () {
 	const info = {};
@@ -16,5 +16,3 @@ export function prepareErrorInfoForContext () {
 
 	return info;
 }
-
-// TODO: Test this file

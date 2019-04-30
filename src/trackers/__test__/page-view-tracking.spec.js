@@ -197,3 +197,5 @@ describe('PageViewTracking', () => {
 		});
 	});
 });
+
+// TODO: Test these by setting up the context directly

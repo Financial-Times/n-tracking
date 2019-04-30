@@ -2,6 +2,7 @@ import oGrid from 'o-grid';
 import oViewport from 'o-viewport';
 import oTracking from 'o-tracking';
 import { broadcast } from 'n-ui-foundations';
+import { prepareContext } from '../helpers/context';
 import { Tracking, SPOOR_API_INGEST_URL, ERROR_MSG } from '../tracking';
 
 jest.mock('o-grid', () => ({ getCurrentLayout: jest.fn() }), { virtual: true });
@@ -12,6 +13,7 @@ jest.mock('o-viewport', () => ({ getOrientation: jest.fn() }), {
 jest.mock('n-ui-foundations', () => ({ broadcast: jest.fn() }), {
 	virtual: true
 });
+jest.mock('../helpers/context', () => ({ prepareContext: jest.fn() }));
 
 const flags = {
 	get: value => {
@@ -39,7 +41,7 @@ describe('Tracking', () => {
 
 			// Stub out helper methods
 			tracking.getUserData = () => userData;
-			tracking.prepareContext = () => context;
+			prepareContext.mockReturnValue(context);
 
 			tracking.init();
 
@@ -60,7 +62,6 @@ describe('Tracking', () => {
 
 			// Stub out helper methods
 			tracking.getUserData = jest.fn();
-			tracking.prepareContext = jest.fn();
 
 			tracking.init();
 
@@ -68,7 +69,7 @@ describe('Tracking', () => {
 			expect(flags.get).toHaveBeenCalledWith('oTracking');
 			expect(oTracking.init).not.toHaveBeenCalled();
 			expect(tracking.getUserData).not.toHaveBeenCalled();
-			expect(tracking.prepareContext).not.toHaveBeenCalled();
+			expect(prepareContext).not.toHaveBeenCalled();
 		});
 
 		it('does nothing when flags have not been supplied', () => {
@@ -76,13 +77,12 @@ describe('Tracking', () => {
 
 			// Stub out helper methods
 			tracking.getUserData = jest.fn();
-			tracking.prepareContext = jest.fn();
 
 			tracking.init();
 
 			expect(oTracking.init).not.toHaveBeenCalled();
 			expect(tracking.getUserData).not.toHaveBeenCalled();
-			expect(tracking.prepareContext).not.toHaveBeenCalled();
+			expect(prepareContext).not.toHaveBeenCalled();
 		});
 
 		it('should broadcast an error if one occurs', () => {
@@ -179,30 +179,6 @@ describe('Tracking', () => {
 			const result = tracking.getConnectionType();
 
 			expect(result).toBeUndefined();
-		});
-	});
-
-	describe('.prepareContextAppInfo()', () => {
-		it('should prepare the `app info` portion of the context', () => {
-			const appInfo = { product: 'foo', name: 'bar', version: '1.0.0' };
-			const tracking = new Tracking(flags, appInfo);
-			const result = tracking.prepareContextAppInfo();
-			expect(result).toEqual({
-				product: 'foo',
-				app: 'bar',
-				appVersion: '1.0.0'
-			});
-		});
-
-		it('should set the `product` value as `next` is `appInfo.product` has not been specified', () => {
-			const appInfo = { name: 'bar', version: '1.0.0' };
-			const tracking = new Tracking(flags, appInfo);
-			const result = tracking.prepareContextAppInfo();
-			expect(result).toEqual({
-				product: 'next',
-				app: 'bar',
-				appVersion: '1.0.0'
-			});
 		});
 	});
 });

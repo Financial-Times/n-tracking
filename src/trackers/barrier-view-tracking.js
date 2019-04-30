@@ -1,25 +1,27 @@
-import { Tracking } from '../tracking';
 import { broadcast } from 'n-ui-foundations';
+import { prepareContext } from '../helpers/context';
 import { selectEachAttributeValue, findInQueryString } from '../helpers/dom';
 
-export default class BarrierViewTracking extends Tracking {
+export default class BarrierViewTracking {
+	constructor (flags, appInfo = {}) {
+		this.flags = flags;
+		this.appInfo = appInfo;
+	}
+
 	init () {
 		const barrier = this.getBarrierData();
 
 		if (barrier) {
-			const eventData = Object.assign(
-				{
-					category: 'barrier',
-					action: 'view',
-					opportunity: this.getOpportunityTaggingData(),
-					barrierReferrer: this.getBarrierReferrer(),
-					type: barrier.type,
-					commsType: barrier.messaging,
-					acquisitionContext: this.getAcquisitionContext(),
-					offers: this.getOffers()
-				},
-				this.prepareContext()
-			);
+			const eventData = Object.assign(prepareContext(this.appInfo), {
+				category: 'barrier',
+				action: 'view',
+				opportunity: this.getOpportunityTaggingData(),
+				barrierReferrer: this.getBarrierReferrer(),
+				type: barrier.type,
+				commsType: barrier.messaging,
+				acquisitionContext: this.getAcquisitionContext(),
+				offers: this.getOffers()
+			});
 
 			broadcast('oTracking.event', eventData);
 		}

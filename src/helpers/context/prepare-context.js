@@ -1,6 +1,6 @@
-import { getRootData, findInQueryString } from './helpers/dom';
-import { getErrorStatus } from './helpers/error';
-import { prepareErrorInfoForContext } from './helpers/context';
+import { getRootData, findInQueryString } from '../dom';
+import { getErrorStatus } from '../error';
+import { prepareErrorInfoForContext } from '.';
 
 export function prepareContext (appInfo) {
 	return {
