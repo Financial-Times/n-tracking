@@ -1,4 +1,4 @@
-import { withDocument } from '../../../__test__/helpers';
+import { withDOM } from '../../../__test__/helpers';
 import { prepareErrorInfoForContext } from '../prepare-error-info-for-context';
 
 const referrer = 'foo-referrer';
@@ -9,18 +9,26 @@ describe('prepareErrorInfoForContext()', () => {
 	it('should prepare the error info that should be added to the context', () => {
 		const url = createErrorUrl(errorStatus);
 
-		withDocument({ url, referrer }, () => {
-			const info = prepareErrorInfoForContext();
-			expect(info).toEqual({ url, referrer, errorStatus });
+		withDOM({
+			url,
+			referrer,
+			assertion: () => {
+				const info = prepareErrorInfoForContext();
+				expect(info).toEqual({ url, referrer, errorStatus });
+			}
 		});
 	});
 
 	it('should add the error reason to the error info if it exists', () => {
 		const url = createErrorUrl(errorStatus, errorReason);
 
-		withDocument({ url, referrer }, () => {
-			const info = prepareErrorInfoForContext();
-			expect(info).toEqual({ url, referrer, errorStatus, errorReason });
+		withDOM({
+			url,
+			referrer,
+			assertion: () => {
+				const info = prepareErrorInfoForContext();
+				expect(info).toEqual({ url, referrer, errorStatus, errorReason });
+			}
 		});
 	});
 });

@@ -1,9 +1,9 @@
 import oTracking from 'o-tracking';
 import PageViewTracking from '../page-view-tracking';
+import { withDOM } from '../../__test__/helpers';
 import { getRootData } from '../../helpers/dom';
 import { getErrorStatus } from '../../helpers/error';
 import { prepareErrorInfoForContext } from '../../helpers/context';
-import { withReconfiguredWindowSettings } from '../../__test__/helpers';
 
 jest.mock('o-tracking', () => ({ page: jest.fn() }), { virtual: true });
 jest.mock('../../helpers/dom', () => ({ getRootData: jest.fn() }));
@@ -166,10 +166,8 @@ describe('PageViewTracking', () => {
 		});
 
 		it('should return `true` if the script is not running within an iframe', () => {
-			withReconfiguredWindowSettings({
-				settings: {
-					windowTop: {}
-				},
+			withDOM({
+				windowTop: {},
 				assertion: () => {
 					const tracking = new PageViewTracking();
 					expect(tracking.isFrameset()).toBe(true);
@@ -180,10 +178,10 @@ describe('PageViewTracking', () => {
 
 	describe('.isInErrorDomain()', () => {
 		it('should return `true` if the hostname of the page is that of an FT error page ', () => {
-			withReconfiguredWindowSettings({
-				settings: {
-					url: 'http://errors-next.ft.com/foo'
-				},
+			const url = 'http://errors-next.ft.com/foo';
+
+			withDOM({
+				url,
 				assertion: () => {
 					const tracking = new PageViewTracking();
 					expect(tracking.isInErrorDomain()).toBe(true);

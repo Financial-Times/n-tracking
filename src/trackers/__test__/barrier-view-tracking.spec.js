@@ -1,8 +1,5 @@
+import { withDOM } from '../../__test__/helpers';
 import BarrierViewTracking from '../barrier-view-tracking';
-import {
-	withReconfiguredWindowSettings,
-	withDocumentInnerHTML
-} from '../../__test__/helpers';
 
 jest.mock('o-grid', () => ({ getCurrentLayout: jest.fn() }), { virtual: true });
 jest.mock('o-tracking', () => ({ init: jest.fn() }), { virtual: true });
@@ -23,13 +20,17 @@ const barrierData = {
 describe('BarrierViewTracking', () => {
 	describe('.getAcquisitionContext()', () => {
 		it('should return an array of acquisition context entries if they have been specified', () => {
-			withDocumentInnerHTML({
-				innerHTML: `
-					<div>
-						<div data-acquisition-context="a"></div>
-						<div data-acquisition-context="b"></div>
-						<div data-acquisition-context="c"></div>
-					</div>
+			withDOM({
+				html: `
+					<html>
+						<body>
+							<div>
+								<div data-acquisition-context="a"></div>
+								<div data-acquisition-context="b"></div>
+								<div data-acquisition-context="c"></div>
+							</div>
+						</body>
+					</html>
 				`,
 				assertion: () => {
 					const tracking = new BarrierViewTracking();
@@ -46,13 +47,17 @@ describe('BarrierViewTracking', () => {
 
 	describe('.getOffers()', () => {
 		it('should return the ids of all the offers', () => {
-			withDocumentInnerHTML({
-				innerHTML: `
-					<div>
-						<div data-offer-id="1"></div>
-						<div data-offer-id="2"></div>
-						<div data-offer-id="3"></div>
-					</div>
+			withDOM({
+				html: `
+					<html>
+						<body>
+							<div>
+								<div data-offer-id="1"></div>
+								<div data-offer-id="2"></div>
+								<div data-offer-id="3"></div>
+							</div>
+						</body>
+					</html>
 				`,
 				assertion: () => {
 					const tracking = new BarrierViewTracking();
@@ -70,11 +75,10 @@ describe('BarrierViewTracking', () => {
 	describe('.getBarrierReferrer()', () => {
 		it('should return the barrier referrer if it has been specified', () => {
 			const referrer = 'app';
+			const url = `https://www.ft.com/products?barrierReferrer=${referrer}`;
 
-			withReconfiguredWindowSettings({
-				settings: {
-					url: `https://www.ft.com/products?barrierReferrer=${referrer}`
-				},
+			withDOM({
+				url,
 				assertion: () => {
 					const tracking = new BarrierViewTracking();
 					expect(tracking.getBarrierReferrer()).toBe(referrer);
@@ -90,15 +94,19 @@ describe('BarrierViewTracking', () => {
 
 	describe('.getBarrierData()', () => {
 		it('should return the barrier data if it has been specified', () => {
-			withDocumentInnerHTML({
-				innerHTML: `
-					<div
-						data-barrier="${barrierData.type}"
-						data-barrier-messaging="${barrierData.messaging}"
-						data-opportunity-subtype="${barrierData.opportunitySubType}"
-						data-barrier-is-product-selector="${barrierData.isProductSelector}">
-						...
-					</div>
+			withDOM({
+				html: `
+					<html>
+						<body>
+							<div
+								data-barrier="${barrierData.type}"
+								data-barrier-messaging="${barrierData.messaging}"
+								data-opportunity-subtype="${barrierData.opportunitySubType}"
+								data-barrier-is-product-selector="${barrierData.isProductSelector}">
+								...
+							</div>
+						</body>
+					</html>
 				`,
 				assertion: () => {
 					const tracking = new BarrierViewTracking();

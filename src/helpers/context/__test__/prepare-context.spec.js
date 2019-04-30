@@ -1,8 +1,4 @@
-import {
-	withHTML,
-	withDocumentInnerHTML,
-	withReconfiguredWindowSettings
-} from '../../../__test__/helpers';
+import { withDOM } from '../../../__test__/helpers';
 import { getErrorStatus } from '../../error';
 import { prepareContext } from '../prepare-context';
 import { prepareErrorInfoForContext } from '..';
@@ -53,11 +49,10 @@ describe('prepareContext(appInfo)', () => {
 
 	describe('content info', () => {
 		it('should add the content info to the created context it is present', () => {
-			withHTML({
+			withDOM({
 				html: '<html data-content-id="10001"></html>',
 				assertion: () => {
 					const context = prepareContext(appInfo);
-
 					expect(context).toEqual({
 						...expectedContextAppInfo,
 						rootContentId: '10001'
@@ -73,7 +68,7 @@ describe('prepareContext(appInfo)', () => {
 				const conceptId = 'concept-123';
 				const taxonomy = 'taxonomy-123';
 
-				withHTML({
+				withDOM({
 					html: `<html data-concept-id="${conceptId}"  data-taxonomy="${taxonomy}"></html>`,
 					assertion: () => {
 						const context = prepareContext(appInfo);
@@ -90,7 +85,7 @@ describe('prepareContext(appInfo)', () => {
 
 		describe('when the concept id has not been specified', () => {
 			it('should not add the concept info to the created context', () => {
-				withHTML({
+				withDOM({
 					html: '<html data-taxonomy="123"></html>',
 					assertion: () => {
 						const context = prepareContext(appInfo);
@@ -123,11 +118,15 @@ describe('prepareContext(appInfo)', () => {
 	describe('edition info', () => {
 		it('should add the edition info to the context if it is present', () => {
 			const edition = 'edition123';
-			withDocumentInnerHTML({
-				innerHTML: `
-					<div data-next-edition="${edition}">
-						...
-					</div>
+			withDOM({
+				html: `
+					<html>
+						<body>
+							<div data-next-edition="${edition}">
+								...
+							</div>
+						</body>
+					</html>
 				`,
 				assertion: () => {
 					const context = prepareContext(appInfo);
@@ -141,13 +140,14 @@ describe('prepareContext(appInfo)', () => {
 		it('should add the segment info to the context if it is present', () => {
 			const segmentId = '12345';
 			const url = `https://www.ft.com/content/foo?desktop=true&segmentId=${segmentId}#myft:notification:instant-email:content`;
-			withReconfiguredWindowSettings({
-				settings: { url },
+
+			withDOM({
+				url,
 				assertion: () => {
 					const context = prepareContext(appInfo);
 					expect(context).toEqual({
 						...expectedContextAppInfo,
-						['marketing_segment_id']: segmentId
+						marketing_segment_id: segmentId
 					});
 				}
 			});
@@ -158,13 +158,14 @@ describe('prepareContext(appInfo)', () => {
 		it('should add the cpc campaign info to the context if it is present', () => {
 			const cpcCampaign = 'EducationHub';
 			const url = `https://enterprise.ft.com/en-gb/contact-us/?cpccampaign=${cpcCampaign}`;
-			withReconfiguredWindowSettings({
-				settings: { url },
+
+			withDOM({
+				url,
 				assertion: () => {
 					const context = prepareContext(appInfo);
 					expect(context).toEqual({
 						...expectedContextAppInfo,
-						['cpc_campaign']: cpcCampaign
+						cpc_campaign: cpcCampaign
 					});
 				}
 			});
@@ -192,7 +193,7 @@ describe('prepareContext(appInfo)', () => {
 
 	describe('ab state info', () => {
 		it('should add the AB state data to the context if it is present', () => {
-			withHTML({
+			withDOM({
 				html: `
 					<html  data-ab-state="one:on,two:off">
 						...
