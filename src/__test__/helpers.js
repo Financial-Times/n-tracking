@@ -2,8 +2,8 @@ import jsdom from 'jsdom';
 
 export function withDOM ({ html, referrer, url, windowTop, assertion }) {
 	const originalHtml = document.documentElement.outerHTML;
-	const originalWindow = window;
-	const originalDocument = document;
+	const originalWindow = global.window;
+	const originalDocument = global.document;
 	const dom = new jsdom.JSDOM(html || originalHtml);
 	const toReconfigure = {};
 

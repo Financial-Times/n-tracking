@@ -3,6 +3,7 @@ import oViewport from 'o-viewport';
 import oTracking from 'o-tracking';
 import { broadcast } from 'n-ui-foundations';
 import { prepareContext } from '../helpers/context';
+import { initialiseSitewideTrackers } from '../trackers';
 import { Tracking, SPOOR_API_INGEST_URL, ERROR_MSG } from '../tracking';
 
 jest.mock('o-grid', () => ({ getCurrentLayout: jest.fn() }), { virtual: true });
@@ -14,6 +15,7 @@ jest.mock('n-ui-foundations', () => ({ broadcast: jest.fn() }), {
 	virtual: true
 });
 jest.mock('../helpers/context', () => ({ prepareContext: jest.fn() }));
+jest.mock('../trackers', () => ({ initialiseSitewideTrackers: jest.fn() }));
 
 const flags = {
 	get: value => {
@@ -52,6 +54,20 @@ describe('Tracking', () => {
 				user: userData,
 				useSendBeacon: flags.get('sendBeacon')
 			});
+		});
+
+		it('should initialise the site wide trackers', () => {
+			const context = { context: '' };
+			const userData = { userData: '' };
+			const tracking = new Tracking(flags, appInfo);
+
+			// Stub out helper methods
+			tracking.getUserData = () => userData;
+			prepareContext.mockReturnValue(context);
+
+			tracking.init();
+
+			expect(initialiseSitewideTrackers).toHaveBeenCalledTimes(1);
 		});
 
 		it('does nothing when the flag has not been set', () => {

@@ -3,6 +3,7 @@ import oViewport from 'o-viewport';
 import oTracking from 'o-tracking';
 import { broadcast } from 'n-ui-foundations';
 import { prepareContext } from './helpers/context';
+import { initialiseSitewideTrackers } from './trackers';
 
 export const ERROR_MSG = 'Failed to init o-tracking';
 export const SPOOR_API_INGEST_URL = 'https://spoor-api.ft.com/ingest';
@@ -28,6 +29,8 @@ export class Tracking {
 				user: userData,
 				useSendBeacon: this.flags.get('sendBeacon')
 			});
+
+			initialiseSitewideTrackers();
 		} catch (error) {
 			broadcast('oErrors.log', {
 				error: error,
