@@ -1,7 +1,7 @@
 import { broadcast } from 'n-ui-foundations';
 
 export default class CopyTracking {
-	constructor (root = document) {
+	constructor ({ root = document } = {}) {
 		this.root = root;
 	}
 	init () {
