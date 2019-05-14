@@ -39,7 +39,7 @@ describe('Tracking', () => {
 		it('should initialise `oTracking` with the correct parameters', () => {
 			const context = { context: '' };
 			const userData = { userData: '' };
-			const tracking = new Tracking(flags, appInfo);
+			const tracking = new Tracking({ flags, appInfo });
 
 			// Stub out helper methods
 			tracking.getUserData = () => userData;
@@ -59,7 +59,7 @@ describe('Tracking', () => {
 		it('should initialise the site wide trackers', () => {
 			const context = { context: '' };
 			const userData = { userData: '' };
-			const tracking = new Tracking(flags, appInfo);
+			const tracking = new Tracking({ flags, appInfo });
 
 			// Stub out helper methods
 			tracking.getUserData = () => userData;
@@ -74,7 +74,7 @@ describe('Tracking', () => {
 			const flags = {
 				get: jest.fn(flag => (flag === 'oTracking' ? false : true))
 			};
-			const tracking = new Tracking(flags, appInfo);
+			const tracking = new Tracking({ flags, appInfo });
 
 			// Stub out helper methods
 			tracking.getUserData = jest.fn();
@@ -89,7 +89,7 @@ describe('Tracking', () => {
 		});
 
 		it('does nothing when flags have not been supplied', () => {
-			const tracking = new Tracking(null, appInfo);
+			const tracking = new Tracking({ appInfo });
 
 			// Stub out helper methods
 			tracking.getUserData = jest.fn();
@@ -103,7 +103,7 @@ describe('Tracking', () => {
 
 		it('should broadcast an error if one occurs', () => {
 			const error = new Error('Something went wrong');
-			const tracking = new Tracking(flags, appInfo);
+			const tracking = new Tracking({ flags, appInfo });
 
 			// Stub out helper methods
 			tracking.getUserData = () => {
@@ -128,7 +128,7 @@ describe('Tracking', () => {
 		};
 
 		it('should return the correct user data', () => {
-			const tracking = new Tracking(flags, appInfo);
+			const tracking = new Tracking({ flags, appInfo });
 
 			oGrid.getCurrentLayout.mockReturnValue(userData.layout);
 			oViewport.getOrientation.mockReturnValue(userData.orientation);
@@ -140,7 +140,7 @@ describe('Tracking', () => {
 		});
 
 		it('should return a user data object without a `connectionType` prop when there is no connection Type ', () => {
-			const tracking = new Tracking(flags, appInfo);
+			const tracking = new Tracking({ flags, appInfo });
 
 			oGrid.getCurrentLayout.mockReturnValue(userData.layout);
 			oViewport.getOrientation.mockReturnValue(userData.orientation);
@@ -158,7 +158,7 @@ describe('Tracking', () => {
 			navigator.mozConnection = undefined;
 			navigator.webkitConnection = undefined;
 
-			const tracking = new Tracking(flags, appInfo);
+			const tracking = new Tracking({ flags, appInfo });
 			const result = tracking.getConnectionType();
 
 			expect(result).toBe(navigator.connection);
@@ -169,7 +169,7 @@ describe('Tracking', () => {
 			navigator.mozConnection = 'mozConnection';
 			navigator.webkitConnection = 'webkitConnection';
 
-			const tracking = new Tracking(flags, appInfo);
+			const tracking = new Tracking({ flags, appInfo });
 			const result = tracking.getConnectionType();
 
 			expect(result).toBe(navigator.mozConnection);
@@ -180,7 +180,7 @@ describe('Tracking', () => {
 			navigator.mozConnection = undefined;
 			navigator.webkitConnection = 'webkitConnection';
 
-			const tracking = new Tracking(flags, appInfo);
+			const tracking = new Tracking({ flags, appInfo });
 			const result = tracking.getConnectionType();
 
 			expect(result).toBe(navigator.webkitConnection);
@@ -191,7 +191,7 @@ describe('Tracking', () => {
 			navigator.mozConnection = undefined;
 			navigator.webkitConnection = undefined;
 
-			const tracking = new Tracking(flags, appInfo);
+			const tracking = new Tracking({ flags, appInfo });
 			const result = tracking.getConnectionType();
 
 			expect(result).toBeUndefined();
