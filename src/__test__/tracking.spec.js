@@ -141,6 +141,25 @@ describe('Tracking', () => {
 				useSendBeacon: flags.get('sendBeacon')
 			});
 		});
+
+		it('should allow for additional context to be added to the default context', () => {
+			const userData = { userData: '' };
+			const additionalContext = { additionalContext: '' };
+			const tracking = new Tracking({ flags, appInfo, additionalContext });
+
+			// Stub out helper methods
+			tracking.getUserData = () => userData;
+
+			tracking.init();
+
+			expect(oTracking.init).toHaveBeenCalledTimes(1);
+			expect(oTracking.init).toHaveBeenCalledWith({
+				server: SPOOR_API_INGEST_URL,
+				context: { ...context, ...additionalContext },
+				user: userData,
+				useSendBeacon: flags.get('sendBeacon')
+			});
+		});
 	});
 
 	describe('.userData', () => {

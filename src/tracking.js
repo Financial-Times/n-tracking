@@ -9,10 +9,15 @@ export const ERROR_MSG = 'Failed to init o-tracking';
 export const SPOOR_API_INGEST_URL = 'https://spoor-api.ft.com/ingest';
 
 export class Tracking {
-	constructor ({ flags, appInfo = {}, context = prepareContext() } = {}) {
+	constructor ({
+		flags,
+		appInfo = {},
+		context = prepareContext(),
+		additionalContext = {}
+	} = {}) {
 		this.flags = flags;
 		this.appInfo = appInfo;
-		this.context = context;
+		this.context = { ...context, ...additionalContext };
 	}
 
 	init () {
