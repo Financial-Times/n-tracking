@@ -66,7 +66,7 @@ export class Tracking {
 		);
 	}
 
-	static init (flags, appInfo) {
-		return new Tracking(flags, appInfo).init();
+	static init (args) {
+		return new Tracking(args).init();
 	}
 }

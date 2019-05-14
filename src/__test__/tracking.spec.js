@@ -36,6 +36,37 @@ const appInfo = { appInfo: 'appInfo' };
 describe('Tracking', () => {
 	afterEach(() => jest.clearAllMocks());
 
+	describe('static .init()', () => {
+		it('should setup and initialise the tracking class', () => {
+			const originalConnection = navigator.connection;
+			const context = { foo: 'foo' };
+			const additionalContext = { bar: 'bar' };
+			const userData = {
+				layout: 'foo',
+				orientation: 'bar',
+				connectionType: 'baz'
+			};
+
+			navigator.connection = userData.connectionType;
+
+			prepareContext.mockReturnValue(context);
+			oGrid.getCurrentLayout.mockReturnValue(userData.layout);
+			oViewport.getOrientation.mockReturnValue(userData.orientation);
+
+			Tracking.init({ flags, appInfo, context, additionalContext });
+
+			expect(oTracking.init).toHaveBeenCalledTimes(1);
+			expect(oTracking.init).toHaveBeenCalledWith({
+				server: SPOOR_API_INGEST_URL,
+				context: { ...context, ...additionalContext },
+				user: userData,
+				useSendBeacon: flags.get('sendBeacon')
+			});
+
+			navigator.connection = originalConnection;
+		});
+	});
+
 	describe('.init()', () => {
 		it('should initialise `oTracking` with the correct parameters', () => {
 			prepareContext.mockReturnValue(context);
