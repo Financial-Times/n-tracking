@@ -1,20 +1,20 @@
-import { broadcast } from 'n-ui-foundations';
-import { prepareContext } from '../helpers/context';
-import { selectEachAttributeValue, findInQueryString } from '../helpers/dom';
+import { broadcast } from "n-ui-foundations";
+import { prepareContext } from "../helpers/context";
+import { selectEachAttributeValue, findInQueryString } from "../helpers/dom";
 
 export default class BarrierViewTracking {
-	constructor (flags, appInfo = {}) {
+	constructor({ flags, appInfo = {} } = {}) {
 		this.flags = flags;
 		this.appInfo = appInfo;
 	}
 
-	init () {
+	init() {
 		const barrier = this.getBarrierData();
 
 		if (barrier) {
 			const eventData = Object.assign(prepareContext(this.appInfo), {
-				category: 'barrier',
-				action: 'view',
+				category: "barrier",
+				action: "view",
 				opportunity: this.getOpportunityTaggingData(),
 				barrierReferrer: this.getBarrierReferrer(),
 				type: barrier.type,
@@ -23,45 +23,45 @@ export default class BarrierViewTracking {
 				offers: this.getOffers()
 			});
 
-			broadcast('oTracking.event', eventData);
+			broadcast("oTracking.event", eventData);
 		}
 	}
 
-	getAcquisitionContext () {
-		return selectEachAttributeValue('data-acquisition-context');
+	getAcquisitionContext() {
+		return selectEachAttributeValue("data-acquisition-context");
 	}
 
-	getOffers () {
-		return selectEachAttributeValue('data-offer-id');
+	getOffers() {
+		return selectEachAttributeValue("data-offer-id");
 	}
 
-	getBarrierReferrer () {
-		return findInQueryString('barrierReferrer');
+	getBarrierReferrer() {
+		return findInQueryString("barrierReferrer");
 	}
 
-	getBarrierData () {
-		const barrierElement = document.querySelector('[data-barrier]');
+	getBarrierData() {
+		const barrierElement = document.querySelector("[data-barrier]");
 		if (barrierElement) {
 			return {
-				type: barrierElement.getAttribute('data-barrier'),
-				messaging: barrierElement.getAttribute('data-barrier-messaging'),
+				type: barrierElement.getAttribute("data-barrier"),
+				messaging: barrierElement.getAttribute("data-barrier-messaging"),
 				opportunitySubType: barrierElement.getAttribute(
-					'data-opportunity-subtype'
+					"data-opportunity-subtype"
 				),
 				isProductSelector: !!(
-					barrierElement.getAttribute('data-barrier-is-product-selector') ===
-					'true'
+					barrierElement.getAttribute("data-barrier-is-product-selector") ===
+					"true"
 				)
 			};
 		}
 	}
 
-	getOpportunityTaggingData () {
+	getOpportunityTaggingData() {
 		// https://docs.google.com/document/d/18_yV2s813XCrBF7w6196FLhLJzWXK4hXT2sIpDZVvhQ/edit?ts=575e9368#
 		const barrier = this.getBarrierData();
 		if (barrier) {
 			return {
-				type: barrier.isProductSelector ? 'products' : 'barrier',
+				type: barrier.isProductSelector ? "products" : "barrier",
 				subtype: barrier.opportunitySubType || barrier.type
 			};
 		}
