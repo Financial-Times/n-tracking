@@ -69,6 +69,7 @@ describe('tracking', () => {
 			expect(flags.get).toHaveBeenCalledWith('oTracking');
 			expect(oTracking.init).not.toHaveBeenCalled();
 			expect(getUserData).not.toHaveBeenCalled();
+			expect(prepareContext).not.toHaveBeenCalled();
 		});
 
 		it('does nothing when flags have not been supplied', () => {
@@ -76,6 +77,7 @@ describe('tracking', () => {
 
 			expect(oTracking.init).not.toHaveBeenCalled();
 			expect(getUserData).not.toHaveBeenCalled();
+			expect(prepareContext).not.toHaveBeenCalled();
 		});
 
 		it('should broadcast an error if one occurs', () => {
