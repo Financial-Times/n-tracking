@@ -22,8 +22,3 @@ export default class BarrierPageViewTracking extends PageViewTracking {
 		return new BarrierPageViewTracking.init();
 	}
 }
-
-// TODO: Test this
-// TODO: See if the static init function can be made generic
-// TODO: Export this and other trackers properly
-// TODO: Test the static init method

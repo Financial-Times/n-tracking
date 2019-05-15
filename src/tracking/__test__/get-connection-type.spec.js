@@ -41,5 +41,3 @@ describe('getConnectionType()', () => {
 		expect(result).toBeUndefined();
 	});
 });
-
-// TODO: use withDom

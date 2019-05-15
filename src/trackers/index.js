@@ -8,5 +8,3 @@ export function initialiseSitewideTrackers () {
 	CopyTracking.init();
 	PageAttentionTracking.init();
 }
-
-// TODO: Test the `initialiseSitewideTrackers` function

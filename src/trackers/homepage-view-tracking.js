@@ -31,6 +31,3 @@ export function getTeaserTestContext (doc = document) {
 
 	return transformedTeasers;
 }
-
-// TODO: Test this
-// TODO: See if the static init function can be made generic

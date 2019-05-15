@@ -92,5 +92,3 @@ function prepareContextABStateInfo () {
 		return { ['active_ammit_flags']: ammitAllocations };
 	}
 }
-
-// TODO: Move this to the context helper folder
