@@ -6,9 +6,6 @@ jest.mock('o-tracking', () => ({ init: jest.fn() }), { virtual: true });
 jest.mock('o-viewport', () => ({ getOrientation: jest.fn() }), {
 	virtual: true
 });
-jest.mock('n-ui-foundations', () => ({ broadcast: jest.fn() }), {
-	virtual: true
-});
 
 const barrierData = {
 	type: 'foo',

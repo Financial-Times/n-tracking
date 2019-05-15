@@ -1,7 +1,8 @@
 // COPIED AS IS FROM N-UI
 
+import { broadcast } from '../broadcast';
+
 const oViewport = require('o-viewport');
-const broadcast = require('n-ui-foundations').broadcast;
 const ATTENTION_INTERVAL = 15000;
 const ATTENTION_EVENTS = [
 	'load',

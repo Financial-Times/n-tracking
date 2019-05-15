@@ -1,4 +1,4 @@
-import { broadcast } from 'n-ui-foundations';
+import { broadcast } from '../broadcast';
 import { prepareContext } from '../helpers/context';
 import { selectEachAttributeValue, findInQueryString } from '../helpers/dom';
 

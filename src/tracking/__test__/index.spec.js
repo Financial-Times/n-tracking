@@ -1,14 +1,12 @@
 import oTracking from 'o-tracking';
-import { broadcast } from 'n-ui-foundations';
+import { broadcast } from '../../broadcast';
 import { getUserData } from '../get-user-data';
 import { prepareContext } from '../../helpers/context';
 import { initialiseSitewideTrackers } from '../../trackers';
 import { tracking, SPOOR_API_INGEST_URL, ERROR_MSG } from '..';
 
 jest.mock('o-tracking', () => ({ init: jest.fn() }), { virtual: true });
-jest.mock('n-ui-foundations', () => ({ broadcast: jest.fn() }), {
-	virtual: true
-});
+jest.mock('../../broadcast', () => ({ broadcast: jest.fn() }));
 jest.mock('../get-user-data', () => ({ getUserData: jest.fn() }));
 jest.mock('../../helpers/context', () => ({ prepareContext: jest.fn() }));
 jest.mock('../../trackers', () => ({ initialiseSitewideTrackers: jest.fn() }));
@@ -88,8 +86,6 @@ describe('tracking', () => {
 			});
 
 			tracking.init({ flags, appInfo });
-
-			// TODO: Dont use the broadcast function from n-ui-foundations
 
 			expect(broadcast).toHaveBeenCalledTimes(1);
 			expect(broadcast).toHaveBeenCalledWith('oErrors.log', {

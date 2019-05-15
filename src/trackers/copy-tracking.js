@@ -1,4 +1,4 @@
-import { broadcast } from 'n-ui-foundations';
+import { broadcast } from '../broadcast';
 
 export default class CopyTracking {
 	constructor ({ root = document } = {}) {

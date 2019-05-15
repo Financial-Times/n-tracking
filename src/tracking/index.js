@@ -1,5 +1,5 @@
 import oTracking from 'o-tracking';
-import { broadcast } from 'n-ui-foundations';
+import { broadcast } from '../broadcast';
 import { getUserData } from './get-user-data';
 import { prepareContext } from '../helpers/context';
 import { initialiseSitewideTrackers } from '../trackers';
