@@ -1,7 +1,7 @@
 import oTracking from 'o-tracking';
-import { getRootData } from '../helpers/dom';
-import { getErrorStatus } from '../helpers/error';
-import { prepareErrorInfoForContext } from '../helpers/context';
+import { getRootData } from '../utilities/dom';
+import { getErrorStatus } from '../utilities/error';
+import { prepareErrorInfoForContext } from '../context';
 
 export default class PageViewTracking {
 	init () {

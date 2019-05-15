@@ -1,7 +1,7 @@
 import oTracking from 'o-tracking';
 import { broadcast } from '../broadcast';
 import { getUserData } from './get-user-data';
-import { prepareContext } from '../helpers/context';
+import { prepareContext } from '../context';
 import { initialiseSitewideTrackers } from '../trackers';
 
 export const ERROR_MSG = 'Failed to init o-tracking';

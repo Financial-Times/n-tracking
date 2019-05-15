@@ -1,4 +1,4 @@
-import { getErrorStatus, getErrorReason } from '../error';
+import { getErrorReason, getErrorStatus } from '../utilities/error';
 
 export function prepareErrorInfoForContext () {
 	const info = {};

@@ -1,16 +1,14 @@
 import oTracking from 'o-tracking';
 import PageViewTracking from '../page-view-tracking';
 import { withDOM } from '../../__test__/helpers';
-import { getRootData } from '../../helpers/dom';
-import { getErrorStatus } from '../../helpers/error';
-import { prepareErrorInfoForContext } from '../../helpers/context';
+import { getRootData } from '../../utilities/dom';
+import { getErrorStatus } from '../../utilities/error';
+import { prepareErrorInfoForContext } from '../../context';
 
 jest.mock('o-tracking', () => ({ page: jest.fn() }), { virtual: true });
-jest.mock('../../helpers/dom', () => ({ getRootData: jest.fn() }));
-jest.mock('../../helpers/error', () => ({ getErrorStatus: jest.fn() }));
-jest.mock('../../helpers/context', () => ({
-	prepareErrorInfoForContext: jest.fn()
-}));
+jest.mock('../../context', () => ({ prepareErrorInfoForContext: jest.fn() }));
+jest.mock('../../utilities/dom', () => ({ getRootData: jest.fn() }));
+jest.mock('../../utilities/error', () => ({ getErrorStatus: jest.fn() }));
 
 describe('PageViewTracking', () => {
 	afterEach(() => jest.clearAllMocks());

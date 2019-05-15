@@ -1,13 +1,13 @@
-import { withDOM } from '../../../__test__/helpers';
-import { getErrorStatus } from '../../error';
+import { withDOM } from '../../__test__/helpers';
+import { getErrorStatus } from '../../utilities/error';
 import { prepareContext } from '../prepare-context';
-import { prepareErrorInfoForContext } from '..';
+import { prepareErrorInfoForContext } from '../prepare-error-info-for-context';
 
-jest.mock('../../error', () => ({
+jest.mock('../../utilities/error', () => ({
 	getErrorStatus: jest.fn()
 }));
 
-jest.mock('..', () => ({
+jest.mock('../prepare-error-info-for-context', () => ({
 	prepareErrorInfoForContext: jest.fn()
 }));
 

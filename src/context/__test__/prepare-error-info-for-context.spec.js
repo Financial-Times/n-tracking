@@ -1,4 +1,4 @@
-import { withDOM } from '../../../__test__/helpers';
+import { withDOM } from '../../__test__/helpers';
 import { prepareErrorInfoForContext } from '../prepare-error-info-for-context';
 
 const referrer = 'foo-referrer';

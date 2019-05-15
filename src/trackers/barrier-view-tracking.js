@@ -1,6 +1,6 @@
 import { broadcast } from '../broadcast';
-import { prepareContext } from '../helpers/context';
-import { selectEachAttributeValue, findInQueryString } from '../helpers/dom';
+import { prepareContext } from '../context';
+import { selectEachAttributeValue, findInQueryString } from '../utilities/dom';
 
 export default class BarrierViewTracking {
 	constructor ({ flags, appInfo = {} } = {}) {

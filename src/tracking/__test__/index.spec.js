@@ -1,14 +1,14 @@
 import oTracking from 'o-tracking';
 import { broadcast } from '../../broadcast';
 import { getUserData } from '../get-user-data';
-import { prepareContext } from '../../helpers/context';
+import { prepareContext } from '../../context';
 import { initialiseSitewideTrackers } from '../../trackers';
 import { tracking, SPOOR_API_INGEST_URL, ERROR_MSG } from '..';
 
 jest.mock('o-tracking', () => ({ init: jest.fn() }), { virtual: true });
+jest.mock('../../context', () => ({ prepareContext: jest.fn() }));
 jest.mock('../../broadcast', () => ({ broadcast: jest.fn() }));
 jest.mock('../get-user-data', () => ({ getUserData: jest.fn() }));
-jest.mock('../../helpers/context', () => ({ prepareContext: jest.fn() }));
 jest.mock('../../trackers', () => ({ initialiseSitewideTrackers: jest.fn() }));
 
 const flags = {
