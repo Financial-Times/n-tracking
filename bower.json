@@ -1,6 +1,6 @@
 {
   "name": "n-tracking",
-  "description": "Client-side tracking for next apps",
+  "description": "Client-side tracking for ft.com apps",
   "main": "dist/index.js",
   "authors": ["Ifeanyi Isitor <ifeanyi.isitor@ft.com>"],
   "license": "MIT",

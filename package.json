@@ -1,6 +1,6 @@
 {
   "name": "@financial-times/n-tracking",
-  "description": "Client-side tracking for next apps",
+  "description": "Client-side tracking for ft.com apps",
   "version": "0.0.0",
   "license": "MIT",
   "main": "dist/index.js",
