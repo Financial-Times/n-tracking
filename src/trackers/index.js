@@ -1,5 +1,5 @@
-import oTracking from 'copy-tracking';
-import CopyTracking from 'copy-tracking';
+import oTracking from 'o-tracking';
+import CopyTracking from './copy-tracking';
 import PageAttentionTracking from './page-attention-tracking';
 
 export function initialiseSitewideTrackers () {

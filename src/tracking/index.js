@@ -1,5 +1,6 @@
 import oTracking from 'o-tracking';
 import { broadcast } from '../broadcast';
+import { getAppInfo } from './get-app-info';
 import { getUserData } from './get-user-data';
 import { prepareContext } from '../context';
 import { initialiseSitewideTrackers } from '../trackers';
@@ -8,14 +9,15 @@ export const ERROR_MSG = 'Failed to init o-tracking';
 export const SPOOR_API_INGEST_URL = 'https://spoor-api.ft.com/ingest';
 
 export const tracking = {
-	init ({ flags, context, appInfo = {}, additionalContext = {} } = {}) {
+	init ({ flags, context, appInfo, additionalContext = {} } = {}) {
 		try {
 			if (!flags || !flags.get('oTracking')) {
 				return;
 			}
 
 			const userData = getUserData();
-			const contextToUse = context || prepareContext(appInfo);
+			const appInfoToUse = appInfo || getAppInfo();
+			const contextToUse = context || prepareContext(appInfoToUse);
 
 			oTracking.init({
 				server: SPOOR_API_INGEST_URL,
