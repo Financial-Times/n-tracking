@@ -1,4 +1,4 @@
-import { withDOM } from '../../__test__/helpers';
+import withDomOverwrites from 'with-dom-overwrites';
 import BarrierViewTracking from '../barrier-view-tracking';
 
 jest.mock('o-grid', () => ({ getCurrentLayout: jest.fn() }), { virtual: true });
@@ -17,19 +17,21 @@ const barrierData = {
 describe('BarrierViewTracking', () => {
 	describe('.getAcquisitionContext()', () => {
 		it('should return an array of acquisition context entries if they have been specified', () => {
-			withDOM({
-				html: `
-					<html>
-						<body>
-							<div>
-								<div data-acquisition-context="a"></div>
-								<div data-acquisition-context="b"></div>
-								<div data-acquisition-context="c"></div>
-							</div>
-						</body>
-					</html>
-				`,
-				assertion: () => {
+			withDomOverwrites({
+				overwrites: {
+					'document.documentElement.outerHTML': `
+						<html>
+							<body>
+								<div>
+									<div data-acquisition-context="a"></div>
+									<div data-acquisition-context="b"></div>
+									<div data-acquisition-context="c"></div>
+								</div>
+							</body>
+						</html>
+					`
+				},
+				run: () => {
 					const tracking = new BarrierViewTracking();
 					expect(tracking.getAcquisitionContext()).toEqual(['a', 'b', 'c']);
 				}
@@ -44,19 +46,21 @@ describe('BarrierViewTracking', () => {
 
 	describe('.getOffers()', () => {
 		it('should return the ids of all the offers', () => {
-			withDOM({
-				html: `
-					<html>
-						<body>
-							<div>
-								<div data-offer-id="1"></div>
-								<div data-offer-id="2"></div>
-								<div data-offer-id="3"></div>
-							</div>
-						</body>
-					</html>
-				`,
-				assertion: () => {
+			withDomOverwrites({
+				overwrites: {
+					'document.documentElement.outerHTML': `
+						<html>
+							<body>
+								<div>
+									<div data-offer-id="1"></div>
+									<div data-offer-id="2"></div>
+									<div data-offer-id="3"></div>
+								</div>
+							</body>
+						</html>
+					`
+				},
+				run: () => {
 					const tracking = new BarrierViewTracking();
 					expect(tracking.getOffers()).toEqual(['1', '2', '3']);
 				}
@@ -74,9 +78,11 @@ describe('BarrierViewTracking', () => {
 			const referrer = 'app';
 			const url = `https://www.ft.com/products?barrierReferrer=${referrer}`;
 
-			withDOM({
-				url,
-				assertion: () => {
+			withDomOverwrites({
+				overwrites: {
+					'document.location.href': url
+				},
+				run: () => {
 					const tracking = new BarrierViewTracking();
 					expect(tracking.getBarrierReferrer()).toBe(referrer);
 				}
@@ -91,21 +97,23 @@ describe('BarrierViewTracking', () => {
 
 	describe('.getBarrierData()', () => {
 		it('should return the barrier data if it has been specified', () => {
-			withDOM({
-				html: `
-					<html>
-						<body>
-							<div
-								data-barrier="${barrierData.type}"
-								data-barrier-messaging="${barrierData.messaging}"
-								data-opportunity-subtype="${barrierData.opportunitySubType}"
-								data-barrier-is-product-selector="${barrierData.isProductSelector}">
-								...
-							</div>
-						</body>
-					</html>
-				`,
-				assertion: () => {
+			withDomOverwrites({
+				overwrites: {
+					'document.documentElement.outerHTML': `
+						<html>
+							<body>
+								<div
+									data-barrier="${barrierData.type}"
+									data-barrier-messaging="${barrierData.messaging}"
+									data-opportunity-subtype="${barrierData.opportunitySubType}"
+									data-barrier-is-product-selector="${barrierData.isProductSelector}">
+									...
+								</div>
+							</body>
+						</html>
+					`
+				},
+				run: () => {
 					const tracking = new BarrierViewTracking();
 					expect(tracking.getBarrierData()).toEqual(barrierData);
 				}

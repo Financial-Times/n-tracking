@@ -1,4 +1,4 @@
-import { withDOM } from '../../__test__/helpers';
+import withDomOverwrites from 'with-dom-overwrites';
 import { prepareErrorInfoForContext } from '../prepare-error-info-for-context';
 
 const referrer = 'foo-referrer';
@@ -9,12 +9,18 @@ describe('prepareErrorInfoForContext()', () => {
 	it('should prepare the error info that should be added to the context', () => {
 		const url = createErrorUrl(errorStatus);
 
-		withDOM({
-			url,
-			referrer,
-			assertion: () => {
+		withDomOverwrites({
+			overwrites: {
+				'document.referrer': referrer,
+				'document.location.href': url
+			},
+			run: () => {
 				const info = prepareErrorInfoForContext();
-				expect(info).toEqual({ url, referrer, errorStatus });
+				expect(info).toEqual({
+					url,
+					referrer,
+					errorStatus
+				});
 			}
 		});
 	});
@@ -22,12 +28,19 @@ describe('prepareErrorInfoForContext()', () => {
 	it('should add the error reason to the error info if it exists', () => {
 		const url = createErrorUrl(errorStatus, errorReason);
 
-		withDOM({
-			url,
-			referrer,
-			assertion: () => {
+		withDomOverwrites({
+			overwrites: {
+				'document.referrer': referrer,
+				'document.location.href': url
+			},
+			run: () => {
 				const info = prepareErrorInfoForContext();
-				expect(info).toEqual({ url, referrer, errorStatus, errorReason });
+				expect(info).toEqual({
+					url,
+					referrer,
+					errorStatus,
+					errorReason
+				});
 			}
 		});
 	});

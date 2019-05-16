@@ -1,6 +1,6 @@
 import oTracking from 'o-tracking';
 import PageViewTracking from '../page-view-tracking';
-import { withDOM } from '../../__test__/helpers';
+import withDomOverwrites from 'with-dom-overwrites';
 import { getRootData } from '../../utilities/dom';
 import { getErrorStatus } from '../../utilities/error';
 import { prepareErrorInfoForContext } from '../../context';
@@ -164,9 +164,11 @@ describe('PageViewTracking', () => {
 		});
 
 		it('should return `true` if the script is not running within an iframe', () => {
-			withDOM({
-				windowTop: {},
-				assertion: () => {
+			withDomOverwrites({
+				overwrites: {
+					'window.top': {}
+				},
+				run: () => {
 					const tracking = new PageViewTracking();
 					expect(tracking.isFrameset()).toBe(true);
 				}
@@ -178,9 +180,11 @@ describe('PageViewTracking', () => {
 		it('should return `true` if the hostname of the page is that of an FT error page ', () => {
 			const url = 'http://errors-next.ft.com/foo';
 
-			withDOM({
-				url,
-				assertion: () => {
+			withDomOverwrites({
+				overwrites: {
+					'document.location.href': url
+				},
+				run: () => {
 					const tracking = new PageViewTracking();
 					expect(tracking.isInErrorDomain()).toBe(true);
 				}

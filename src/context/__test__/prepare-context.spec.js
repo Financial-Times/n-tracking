@@ -1,4 +1,4 @@
-import { withDOM } from '../../__test__/helpers';
+import withDomOverwrites from 'with-dom-overwrites';
 import { getErrorStatus } from '../../utilities/error';
 import { prepareContext } from '../prepare-context';
 import { prepareErrorInfoForContext } from '../prepare-error-info-for-context';
@@ -49,9 +49,12 @@ describe('prepareContext(appInfo)', () => {
 
 	describe('content info', () => {
 		it('should add the content info to the created context it is present', () => {
-			withDOM({
-				html: '<html data-content-id="10001"></html>',
-				assertion: () => {
+			withDomOverwrites({
+				overwrites: {
+					'document.documentElement.outerHTML':
+						'<html data-content-id="10001"></html>'
+				},
+				run: () => {
 					const context = prepareContext(appInfo);
 					expect(context).toEqual({
 						...expectedContextAppInfo,
@@ -68,9 +71,13 @@ describe('prepareContext(appInfo)', () => {
 				const conceptId = 'concept-123';
 				const taxonomy = 'taxonomy-123';
 
-				withDOM({
-					html: `<html data-concept-id="${conceptId}"  data-taxonomy="${taxonomy}"></html>`,
-					assertion: () => {
+				withDomOverwrites({
+					overwrites: {
+						'document.documentElement.outerHTML': `
+							<html data-concept-id="${conceptId}"  data-taxonomy="${taxonomy}"></html>
+						`
+					},
+					run: () => {
 						const context = prepareContext(appInfo);
 
 						expect(context).toEqual({
@@ -85,9 +92,12 @@ describe('prepareContext(appInfo)', () => {
 
 		describe('when the concept id has not been specified', () => {
 			it('should not add the concept info to the created context', () => {
-				withDOM({
-					html: '<html data-taxonomy="123"></html>',
-					assertion: () => {
+				withDomOverwrites({
+					overwrites: {
+						'document.documentElement.outerHTML':
+							'<html data-taxonomy="123"></html>'
+					},
+					run: () => {
 						const context = prepareContext(appInfo);
 
 						expect(context).toEqual(expectedContextAppInfo);
@@ -118,17 +128,19 @@ describe('prepareContext(appInfo)', () => {
 	describe('edition info', () => {
 		it('should add the edition info to the context if it is present', () => {
 			const edition = 'edition123';
-			withDOM({
-				html: `
-					<html>
-						<body>
-							<div data-next-edition="${edition}">
-								...
-							</div>
-						</body>
-					</html>
-				`,
-				assertion: () => {
+			withDomOverwrites({
+				overwrites: {
+					'document.documentElement.outerHTML': `
+						<html>
+							<body>
+								<div data-next-edition="${edition}">
+									...
+								</div>
+							</body>
+						</html>
+					`
+				},
+				run: () => {
 					const context = prepareContext(appInfo);
 					expect(context).toEqual({ ...expectedContextAppInfo, edition });
 				}
@@ -141,9 +153,11 @@ describe('prepareContext(appInfo)', () => {
 			const segmentId = '12345';
 			const url = `https://www.ft.com/content/foo?desktop=true&segmentId=${segmentId}#myft:notification:instant-email:content`;
 
-			withDOM({
-				url,
-				assertion: () => {
+			withDomOverwrites({
+				overwrites: {
+					'document.location.href': url
+				},
+				run: () => {
 					const context = prepareContext(appInfo);
 					expect(context).toEqual({
 						...expectedContextAppInfo,
@@ -159,9 +173,11 @@ describe('prepareContext(appInfo)', () => {
 			const cpcCampaign = 'EducationHub';
 			const url = `https://enterprise.ft.com/en-gb/contact-us/?cpccampaign=${cpcCampaign}`;
 
-			withDOM({
-				url,
-				assertion: () => {
+			withDomOverwrites({
+				overwrites: {
+					'document.location.href': url
+				},
+				run: () => {
 					const context = prepareContext(appInfo);
 					expect(context).toEqual({
 						...expectedContextAppInfo,
@@ -174,32 +190,35 @@ describe('prepareContext(appInfo)', () => {
 
 	describe('page meta info', () => {
 		it('should add the page meta info to the context if it is present', () => {
-			window.FT = {
-				pageMeta: {
-					one: '1',
-					two: '2'
+			withDomOverwrites({
+				overwrites: {
+					'window.FT.pageMeta': {
+						one: '1',
+						two: '2'
+					}
+				},
+				run: () => {
+					const context = prepareContext(appInfo);
+					expect(context).toEqual({
+						...expectedContextAppInfo,
+						...window.FT.pageMeta
+					});
 				}
-			};
-
-			const context = prepareContext(appInfo);
-			expect(context).toEqual({
-				...expectedContextAppInfo,
-				...window.FT.pageMeta
 			});
-
-			delete window.FT;
 		});
 	});
 
 	describe('ab state info', () => {
 		it('should add the AB state data to the context if it is present', () => {
-			withDOM({
-				html: `
-					<html  data-ab-state="one:on,two:off">
-						...
-					</html>
-				`,
-				assertion: () => {
+			withDomOverwrites({
+				overwrites: {
+					'document.documentElement.outerHTML': `
+						<html  data-ab-state="one:on,two:off">
+							...
+						</html>
+					`
+				},
+				run: () => {
 					const context = prepareContext(appInfo);
 					expect(context).toEqual({
 						...expectedContextAppInfo,
