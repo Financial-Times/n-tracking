@@ -12,19 +12,6 @@ jest.mock('o-viewport', () => ({ getOrientation: jest.fn() }), {
 	virtual: true
 });
 
-const flags = {
-	get: value => {
-		switch (value) {
-			case 'oTracking':
-				return true;
-			case 'sendBeacon':
-				return 'sendBeacon';
-			default:
-				return true;
-		}
-	}
-};
-
 describe('tracking', () => {
 	afterEach(() => jest.clearAllMocks());
 
@@ -44,11 +31,17 @@ describe('tracking', () => {
 					isProduction: true
 				};
 
+				const flags = {
+					oTracking: true,
+					sendBeacon: true
+				};
+
 				oGrid.getCurrentLayout.mockReturnValue(userData.layout);
 				oViewport.getOrientation.mockReturnValue(userData.orientation);
 
 				withDomOverwrites({
 					overwrites: {
+						'window.FT.flags': flags,
 						'navigator.connection': userData.connectionType,
 						'document.documentElement.outerHTML': `
 							<html
@@ -62,7 +55,7 @@ describe('tracking', () => {
 						`
 					},
 					run: () => {
-						tracking.init({ flags });
+						tracking.init();
 
 						expect(oTracking.init).toHaveBeenCalledWith({
 							server: SPOOR_API_INGEST_URL,
@@ -73,7 +66,7 @@ describe('tracking', () => {
 								product: appInfo.product
 							},
 							user: userData,
-							useSendBeacon: flags.get('sendBeacon')
+							useSendBeacon: flags['sendBeacon']
 						});
 
 						expect(initialiseSitewideTrackers).toHaveBeenCalledTimes(1);

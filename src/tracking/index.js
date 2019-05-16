@@ -9,9 +9,14 @@ export const ERROR_MSG = 'Failed to init o-tracking';
 export const SPOOR_API_INGEST_URL = 'https://spoor-api.ft.com/ingest';
 
 export const tracking = {
-	init ({ flags, context, appInfo, additionalContext = {} } = {}) {
+	init ({
+		context,
+		appInfo,
+		flags = window.FT.flags,
+		additionalContext = {}
+	} = {}) {
 		try {
-			if (!flags || !flags.get('oTracking')) {
+			if (!flags || !flags['oTracking']) {
 				return;
 			}
 
@@ -23,7 +28,7 @@ export const tracking = {
 				server: SPOOR_API_INGEST_URL,
 				context: { ...contextToUse, ...additionalContext },
 				user: userData,
-				useSendBeacon: flags.get('sendBeacon')
+				useSendBeacon: flags['sendBeacon']
 			});
 
 			initialiseSitewideTrackers();

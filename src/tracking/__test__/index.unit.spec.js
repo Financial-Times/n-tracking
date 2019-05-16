@@ -12,18 +12,9 @@ jest.mock('../get-user-data', () => ({ getUserData: jest.fn() }));
 jest.mock('../../trackers', () => ({ initialiseSitewideTrackers: jest.fn() }));
 
 const flags = {
-	get: value => {
-		switch (value) {
-			case 'oTracking':
-				return true;
-			case 'sendBeacon':
-				return 'sendBeacon';
-			default:
-				return true;
-		}
-	}
+	oTracking: true,
+	sendBeacon: true
 };
-
 const appInfo = { appInfo: 'appInfo' };
 const context = { context: '' };
 const userData = { userData: '' };
@@ -44,7 +35,7 @@ describe('tracking', () => {
 					server: SPOOR_API_INGEST_URL,
 					context: context,
 					user: userData,
-					useSendBeacon: flags.get('sendBeacon')
+					useSendBeacon: flags['sendBeacon']
 				});
 			});
 
@@ -58,21 +49,17 @@ describe('tracking', () => {
 			});
 
 			it('does nothing when the flag has not been set', () => {
-				const flags = {
-					get: jest.fn(flag => (flag === 'oTracking' ? false : true))
-				};
+				const flags = { oTracking: false };
 
 				tracking.init({ flags, appInfo });
 
-				expect(flags.get).toHaveBeenCalledTimes(1);
-				expect(flags.get).toHaveBeenCalledWith('oTracking');
 				expect(oTracking.init).not.toHaveBeenCalled();
 				expect(getUserData).not.toHaveBeenCalled();
 				expect(prepareContext).not.toHaveBeenCalled();
 			});
 
 			it('does nothing when flags have not been supplied', () => {
-				tracking.init({ appInfo });
+				tracking.init({ flags: null, appInfo });
 
 				expect(oTracking.init).not.toHaveBeenCalled();
 				expect(getUserData).not.toHaveBeenCalled();
@@ -112,7 +99,7 @@ describe('tracking', () => {
 					server: SPOOR_API_INGEST_URL,
 					context: specialContext,
 					user: userData,
-					useSendBeacon: flags.get('sendBeacon')
+					useSendBeacon: flags['sendBeacon']
 				});
 			});
 
@@ -128,7 +115,7 @@ describe('tracking', () => {
 					server: SPOOR_API_INGEST_URL,
 					context: { ...context, ...additionalContext },
 					user: userData,
-					useSendBeacon: flags.get('sendBeacon')
+					useSendBeacon: flags['sendBeacon']
 				});
 			});
 		});
