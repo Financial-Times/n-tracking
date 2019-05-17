@@ -9,12 +9,7 @@ export const ERROR_MSG = 'Failed to init o-tracking';
 export const SPOOR_API_INGEST_URL = 'https://spoor-api.ft.com/ingest';
 
 export const tracking = {
-	init ({
-		context,
-		appInfo,
-		flags = window.FT.flags,
-		additionalContext = {}
-	} = {}) {
+	init ({ flags, appInfo, context, additionalContext = {} } = {}) {
 		try {
 			if (!flags || !flags['oTracking']) {
 				return;

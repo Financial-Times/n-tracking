@@ -34,7 +34,7 @@ function prepareContextConceptInfo () {
 	if (conceptId) {
 		return {
 			rootConceptId: conceptId,
-			rootTaxonomy: getRootData('taxonomy')
+			rootTaxonomy: getRootData('taxonomy') // TODO: Remove
 		};
 	}
 }

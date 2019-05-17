@@ -41,7 +41,6 @@ describe('tracking', () => {
 
 				withDomOverwrites({
 					overwrites: {
-						'window.FT.flags': flags,
 						'navigator.connection': userData.connectionType,
 						'document.documentElement.outerHTML': `
 							<html
@@ -55,7 +54,7 @@ describe('tracking', () => {
 						`
 					},
 					run: () => {
-						tracking.init();
+						tracking.init({ flags });
 
 						expect(oTracking.init).toHaveBeenCalledWith({
 							server: SPOOR_API_INGEST_URL,
