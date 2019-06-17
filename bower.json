@@ -3,10 +3,18 @@
   "description": "Client-side tracking for ft.com apps",
   "version": "0.0.0",
   "main": "dist/index.js",
-  "authors": ["Ifeanyi Isitor <ifeanyi.isitor@ft.com>"],
   "license": "MIT",
   "homepage": "https://github.com/Financial-Times/n-tracking",
-  "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests"],
+  "ignore": [
+    ".circleci",
+    "node_modules",
+    "bower_components",
+    "**/__test__",
+    "**/.*",
+    "jest.config.js",
+    "Makefile",
+    "secret-squirrel.js"
+  ],
   "dependencies": {
     "o-tracking": "^1.7.2",
     "ftdomdelegate": "^3.0.2",

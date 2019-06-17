@@ -1,8 +1,11 @@
-bower_components
-.circleci
+.circleci/
+__test__/
+bower_components/
 .babelrc
-.npmrc
+.editorconfig
 .eslintrc.js
-secret-squirrel.js
-Makefile
+.npmrc
 bower.json
+jest.config.js
+Makefile
+secret-squirrel.js
