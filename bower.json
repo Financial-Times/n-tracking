@@ -8,12 +8,9 @@
   "homepage": "https://github.com/Financial-Times/n-tracking",
   "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests"],
   "dependencies": {
-    "o-tracking": "^1.6.0",
-    "ftdomdelegate": "^3.0.0",
+    "o-tracking": "^1.7.2",
+    "ftdomdelegate": "^3.0.2",
     "o-utils": "^1.1.0",
     "o-viewport": "^3.3.2"
-  },
-  "resolutions": {
-    "ftdomdelegate": "^3.0.0"
   }
 }
