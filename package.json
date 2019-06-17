@@ -16,10 +16,10 @@
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
-    "@financial-times/n-gage": "^3.5.0",
-    "babel-jest": "^24.7.1",
+    "@financial-times/n-gage": "^3.7.0",
+    "babel-jest": "^24.8.0",
     "bower": "^1.8.8",
-    "jest": "^24.7.1",
+    "jest": "^24.8.0",
     "jsdom": "^15.0.0",
     "with-dom-overwrites": "^1.2.0"
   },
