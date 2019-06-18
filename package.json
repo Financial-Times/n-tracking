@@ -1,9 +1,9 @@
 {
   "name": "@financial-times/n-tracking",
-  "description": "Client-side tracking for ft.com apps",
+  "description": "Client-side tracking initialisation for FT.com apps",
+  "private": true,
   "version": "0.0.0",
   "license": "MIT",
-  "main": "dist/index.js",
   "repository": "Financial-Times/n-tracking.git",
   "scripts": {
     "precommit": "secret-squirrel",
@@ -11,7 +11,6 @@
     "prepush": "make verify -j3",
     "test": "jest --config jest.config.js"
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
