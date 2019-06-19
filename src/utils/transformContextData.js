@@ -8,18 +8,19 @@ const dataPropertyMap = {
 	contentType: 'rootContentType',
 	conceptId: 'rootConceptId',
 	conceptType: 'rootConceptType',
+	segmentId: 'marketing_segment_id',
+	cpcCampaign: 'cpc_campaign',
+	abTestStatus: 'active_ammit_flags'
 };
 
 export default function transformContextData(contextData) {
 	const result = {};
 
 	Object.keys(contextData).forEach((key) => {
-		const value = contextData[key];
+		let value = contextData[key];
 
 		if (key === 'abTestStatus') {
-			result['active_ammit_flags'] = transformListToObject(value);
-		} else {
-			result[dataPropertyMap[key] || key] = value;
+			value = transformListToObject(value);
 		}
 
 		// HACK: ensure content UUID and type match the audio tracking spec
@@ -31,6 +32,8 @@ export default function transformContextData(contextData) {
 		if (key === 'contentType') {
 			result.content = { ...result.content, asset_type: value }
 		}
+
+		result[dataPropertyMap[key] || key] = value;
 	});
 
 	return result;
