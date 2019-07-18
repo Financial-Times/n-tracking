@@ -1,10 +1,3 @@
-import oTracking from 'o-tracking';
-import CopyTracking from './copy-tracking';
-import PageAttentionTracking from './page-attention-tracking';
-
-export function initialiseSitewideTrackers () {
-	// Click-event tracking - https://github.com/Financial-Times/o-tracking
-	oTracking.click.init('cta');
-	CopyTracking.init();
-	PageAttentionTracking.init();
-}
+// TODO: implement and test trackers copied over from n-ui
+// https://github.com/Financial-Times/n-ui/tree/master/components/n-ui/tracking/ft/events
+export {};
