@@ -1,8 +1,16 @@
-export default function getQueryParams() {
-	const searchParams = new URLSearchParams(window.location.search);
+export default function getQueryParams(queryString = window.location.search) {
+	const result = {};
+	const properties = ['segmentid', 'cpccampaign'];
+	const searchParams = new URLSearchParams(queryString);
 
-	return {
-		segmentId: searchParams.get('segmentId'),
-		cpcCampaign: searchParams.get('cpccampaign')
-	};
+	// NOTE: undefined parameters will return null values so fallback to undefined
+	properties.forEach((property) => {
+		const value = searchParams.get(property);
+
+		if (value) {
+			result[property] = value;
+		}
+	});
+
+	return result;
 }
