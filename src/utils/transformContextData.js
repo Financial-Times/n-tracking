@@ -8,8 +8,8 @@ const dataPropertyMap = {
 	contentType: 'rootContentType',
 	conceptId: 'rootConceptId',
 	conceptType: 'rootConceptType',
-	segmentId: 'marketing_segment_id',
-	cpcCampaign: 'cpc_campaign',
+	segmentid: 'marketing_segment_id',
+	cpccampaign: 'cpc_campaign',
 	abTestStatus: 'active_ammit_flags'
 };
 

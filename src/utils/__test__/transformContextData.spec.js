@@ -15,6 +15,20 @@ describe('src/utils/transformContextData', () => {
 		expect(subject(fixture)).toEqual(expected);
 	});
 
+	it('maps the marketing query string properties to expected names', () => {
+		const fixture = {
+			cpccampaign: 1234,
+			segmentid: 'foo'
+		};
+
+		const expected = {
+			cpc_campaign: 1234,
+			marketing_segment_id: 'foo'
+		};
+
+		expect(subject(fixture)).toEqual(expected);
+	});
+
 	it('maps the content UUID and type to match the audio tracking spec', () => {
 		const fixture = {
 			contentId: 1234,
