@@ -12,15 +12,14 @@
     "test": "jest --config jest.config.js"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.3",
-    "@babel/core": "^7.4.3",
-    "@babel/preset-env": "^7.4.3",
-    "@financial-times/n-gage": "^3.7.0",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@financial-times/n-gage": "^3.10.0",
     "babel-jest": "^24.8.0",
     "bower": "^1.8.8",
     "jest": "^24.8.0",
     "jest-environment-jsdom-fifteen": "^1.0.0",
-    "jsdom": "^15.0.0",
+    "jsdom": "^15.1.0",
     "with-dom-overwrites": "^1.2.0"
   },
   "config": {},
