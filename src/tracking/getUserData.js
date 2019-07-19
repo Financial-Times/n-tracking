@@ -11,6 +11,6 @@ export default function getUserData () {
 	return {
 		layout: oGrid.getCurrentLayout(),
 		orientation: oViewport.getOrientation(),
-		connectionType: networkInfo ? networkInfo.type : null
+		connectionType: networkInfo ? networkInfo.type : undefined
 	};
 }
