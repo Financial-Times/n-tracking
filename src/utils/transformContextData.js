@@ -10,7 +10,7 @@ const dataPropertyMap = {
 	conceptType: 'rootConceptType',
 	segmentid: 'marketing_segment_id',
 	cpccampaign: 'cpc_campaign',
-	abTestStatus: 'active_ammit_flags'
+	abTestState: 'active_ammit_flags'
 };
 
 export default function transformContextData (contextData) {
@@ -19,7 +19,7 @@ export default function transformContextData (contextData) {
 	Object.keys(contextData).forEach((key) => {
 		let value = contextData[key];
 
-		if (key === 'abTestStatus') {
+		if (key === 'abTestState') {
 			value = transformListToObject(value);
 		}
 
