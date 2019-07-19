@@ -1,7 +1,7 @@
 import oGrid from 'o-grid';
 import oViewport from 'o-viewport';
 
-export default function getUserData() {
+export default function getUserData () {
 	// https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation
 	const networkInfo =
 		navigator.connection ||

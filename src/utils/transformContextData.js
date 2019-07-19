@@ -13,7 +13,7 @@ const dataPropertyMap = {
 	abTestStatus: 'active_ammit_flags'
 };
 
-export default function transformContextData(contextData) {
+export default function transformContextData (contextData) {
 	const result = {};
 
 	Object.keys(contextData).forEach((key) => {
@@ -26,11 +26,11 @@ export default function transformContextData(contextData) {
 		// HACK: ensure content UUID and type match the audio tracking spec
 		// <https://docs.google.com/spreadsheets/d/1YjXO0_3Xojact4sU24tIo_Nnv7e38zbRHWjwmOfHkb0/edit?usp=sharing>
 		if (key === 'contentId') {
-			result.content = { ...result.content, uuid: value }
+			result.content = { ...result.content, uuid: value };
 		}
 
 		if (key === 'contentType') {
-			result.content = { ...result.content, asset_type: value }
+			result.content = { ...result.content, asset_type: value };
 		}
 
 		result[dataPropertyMap[key] || key] = value;

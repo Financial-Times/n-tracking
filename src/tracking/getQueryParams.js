@@ -1,4 +1,4 @@
-export default function getQueryParams(queryString = window.location.search) {
+export default function getQueryParams (queryString = window.location.search) {
 	const result = {};
 	const properties = ['segmentid', 'cpccampaign'];
 	const searchParams = new URLSearchParams(queryString);

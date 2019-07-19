@@ -1,4 +1,4 @@
-export default function getErrorPageParams(queryString = window.location.search) {
+export default function getErrorPageParams (queryString = window.location.search) {
 	const searchParams = new URLSearchParams(queryString);
 
 	const errorStatus = searchParams.get('nextErrorStatus');

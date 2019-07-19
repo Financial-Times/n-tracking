@@ -1,4 +1,4 @@
-export default function transformListToObject(list) {
+export default function transformListToObject (list) {
 	const result = {};
 
 	list.split(',').map(flag => {
