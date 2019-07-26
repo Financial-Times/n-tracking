@@ -48,7 +48,7 @@ Property       | Type   | Required | Description
 `extraContext` | Object | No       | Additional data describing the current page which will be appended to all captured events.
 `pageViewContext` | Object | No | Additional data to append to the page view event but not
 
-[FT.com App Context schema]: https://github.com/Financial-Times/dotcom-page-kit/blob/master/packages/dotcom-server-app-context/schema.md
+[FT.com App Context]: https://github.com/Financial-Times/dotcom-page-kit/blob/master/packages/dotcom-server-app-context/schema.md
 
 
 ## Automatically inferred data
