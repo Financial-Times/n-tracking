@@ -1,17 +1,17 @@
-import oTracking from 'o-tracking';
-import oViewport from 'o-viewport';
-import oGrid from 'o-grid';
-import { init, SPOOR_API_INGEST_URL } from '..';
-
-jest.mock('o-tracking', () => {
+jest.mock('@financial-times/o-tracking', () => {
 	return {
 		init: jest.fn(),
 		page: jest.fn(),
 		click: { init: jest.fn() }
 	};
 }, { virtual: true });
-jest.mock('o-viewport', () => ({ getOrientation: jest.fn() }), { virtual: true });
-jest.mock('o-grid', () => ({ getCurrentLayout: jest.fn() }), { virtual: true });
+jest.mock('@financial-times/o-viewport', () => ({ getOrientation: jest.fn() }), { virtual: true });
+jest.mock('@financial-times/o-grid', () => ({ getCurrentLayout: jest.fn() }), { virtual: true });
+
+import oTracking from '@financial-times/o-tracking';
+import oViewport from '@financial-times/o-viewport';
+import oGrid from '@financial-times/o-grid';
+import { init, SPOOR_API_INGEST_URL } from '..';
 
 const appContext = {
 	product: 'next',

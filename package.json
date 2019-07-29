@@ -25,5 +25,10 @@
   "config": {},
   "engines": {
     "node": ">=8.16.0"
+  },
+  "dependencies": {
+    "@financial-times/o-grid": "^4.5.3",
+    "@financial-times/o-tracking": "^1.7.2",
+    "@financial-times/o-viewport": "^3.3.3"
   }
 }
