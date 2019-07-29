@@ -2,6 +2,7 @@
   "name": "@financial-times/n-tracking",
   "description": "Client-side tracking initialisation for FT.com apps",
   "private": true,
+  "browser": "src/index.js",
   "version": "0.0.0",
   "license": "MIT",
   "repository": "Financial-Times/n-tracking.git",
