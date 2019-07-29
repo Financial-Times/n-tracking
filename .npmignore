@@ -1,11 +1,9 @@
 .circleci/
 __test__/
-bower_components/
 .babelrc
 .editorconfig
 .eslintrc.js
 .npmrc
-bower.json
 jest.config.js
 Makefile
 secret-squirrel.js
