@@ -1,4 +1,4 @@
-# n-tracking
+# @financial-times/n-tracking [![CircleCI](https://circleci.com/gh/Financial-Times/n-tracking/tree/master.svg?style=svg)](https://circleci.com/gh/Financial-Times/n-tracking/tree/master)
 
 This package provides client-side tracking initialisation for FT.com. It configures [o-tracking] (which is used to capture and send tracking events to [Spoor]) with the provided and automatically inferred context data.
 
