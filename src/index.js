@@ -1,4 +1,4 @@
-import oTracking from 'o-tracking';
+import oTracking from '@financial-times/o-tracking';
 import getUserData from './tracking/getUserData';
 import getQueryParams from './tracking/getQueryParams';
 import getErrorPageParams from './tracking/getErrorPageParams';

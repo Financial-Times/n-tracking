@@ -8,16 +8,16 @@ This package provides client-side tracking initialisation for FT.com. It configu
 
 ## Getting started
 
-This package is for client-side use and is distributed on Bower.
+This package is for client-side use and is distributed on npm.
 
 ```sh
-bower install -S n-tracking
+npm install -S @financial-times/n-tracking
 ```
 
 After installing the package you can import the tracking component into your client-side code:
 
 ```js
-import * as tracking from 'n-tracking';
+import * as tracking from '@financial-times/n-tracking';
 
 const oTracking = tracking.init(options);
 ```
