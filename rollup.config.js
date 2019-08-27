@@ -8,7 +8,7 @@ const external = [
 
 export default [
 	{
-		input: 'src/index.js',
+		input: 'src/client/index.js',
 		external,
 		output: {
 			file: pkg.browser,
