@@ -5,6 +5,9 @@ node_modules/@financial-times/n-gage/index.mk:
 
 -include node_modules/@financial-times/n-gage/index.mk
 
+build:
+	npm run build
+
 unit-test:
 	npm run test
 
