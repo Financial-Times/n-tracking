@@ -1,5 +1,5 @@
 import React from 'react';
-import filterAppContext from '../lib/filterAppContext';
+import formatAppContext from '../lib/formatAppContext';
 
 const pixel = 'https://spoor-api.ft.com/px.gif?data=';
 
@@ -8,7 +8,7 @@ const placeholder = '[SOURCE]';
 export function CoreTracking({ options }) {
 	// We only need the basics as the full data cannot be assembled
 	// on the server without the client-side JS.
-	const context = filterAppContext(options.appContext);
+	const context = formatAppContext(options.appContext);
 
 	const trackingData = {
 		category: 'page',
