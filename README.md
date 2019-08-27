@@ -1,6 +1,6 @@
 # @financial-times/n-tracking [![CircleCI](https://circleci.com/gh/Financial-Times/n-tracking/tree/master.svg?style=svg)](https://circleci.com/gh/Financial-Times/n-tracking/tree/master)
 
-This package provides client-side tracking initialisation for FT.com. On the client-side it configures [o-tracking] (which is used to capture and send tracking events to [Spoor]) and can be used on the server-side to embed fallback tracking pixels.
+This package provides tracking initialisation for FT.com. On the client-side it configures [o-tracking] (which is used to capture and send tracking events to [Spoor]) and for the server-side it provides components which render fallback tracking pixels .
 
 [o-tracking]: https://github.com/Financial-Times/o-tracking
 [Spoor]: https://spoor-docs.herokuapp.com/
@@ -21,9 +21,14 @@ After installing the package you can import the tracking component into your cod
 On the client-side this package can be used to configure [o-tracking], setup click tracking, and send a page view event.
 
 ```js
-import * as tracking from '@financial-times/n-tracking';
+import * as nTracking from '@financial-times/n-tracking';
 
-const oTracking = tracking.init(options);
+const oTracking = nTracking.init(options);
+
+nTracking.broadcast('oTracking.event', {
+  category: 'page',
+  action: 'custom-event',
+});
 ```
 
 To initialise the component you'll need to provide it with several [configuration options](#options).
@@ -61,7 +66,7 @@ TODO: custom tracking events to be used across FT.com
 
 ### `<CoreTracking options={} />`
 
-Renders a `<noscript>` and inline `<script>` element to embed fallback tracking pixels into the page which are used when the client-side JS fails to run. It accepts the same [options](#options) as the client-side code.
+Renders a `<noscript>` and inline `<script>` element to embed fallback tracking pixels into the page which can be used when the client-side JS fails to run. It accepts the same [options](#options) as the client-side code.
 
 
 ## Options
