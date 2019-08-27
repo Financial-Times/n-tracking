@@ -1,7 +1,8 @@
 {
   "name": "@financial-times/n-tracking",
   "description": "Client-side tracking initialisation for FT.com apps",
-  "browser": "dist/index.js",
+  "main": "dist/server.js",
+  "browser": "dist/browser.js",
   "version": "0.0.0",
   "license": "MIT",
   "repository": "Financial-Times/n-tracking.git",
@@ -15,13 +16,17 @@
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/preset-env": "^7.5.5",
     "@financial-times/n-gage": "^3.10.0",
     "babel-jest": "^24.8.0",
+    "eslint-plugin-react": "^7.14.3",
     "jest": "^24.8.0",
     "jest-environment-jsdom-fifteen": "^1.0.0",
     "jsdom": "^15.1.0",
+    "react": "^16.9.0",
     "rollup": "^1.20.2",
+    "rollup-plugin-babel": "^4.3.3",
     "with-dom-overwrites": "^1.2.0"
   },
   "config": {},
@@ -32,5 +37,8 @@
     "@financial-times/o-grid": "^4.5.3",
     "@financial-times/o-tracking": "^1.7.2",
     "@financial-times/o-viewport": "^3.3.3"
+  },
+  "peerDependencies": {
+    "react": "^16.9.0"
   }
 }
