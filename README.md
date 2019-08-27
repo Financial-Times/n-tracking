@@ -1,6 +1,6 @@
 # @financial-times/n-tracking [![CircleCI](https://circleci.com/gh/Financial-Times/n-tracking/tree/master.svg?style=svg)](https://circleci.com/gh/Financial-Times/n-tracking/tree/master)
 
-This package provides client-side tracking initialisation for FT.com. It configures [o-tracking] (which is used to capture and send tracking events to [Spoor]) with the provided and automatically inferred context data. A server-side template is also provided which can be used to embed fallback tracking pixels into the page.
+This package provides client-side tracking initialisation for FT.com. On the client-side it configures [o-tracking] (which is used to capture and send tracking events to [Spoor]) and can be used on the server-side to embed fallback tracking pixels.
 
 [o-tracking]: https://github.com/Financial-Times/o-tracking
 [Spoor]: https://spoor-docs.herokuapp.com/
@@ -18,7 +18,7 @@ After installing the package you can import the tracking component into your cod
 
 ### Client-side integration
 
-This is primarily used to configure [o-tracking] but the client-side integration also provides a utility to trigger custom events.
+On the client-side this package can be used to configure [o-tracking], setup click tracking, and send a page view event.
 
 ```js
 import * as tracking from '@financial-times/n-tracking';
@@ -31,7 +31,7 @@ To initialise the component you'll need to provide it with several [configuratio
 
 ### Server-side integration
 
-The server-side integration can be used to embed tracking pixels into the page which send page view events for visits which do not support JS or an enhanced experience.
+On the server-side a JSX component embeds tracking pixels into the page which send page view events for any visitors which do not support JS or fail to cut the mustard.
 
 ```jsx
 const { CoreTracking } = require('@financial-times/n-tracking');
@@ -42,7 +42,7 @@ const { CoreTracking } = require('@financial-times/n-tracking');
 To initialise the component you'll need to provide it with several [configuration options](#options).
 
 
-## API
+## Client-side API
 
 ### `init(options)`
 
@@ -55,6 +55,13 @@ Creates a [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/Custo
 ### `trackers.customTrackerName()`
 
 TODO: custom tracking events to be used across FT.com
+
+
+## Server-side API
+
+### `<CoreTracking options={} />`
+
+Renders a `<noscript>` and inline `<script>` element to embed fallback tracking pixels into the page which are used when the client-side JS fails to run. It accepts the same [options](#options) as the client-side code.
 
 
 ## Options
