@@ -1,11 +1,14 @@
 import React from 'react';
+import filterAppContext from '../lib/filterAppContext';
 
 const pixel = 'https://spoor-api.ft.com/px.gif?data=';
 
 const placeholder = '[SOURCE]';
 
 export function CoreTracking({ appContext }) {
-	// const context = filterAppContext(appContext);
+	// We only need the basics as the full data cannot be assembled
+	// on the server without the client-side JS.
+	const context = filterAppContext(appContext);
 
 	const trackingData = {
 		category: 'page',
@@ -14,7 +17,7 @@ export function CoreTracking({ appContext }) {
 			source: 'non-ctm'
 		},
 		context: {
-			// ...context,
+			...context,
 			product: 'next',
 			data: { source: placeholder }
 		}
