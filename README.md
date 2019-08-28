@@ -41,7 +41,7 @@ On the server-side a JSX component embeds tracking pixels into the page which se
 ```jsx
 const { CoreTracking } = require('@financial-times/n-tracking');
 
-<CoreTracking options={options} />
+<CoreTracking {...options} />
 ```
 
 To initialise the component you'll need to provide it with several [configuration options](#options).
@@ -64,7 +64,7 @@ TODO: custom tracking events to be used across FT.com
 
 ## Server-side API
 
-### `<CoreTracking options={} />`
+### `<CoreTracking />`
 
 Renders a `<noscript>` and inline `<script>` element to embed fallback tracking pixels into the page which can be used when the client-side JS fails to run. It accepts the same [options](#options) as the client-side code.
 

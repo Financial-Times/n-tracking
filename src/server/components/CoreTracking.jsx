@@ -5,10 +5,10 @@ const pixel = 'https://spoor-api.ft.com/px.gif?data=';
 
 const placeholder = '[SOURCE]';
 
-export function CoreTracking({ options }) {
+export function CoreTracking({ appContext }) {
 	// We only need the basics as the full data cannot be assembled
 	// on the server without the client-side JS.
-	const context = formatAppContext(options.appContext);
+	const context = formatAppContext(appContext);
 
 	const trackingData = {
 		category: 'page',
