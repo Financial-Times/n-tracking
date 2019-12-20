@@ -1,7 +1,20 @@
 import { broadcast } from '../broadcast'
 import ttiPolyfill from 'tti-polyfill'
 
+const userIsInCohort = () => {
+	const cohortPercent = 2
+	const spoorNumber = parseInt(decodeURIComponent(document.cookie.match(/spoor-id=([^;]+)/)[1].replace(/[^0-9]+/g,'')))
+	
+	if (!spoorNumber) return false
+	
+	const isInCohort =  spoorNumber % 100 < cohortPercent
+	return true // isInCohort
+}
+
 export const realUserMonitoringForPerformance = async () => {
+
+	// Collect performance data for a small random selection of users only.
+	if (!userIsInCohort()) return
 
 	// For browser compatibility @see: https://mdn.github.io/dom-examples/performance-apis/perf-api-support.html
 	if (!'PerformanceLongTaskTiming' in window || !'ttiPolyfill' in window) return 
@@ -29,24 +42,29 @@ export const realUserMonitoringForPerformance = async () => {
 	// @see: https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
 	if (type !== 'navigate') return
 	
-	const timeToFirstByte = responseStart - requestStart
-	const firstPaint = performance.getEntriesByName('first-paint')[0].startTime
-	const firstContentfulPaint = performance.getEntriesByName('first-contentful-paint')[0].startTime
-	const context = {
-		firstPaint: Math.round(firstPaint),
-		firstContentfulPaint: Math.round(firstContentfulPaint),
-		timeToFirstByte: Math.round(timeToFirstByte),
-		domInteractive: Math.round(domInteractive),
-		domComplete: Math.round(domComplete),
-		largestContentfulPaint: Math.round(largestContentfulPaint),
-		timeToInteractive: Math.round(timeToInteractive),
+	try {
+		const timeToFirstByte = responseStart - requestStart
+		const firstPaint = performance.getEntriesByName('first-paint')[0].startTime
+		const firstContentfulPaint = performance.getEntriesByName('first-contentful-paint')[0].startTime
+		const context = {
+			firstPaint: Math.round(firstPaint),
+			firstContentfulPaint: Math.round(firstContentfulPaint),
+			timeToFirstByte: Math.round(timeToFirstByte),
+			domInteractive: Math.round(domInteractive),
+			domComplete: Math.round(domComplete),
+			largestContentfulPaint: Math.round(largestContentfulPaint),
+			timeToInteractive: Math.round(timeToInteractive),
+		}
+		
+		console.log(context)
+		const data = {
+			action: 'performance',
+			category: 'page',
+			...context
+		}
+		broadcast('oTracking.event', data)
 	}
-	
-	console.table(context)
-	const data = {
-		action: 'performance',
-		category: 'page',
-		context
+	catch (error) {
+		console.error(error)
 	}
-	broadcast('oTracking.event', data)
 }
