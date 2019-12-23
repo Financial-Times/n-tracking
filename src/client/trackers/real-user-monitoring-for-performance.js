@@ -4,10 +4,10 @@ import ttiPolyfill from 'tti-polyfill'
 const userIsInCohort = () => {
 	const cohortPercent = 2
 	const spoorNumber = parseInt(decodeURIComponent(document.cookie.match(/spoor-id=([^;]+)/)[1].replace(/[^0-9]+/g,'')))
-	
+
 	if (!spoorNumber) return false
-	
-	const isInCohort =  spoorNumber % 100 < cohortPercent
+
+	const isInCohort = spoorNumber % 100 < cohortPercent
 	return true // isInCohort
 }
 
@@ -17,7 +17,7 @@ export const realUserMonitoringForPerformance = async () => {
 	if (!userIsInCohort()) return
 
 	// For browser compatibility @see: https://mdn.github.io/dom-examples/performance-apis/perf-api-support.html
-	if (!'PerformanceLongTaskTiming' in window || !'ttiPolyfill' in window) return 
+	if (!'PerformanceLongTaskTiming' in window || !'ttiPolyfill' in window) return
 
 	// @see: https://web.dev/lcp/#how-to-measure-lcp (largest-contentful-paint)
 	let largestContentfulPaint
@@ -27,7 +27,7 @@ export const realUserMonitoringForPerformance = async () => {
 		largestContentfulPaint = lastEntry.renderTime || lastEntry.loadTime
 	})
 	lcpPerformanceObserver.observe({type: 'largest-contentful-paint', buffered: true})
-	
+
 	// This resolves when it decides it's ready.
 	const timeToInteractive = await ttiPolyfill.getFirstConsistentlyInteractive()
 
@@ -37,11 +37,11 @@ export const realUserMonitoringForPerformance = async () => {
 
 	const navigation = performance.getEntriesByType('navigation')[0]
 	const { type, domInteractive, domComplete, responseStart, requestStart } = navigation
-	
+
 	// Proceed only if the page load event is a "navigate".
 	// @see: https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
 	if (type !== 'navigate') return
-	
+
 	try {
 		const timeToFirstByte = responseStart - requestStart
 		const firstPaint = performance.getEntriesByName('first-paint')[0].startTime
@@ -55,8 +55,8 @@ export const realUserMonitoringForPerformance = async () => {
 			largestContentfulPaint: Math.round(largestContentfulPaint),
 			timeToInteractive: Math.round(timeToInteractive),
 		}
-		
-		console.log(context)
+
+			console.log(context)
 		const data = {
 			action: 'performance',
 			category: 'page',
