@@ -2,13 +2,21 @@ import { broadcast } from '../broadcast'
 import ttiPolyfill from 'tti-polyfill'
 
 const userIsInCohort = () => {
+
+	// What percentage of users shall we measure real perfomance data from?
 	const cohortPercent = 2
-	const spoorNumber = parseInt(decodeURIComponent(document.cookie.match(/spoor-id=([^;]+)/)[1].replace(/[^0-9]+/g,'')))
+	const { cookie } = document || {}
+	if (!cookie) return false
 
-	if (!spoorNumber) return false
-
-	const isInCohort = spoorNumber % 100 < cohortPercent
-	return true // isInCohort
+	let spoorNumber = false
+	let isInCohort = false
+	try {
+		spoorNumber = parseInt(decodeURIComponent(cookie.match(/spoor-id=([^;]+)/)[1].replace(/[^0-9]+/g,'')))
+		isInCohort = spoorNumber % 100 <= cohortPercent
+	} catch (error) {
+		// The spoor id is not in the cohort percentile.
+	}
+	return isInCohort
 }
 
 export const realUserMonitoringForPerformance = async () => {
@@ -27,6 +35,10 @@ export const realUserMonitoringForPerformance = async () => {
 		largestContentfulPaint = lastEntry.renderTime || lastEntry.loadTime
 	})
 	lcpPerformanceObserver.observe({type: 'largest-contentful-paint', buffered: true})
+
+
+console.log({lcpPerformanceObserver})
+
 
 	// This resolves when it decides it's ready.
 	const timeToInteractive = await ttiPolyfill.getFirstConsistentlyInteractive()
@@ -56,7 +68,7 @@ export const realUserMonitoringForPerformance = async () => {
 			timeToInteractive: Math.round(timeToInteractive),
 		}
 
-			console.log(context)
+		console.log(context)
 		const data = {
 			action: 'performance',
 			category: 'page',
