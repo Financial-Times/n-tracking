@@ -42,4 +42,4 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 
 export * from './broadcast';
 import * as trackers from './trackers/index.js';
-export { trackers }	
+export { trackers }
