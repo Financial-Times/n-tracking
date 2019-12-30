@@ -2,7 +2,7 @@ import ttiPolyfill from 'tti-polyfill';
 import { broadcast } from '../broadcast';
 import { userIsInCohort } from '../utils/userIsInCohort';
 
-export const realUserMonitoringForPerformance = async () => {
+export const realUserMonitoringForPerformance = () => {
 	const cohortPercent = 5;
 	if (!userIsInCohort(cohortPercent)) return;
 
