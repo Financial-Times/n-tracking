@@ -54,7 +54,7 @@ export const realUserMonitoringForPerformance = () => {
 			broadcast('oTracking.event', data);
 		}
 		catch (error) {
-			console.error(error); // eslint-disable-line no-console
+			console.error('Could not track web-peformance metrics:', error); // eslint-disable-line no-console
 		}
 	});
 };
