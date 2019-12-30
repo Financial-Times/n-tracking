@@ -40,12 +40,6 @@ nTracking.broadcast('oTracking.event', {
 });
 ```
 
-**Set up click tracking**
-
-```js
-// Todo: Provide example code here.
-```
-
 **Send real-user-monitoring (RUM) performance metrics**
 
 ```js
