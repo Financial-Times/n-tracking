@@ -18,21 +18,39 @@ After installing the package you can import the tracking component into your cod
 
 ### Client-side integration
 
-On the client-side this package can be used to configure [o-tracking], setup click tracking, and send a page view event.
+**Configure [o-tracking]**
+
+This package can be used on the client-side. Initialise the component with [configuration options](#options).
 
 ```js
 import * as nTracking from '@financial-times/n-tracking';
+const options = {}
+const oTracking = nTracking.init(options); 
+```
+ 
+**Send custom events**
 
-const oTracking = nTracking.init(options);
-
+```js
+import * as nTracking from '@financial-times/n-tracking';
+const context = { customData: 12345 }
 nTracking.broadcast('oTracking.event', {
   category: 'page',
   action: 'custom-event',
+  ...context
 });
 ```
 
-To initialise the component you'll need to provide it with several [configuration options](#options).
+**Send real-user-monitoring (RUM) performance metrics**
 
+```js
+import * as nTracking from '@financial-times/n-tracking';
+if (flags.get('realUserMonitoringForPerformance')) {
+	nTracking.trackers.realUserMonitoringForPerformance();
+}
+```
+<div><img width="50%" src="https://user-images.githubusercontent.com/224547/71410882-f2b50980-263e-11ea-86f2-f7e986fc9fad.png" /></div>
+
+_Above: Real-user-monitoring performance metrics are sent to spoor-api._ 
 
 ### Server-side integration
 
@@ -71,11 +89,11 @@ Renders a `<noscript>` and inline `<script>` element to embed fallback tracking 
 
 ## Options
 
-Property       | Type   | Required | Description
----------------|--------|----------|------------------------------------------------------------------
-`appContext`   | Object | Yes      | [FT.com App Context] data describing the current page which will be appended to all captured events.
-`extraContext` | Object | No       | Additional data describing the current page which will be appended to all captured events.
-`pageViewContext` | Object | No | Additional data to append to the page view event only
+Property          | Type   | Required | Description
+------------------|--------|----------|------------------------------------------------------------------
+`appContext`      | Object | Yes      | [FT.com App Context] data describing the current page which will be appended to all captured events.
+`extraContext`    | Object | No       | Additional data describing the current page which will be appended to all captured events.
+`pageViewContext` | Object | No       | Additional data to append to the page view event only
 
 [FT.com App Context]: https://github.com/Financial-Times/dotcom-page-kit/blob/master/packages/dotcom-server-app-context/schema.md
 
