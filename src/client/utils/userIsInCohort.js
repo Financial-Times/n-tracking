@@ -1,4 +1,13 @@
-export const userIsInCohort = (cohortPercent = 5) => {
+
+/**
+ * userIsInCohort
+ *
+ * @param {integer} cohortPercent the percentage of users you want in your cohort.
+ * @returns {boolean} true if the user's spoor number is between zero and `cohortPercent`.
+ */
+export const userIsInCohort = cohortPercent => {
+	if (!cohortPercent || isNaN(cohortPercent)) return false;
+
 	const { cookie } = document || {};
 	if (!cookie) return false;
 
