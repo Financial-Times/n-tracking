@@ -1,4 +1,4 @@
-import ttiPolyfill from 'tti-polyfill';
+import 'first-input-delay';
 import { broadcast } from '../broadcast';
 import { userIsInCohort } from '../utils/userIsInCohort';
 
@@ -7,7 +7,7 @@ export const realUserMonitoringForPerformance = () => {
 	if (!userIsInCohort(cohortPercent)) return;
 
 	// For browser compatibility @see: https://mdn.github.io/dom-examples/performance-apis/perf-api-support.html
-	if (!'PerformanceLongTaskTiming' in window || !'ttiPolyfill' in window) return;
+	if (!'PerformanceLongTaskTiming' in window || !'perfMetrics' in window) return;
 
 	// @see: https://web.dev/lcp/#how-to-measure-lcp (largest-contentful-paint)
 	let largestContentfulPaint;
@@ -18,10 +18,16 @@ export const realUserMonitoringForPerformance = () => {
 	});
 	lcpPerformanceObserver.observe({type: 'largest-contentful-paint', buffered: true});
 
-	ttiPolyfill.getFirstConsistentlyInteractive().then(timeToInteractive => {
+	/**
+	 * Use the 'First Input Delay (FID)' metric as the event that triggers the tracking broadcast
+	 *
+	 * FID is the delay that the user experiences when they first try to interact with the page.
+	 * @see: https://github.com/GoogleChromeLabs/first-input-delay#usage
+	 */
+	perfMetrics.onFirstInputDelay(firstInputDelay => { // eslint-disable-line no-undef
 
 		// Disconnect the observer once it no longer needs to observe the performance data
-		// @SEE: https://w3c.github.io/performance-timeline/#the-performanceobserver-interface
+		// @see: https://w3c.github.io/performance-timeline/#the-performanceobserver-interface
 		lcpPerformanceObserver.disconnect();
 
 		const navigation = performance.getEntriesByType('navigation')[0];
@@ -42,7 +48,7 @@ export const realUserMonitoringForPerformance = () => {
 				domInteractive: Math.round(domInteractive),
 				domComplete: Math.round(domComplete),
 				largestContentfulPaint: Math.round(largestContentfulPaint),
-				timeToInteractive: Math.round(timeToInteractive),
+				firstInputDelay: Math.round(firstInputDelay),
 			};
 
 			console.log(context); // eslint-disable-line no-console
