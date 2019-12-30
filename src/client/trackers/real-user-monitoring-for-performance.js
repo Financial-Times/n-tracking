@@ -1,4 +1,3 @@
-import 'first-input-delay';
 import { broadcast } from '../broadcast';
 import { userIsInCohort } from '../utils/userIsInCohort';
 
@@ -6,7 +5,10 @@ export const realUserMonitoringForPerformance = () => {
 	const cohortPercent = 5;
 	if (!userIsInCohort(cohortPercent)) return;
 
-	// For browser compatibility @see: https://mdn.github.io/dom-examples/performance-apis/perf-api-support.html
+	// For `PerformanceLongTaskTiming` browser compatibility, @see: https://mdn.github.io/dom-examples/performance-apis/perf-api-support.html
+	// `perfMetrics` is added to `window` scope by the first-input-delay code.
+	// @see: https://github.com/GoogleChromeLabs/first-input-delay/blob/master/src/first-input-delay.js#L170
+	// The perfMetrics <script> is added to the document <head> server side, via src/server/components/RealUserMonitoringForPerformance.jsx
 	if (!'PerformanceLongTaskTiming' in window || !'perfMetrics' in window) return;
 
 	// @see: https://web.dev/lcp/#how-to-measure-lcp (largest-contentful-paint)
