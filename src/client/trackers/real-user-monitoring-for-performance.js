@@ -3,9 +3,8 @@ import { broadcast } from '../broadcast';
 import { userIsInCohort } from '../utils/userIsInCohort';
 
 export const realUserMonitoringForPerformance = async () => {
-
-	// Collect performance data for 5% of users, selected randomly.
-	if (!userIsInCohort(5)) return;
+	const cohortPercent = 5;
+	if (!userIsInCohort(cohortPercent)) return;
 
 	// For browser compatibility @see: https://mdn.github.io/dom-examples/performance-apis/perf-api-support.html
 	if (!'PerformanceLongTaskTiming' in window || !'ttiPolyfill' in window) return;
