@@ -8,7 +8,7 @@ module.exports = {
 	strings: {
 		deny: [],
 		denyOverrides: [
-			'f2b50980-263e-11ea-86f2-f7e986fc9fad' // README.md:57
+			'665f8680-2b17-11ea-83c9-466d0c50ec08' // README.md:51
 		]
 	}
 };
