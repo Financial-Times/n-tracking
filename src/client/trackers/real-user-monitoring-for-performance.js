@@ -2,6 +2,27 @@ import Perfume from 'perfume.js';
 import { broadcast } from '../broadcast';
 import { userIsInCohort } from '../utils/userIsInCohort';
 
+// Perfume.js is a web performance package.
+// @see https://zizzamia.github.io/perfume/#/default-options/
+const options = {
+	logging: false,
+	firstPaint: true,
+	largestContentfulPaint: true,
+	firstInputDelay: true,
+	largestContentfulPaint: true,
+	navigationTiming: true,
+};
+
+// @see "Important metrics to measure" https://web.dev/metrics
+const requiredMetrics = [
+	'domInteractive',
+	'domComplete',
+	'timeToFirstByte',
+	'firstPaint',
+	'largestContentfulPaint',
+	'firstInputDelay'
+];
+
 const cohortPercent = 5;
 export const realUserMonitoringForPerformance = () => {
 	if (!userIsInCohort(cohortPercent)) return;
@@ -28,7 +49,7 @@ export const realUserMonitoringForPerformance = () => {
 	 * Once all the metrics are present, it fires a broadcast() to the Spoor API.
 	 */
 	let hasAlreadyBroadcast = false;
-	const analyticsTracker = (({ metricName, duration, data }) => {
+	options.analyticsTracker = (({ metricName, duration, data }) => {
 		if (hasAlreadyBroadcast) return;
 
 		if (duration) {
@@ -41,10 +62,7 @@ export const realUserMonitoringForPerformance = () => {
 		}
 
 		// Broadcast only if all the metrics are present
-		const contextContainsAllRequiredMetrics = [
-			'domInteractive', 'domComplete', 'timeToFirstByte', 'firstPaint', 'largestContentfulPaint', 'firstInputDelay'
-		].every(metric => !isNaN(context[metric]));
-
+		const contextContainsAllRequiredMetrics = requiredMetrics.every(metric => !isNaN(context[metric]));
 		if (contextContainsAllRequiredMetrics) {
 			console.log({performanceMetrics:context}); // eslint-disable-line no-console
 			broadcast('oTracking.event', context);
@@ -52,16 +70,5 @@ export const realUserMonitoringForPerformance = () => {
 		}
 	});
 
-	// Perfume.js is a web performance package.
-	// @see https://zizzamia.github.io/perfume/#/default-options/
-	const options = {
-		analyticsTracker,
-		logging: false,
-		firstPaint: true,
-		largestContentfulPaint: true,
-		firstInputDelay: true,
-		largestContentfulPaint: true,
-		navigationTiming: true,
-	};
 	new Perfume(options);
 };
