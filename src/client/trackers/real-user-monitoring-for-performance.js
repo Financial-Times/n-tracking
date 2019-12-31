@@ -24,7 +24,14 @@ const requiredMetrics = [
 ];
 
 const cohortPercent = 5;
+
 export const realUserMonitoringForPerformance = () => {
+
+	// Check browser support.
+	// @see https://developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming
+	if (!'PerformanceLongTaskTiming' in window) return;
+
+	// Gather metrics for only a cohort of users.
 	if (!userIsInCohort(cohortPercent)) return;
 
 	const navigation = performance.getEntriesByType('navigation')[0];
