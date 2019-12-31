@@ -42,7 +42,7 @@ export const realUserMonitoringForPerformance = () => {
 
 		// Broadcast only if all the metrics are present
 		const contextContainsAllRequiredMetrics = [
-			'domInteractive', 'domComplete', 'timeToFirstByte', 'firstPaint', 'firstContentfulPaint', 'firstInputDelay'
+			'domInteractive', 'domComplete', 'timeToFirstByte', 'firstPaint', 'largestContentfulPaint', 'firstInputDelay'
 		].every(metric => !isNaN(context[metric]));
 
 		if (contextContainsAllRequiredMetrics) {
@@ -58,7 +58,7 @@ export const realUserMonitoringForPerformance = () => {
 		analyticsTracker,
 		logging: false,
 		firstPaint: true,
-		firstContentfulPaint: true,
+		largestContentfulPaint: true,
 		firstInputDelay: true,
 		largestContentfulPaint: true,
 		navigationTiming: true,
