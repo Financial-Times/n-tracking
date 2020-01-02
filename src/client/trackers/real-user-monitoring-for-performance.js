@@ -1,60 +1,81 @@
-import ttiPolyfill from 'tti-polyfill';
+import Perfume from 'perfume.js';
 import { broadcast } from '../broadcast';
 import { userIsInCohort } from '../utils/userIsInCohort';
 
+// Perfume.js is a web performance package.
+// @see https://zizzamia.github.io/perfume/#/default-options/
+const options = {
+	logging: false,
+	firstPaint: true,
+	largestContentfulPaint: true,
+	firstInputDelay: true,
+	largestContentfulPaint: true,
+	navigationTiming: true,
+};
+
+// @see "Important metrics to measure" https://web.dev/metrics
+const requiredMetrics = [
+	'domInteractive',
+	'domComplete',
+	'timeToFirstByte',
+	'firstPaint',
+	'largestContentfulPaint',
+	'firstInputDelay'
+];
+
+const cohortPercent = 5;
+
 export const realUserMonitoringForPerformance = () => {
-	const cohortPercent = 5;
+
+	// Check browser support.
+	// @see https://developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming
+	if (!'PerformanceLongTaskTiming' in window) return;
+
+	// Gather metrics for only a cohort of users.
 	if (!userIsInCohort(cohortPercent)) return;
 
-	// For browser compatibility @see: https://mdn.github.io/dom-examples/performance-apis/perf-api-support.html
-	if (!'PerformanceLongTaskTiming' in window || !'ttiPolyfill' in window) return;
+	const navigation = performance.getEntriesByType('navigation')[0];
+	const { type, domInteractive, domComplete } = navigation;
 
-	// @see: https://web.dev/lcp/#how-to-measure-lcp (largest-contentful-paint)
-	let largestContentfulPaint;
-	const lcpPerformanceObserver = new PerformanceObserver((entryList) => {
-		const entries = entryList.getEntries();
-		const lastEntry = entries[entries.length - 1];
-		largestContentfulPaint = lastEntry.renderTime || lastEntry.loadTime;
-	});
-	lcpPerformanceObserver.observe({type: 'largest-contentful-paint', buffered: true});
+	// Proceed only if the page load event is a "navigate".
+	// @see: https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
+	if (type !== 'navigate') return;
 
-	ttiPolyfill.getFirstConsistentlyInteractive().then(timeToInteractive => {
+	const context = {
+		action: 'performance',
+		category: 'page',
+		domInteractive: Math.round(domInteractive),
+		domComplete: Math.round(domComplete),
+	};
 
-		// Disconnect the observer once it no longer needs to observe the performance data
-		// @SEE: https://w3c.github.io/performance-timeline/#the-performanceobserver-interface
-		lcpPerformanceObserver.disconnect();
+	/**
+	 * analyticsTracker()
+	 *
+	 * This function is called every time one of the performance events occurs.
+	 * The "final" event should be `firstInputDelay`, which is triggered by any "input" event (most likely to be a click.)
+	 * Once all the metrics are present, it fires a broadcast() to the Spoor API.
+	 */
+	let hasAlreadyBroadcast = false;
+	options.analyticsTracker = (({ metricName, duration, data }) => {
+		if (hasAlreadyBroadcast) return;
 
-		const navigation = performance.getEntriesByType('navigation')[0];
-		const { type, domInteractive, domComplete, responseStart, requestStart } = navigation;
-
-		// Proceed only if the page load event is a "navigate".
-		// @see: https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
-		if (type !== 'navigate') return;
-
-		try {
-			const timeToFirstByte = responseStart - requestStart;
-			const firstPaint = performance.getEntriesByName('first-paint')[0].startTime;
-			const firstContentfulPaint = performance.getEntriesByName('first-contentful-paint')[0].startTime;
-			const context = {
-				firstPaint: Math.round(firstPaint),
-				firstContentfulPaint: Math.round(firstContentfulPaint),
-				timeToFirstByte: Math.round(timeToFirstByte),
-				domInteractive: Math.round(domInteractive),
-				domComplete: Math.round(domComplete),
-				largestContentfulPaint: Math.round(largestContentfulPaint),
-				timeToInteractive: Math.round(timeToInteractive),
-			};
-
-			console.log(context); // eslint-disable-line no-console
-			const data = {
-				action: 'performance',
-				category: 'page',
-				...context
-			};
-			broadcast('oTracking.event', data);
+		if (duration) {
+			// Metrics with "duration":
+			// firstPaint, firstContentfulPaint, firstInputDelay and largestContentfulPaint
+			context[metricName] = Math.round(duration);
 		}
-		catch (error) {
-			console.error(error); // eslint-disable-line no-console
+		else if (metricName === 'navigationTiming') {
+			context.timeToFirstByte = Math.round(data.timeToFirstByte);
+		}
+
+		// Broadcast only if all the metrics are present
+		const contextContainsAllRequiredMetrics = requiredMetrics.every(metric => !isNaN(context[metric]));
+		if (contextContainsAllRequiredMetrics) {
+			console.log({performanceMetrics:context}); // eslint-disable-line no-console
+			broadcast('oTracking.event', context);
+			hasAlreadyBroadcast = true;
 		}
 	});
+
+	new Perfume(options);
 };

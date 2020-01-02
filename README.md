@@ -48,7 +48,7 @@ if (flags.get('realUserMonitoringForPerformance')) {
 	nTracking.trackers.realUserMonitoringForPerformance();
 }
 ```
-<div><img width="50%" src="https://user-images.githubusercontent.com/224547/71410882-f2b50980-263e-11ea-86f2-f7e986fc9fad.png" /></div>
+<div><img width="70%" src="https://user-images.githubusercontent.com/224547/71626767-c709c480-2be6-11ea-91a5-506972a3b4d7.png" /></div>
 
 _Above: Real-user-monitoring performance metrics are sent to spoor-api._ 
 
