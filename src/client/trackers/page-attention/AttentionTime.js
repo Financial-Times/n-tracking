@@ -74,7 +74,7 @@ export default class AttentionTime {
 		);
 
 		if (this.options.debug) {
-			console.log(`start:${event.type}`, event.type); // eslint-disable-line no-console
+			console.log('AttentionTime start', { event: event.type }); // eslint-disable-line no-console
 		}
 	}
 
@@ -87,7 +87,7 @@ export default class AttentionTime {
 		}
 
 		if (this.options.debug) {
-			console.log(`end:${event.type}`, this.totalAttentionTime); // eslint-disable-line no-console
+			console.log('AttentionTime end', { event: event.type, time: this.totalAttentionTime }); // eslint-disable-line no-console
 		}
 	}
 
@@ -98,8 +98,8 @@ export default class AttentionTime {
 		);
 	}
 
-	endConstantAttention () {
-		this.endAttention();
+	endConstantAttention (event) {
+		this.endAttention(event);
 		clearInterval(this.constantAttentionInterval);
 	}
 
@@ -115,23 +115,23 @@ export default class AttentionTime {
 		return this.totalAttentionTime + currentAttentionTime;
 	}
 
-	handleVisibilityChange () {
+	handleVisibilityChange (event) {
 		if (document.visibilityState === 'hidden') {
-			this.endAttention({ type: 'visibility' });
+			this.endAttention(event);
 		} else {
-			this.startAttention({ type: 'visibility' });
+			this.startAttention(event);
 		}
 	}
 
-	handleExit () {
+	handleExit (event) {
 		if (this.hasExited) {
 			return;
 		}
 
-		this.endAttention();
+		this.endAttention(event);
 
 		if (this.options.debug) {
-			console.log('broadcast', this.totalAttentionTime); // eslint-disable-line no-console
+			console.log('AttentionTime', { event: event.type, time: this.totalAttentionTime }); // eslint-disable-line no-console
 		}
 
 		this.options.onExit(this.totalAttentionTime);

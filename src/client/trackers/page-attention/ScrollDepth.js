@@ -3,7 +3,8 @@ const DEPTH_MARKERS = [25, 50, 75, 100];
 
 const defaultOptions = {
 	onScroll: () => {},
-	target: 'body'
+	target: 'body',
+	debug: false
 };
 
 export default class ScrollDepth {
@@ -29,7 +30,7 @@ export default class ScrollDepth {
 				marker.style.bottom = '0';
 				marker.style.width = '100%';
 				marker.style.zIndex = '-1';
-				marker.setAttribute('data-depth', percentage);
+				marker.setAttribute('data-scroll-depth', percentage);
 
 				target.appendChild(marker);
 
@@ -42,8 +43,13 @@ export default class ScrollDepth {
 		changes.forEach((change) => {
 			if (change.isIntersecting || change.intersectionRatio > 0) {
 				const marker = change.target;
+				const scrollDepth = marker.getAttribute('data-scroll-depth');
 
-				this.options.onScroll(marker.getAttribute('data-depth'));
+				this.options.onScroll(scrollDepth);
+
+				if (this.options.debug) {
+					console.log('ScrollDepth', { marker: scrollDepth }); // eslint-disable-line no-console
+				}
 
 				if (marker.parentNode) {
 					marker.parentNode.removeChild(marker);
