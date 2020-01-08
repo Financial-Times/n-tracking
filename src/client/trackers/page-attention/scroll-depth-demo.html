@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>scroll depth demo</title>
+	</head>
+	<body>
+		<div class="target"></div>
+
+		<style>
+			.target {
+				height: 2000px;
+				width: 80%;
+				margin: auto;
+				border: 2px solid blue;
+			}
+
+			.n-tracking-scroll-depth-marker {
+				box-shadow: 0 -50px 50px -50px red;
+			}
+		</style>
+
+		<script type="module">
+			import ScrollDepth from './ScrollDepth.js';
+
+			new ScrollDepth({
+				onScroll: (depth) => console.log(`scrolldepth: ${depth}%`),
+				target: 'div.target'
+			});
+		</script>
+	</body>
+</html>
