@@ -7,7 +7,7 @@ Captures the rough length of time a user is active on a page and how far they sc
 
 ## Why?
 
-Journalists want to know if visitors are reading their articles. We record  the time a user spends interacting with the page and how far they scroll so that this data can be used to calculate whether a page view was also a [quality read]. The quality read metric is surfaced in [Lantern].
+Journalists want to know if visitors are reading their articles. To do this we record the time a user spends interacting with the page and how far they scroll. This data can then be used to calculate whether a page view constitutes a [quality read]. The quality read metric is surfaced in the internal analytics tool [Lantern].
 
 [quality read]: https://docs.google.com/document/d/1hkU31FTEQmsRCqVzQebEf--QCw4QncMtutYxdGw8QmE/edit
 [Lantern]: https://lantern.ft.com/
@@ -37,17 +37,19 @@ Scroll depth:
 
 - Chris Brown
 - Matt Hinchliffe
-- Matt Chadburn (original implementation)
+- Tom Parker/Matt Chadburn (first implementation)
 
 
 ## How?
 
-Import and initialise the tracker from the `n-tracking` library:
+Import and initialise the tracker from the `n-tracking` library, please note this should always be done behind the `pageAttentionTracking` flag:
 
 ```js
 import * as nTracking from '@financial-times/n-tracking';
 
-nTracking.trackers.pageAttention();
+if (flags.get('pageAttentionTracking')) {
+    nTracking.trackers.pageAttention();
+}
 ```
 
 The `pageAttention()` method accepts an options object with the following properties:
@@ -57,13 +59,13 @@ The `pageAttention()` method accepts an options object with the following proper
 | target | No       | String  | Target element selector to apply scroll depth markers to. |
 | debug  | No       | Boolean | Enable verbose logs for attention events                  |
 
-This script will internally initialise two components:
+This will initialise two sub-components:
 
 1. ### Attention time
     This sets a timer for each "attention" event detected on the page. Attention events include clicks, mouse movement, and touches. The timer is restarted each time an attention event occurs. The timer will stop either automatically after 15 seconds or by an "attention lost" event. Each time attention ends the total attention time is recalculated. A `page:interaction` event is triggered when the page is unloaded.
 
 2. ### Scroll depth
-    This creates a number of marker elements at equal intervals down the page. The first time a marker is scrolled into the browser's viewport a `page:scrolldepth` event is triggered. Each scroll depth event also includes the current attention time.
+    This creates a number of marker elements at equal intervals down the length of the page. The first time a marker moves into the browser's viewport a `page:scrolldepth` event is triggered. Each scroll depth event also includes the current attention time.
 
 
 ## More details

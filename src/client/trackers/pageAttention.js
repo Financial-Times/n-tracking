@@ -2,6 +2,8 @@ import { broadcast } from '../broadcast';
 import ScrollDepth from './page-attention/ScrollDepth';
 import AttentionTime from './page-attention/AttentionTime';
 
+// TODO: The tracking event data for the `page:interaction` and `page:scrolldepth`
+// events is needlessly different. We should work with the data team to align it.
 export const pageAttention = (options = {}) => {
 	const onExit = (attentionTime) => {
 		broadcast('oTracking.event', {
