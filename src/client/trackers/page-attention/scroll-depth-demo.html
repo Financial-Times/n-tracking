@@ -5,14 +5,16 @@
 		<title>scroll depth demo</title>
 	</head>
 	<body>
-		<div class="target"></div>
+		<div class="target">
+			<p style="text-align: center;">
+				Open your browser console to view logs<br>
+				(↓ and scroll down ↓)
+			</p>
+		</div>
 
 		<style>
 			.target {
 				height: 2000px;
-				width: 80%;
-				margin: auto;
-				border: 2px solid blue;
 			}
 
 			.n-tracking-scroll-depth-marker {
@@ -24,8 +26,9 @@
 			import ScrollDepth from './ScrollDepth.js';
 
 			new ScrollDepth({
-				onScroll: (depth) => console.log(`scrolldepth: ${depth}%`),
-				target: 'div.target'
+				onScroll: (depth) => console.log(`You just scrolled past the ${depth}% marker`),
+				target: 'div.target',
+				debug: true
 			});
 		</script>
 	</body>
