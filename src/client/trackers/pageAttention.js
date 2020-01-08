@@ -2,7 +2,7 @@ import { broadcast } from '../broadcast';
 import ScrollDepth from './page-attention/ScrollDepth';
 import AttentionTime from './page-attention/AttentionTime';
 
-export const pageAttention = () => {
+export const pageAttention = (options = {}) => {
 	const onExit = (attentionTime) => {
 		broadcast('oTracking.event', {
 			category: 'page',
@@ -15,7 +15,7 @@ export const pageAttention = () => {
 		});
 	};
 
-	const attention = new AttentionTime({ onExit });
+	const attention = new AttentionTime({ ...options, onExit });
 
 	const onScroll = (scrollDepth) => {
 		broadcast('oTracking.event', {
@@ -28,5 +28,5 @@ export const pageAttention = () => {
 		});
 	};
 
-	new ScrollDepth({ onScroll });
+	new ScrollDepth({ ...options, onScroll });
 };
