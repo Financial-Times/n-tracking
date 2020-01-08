@@ -1,4 +1,5 @@
 import { broadcast } from '../broadcast';
+import ScrollDepth from './page-attention/ScrollDepth';
 import AttentionTime from './page-attention/AttentionTime';
 
 export const pageAttention = () => {
@@ -14,5 +15,18 @@ export const pageAttention = () => {
 		});
 	};
 
-	new AttentionTime({ onExit });
+	const attention = new AttentionTime({ onExit });
+
+	const onScroll = (scrollDepth) => {
+		broadcast('oTracking.event', {
+			category: 'page',
+			action: 'scrolldepth',
+			meta: {
+				percentagesViewed: scrollDepth,
+				attention: attention.getAttentionTime()
+			}
+		});
+	};
+
+	new ScrollDepth({ onScroll });
 };
