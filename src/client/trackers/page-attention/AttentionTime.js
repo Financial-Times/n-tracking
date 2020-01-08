@@ -1,5 +1,3 @@
-import { broadcast } from '../broadcast';
-
 // Automatically stop the attention timer after this time
 const ATTENTION_INTERVAL = 15000;
 
@@ -16,16 +14,23 @@ const ATTENTION_EVENTS = [
 	'touchleave'
 ];
 
-// These events pause stop the attention timer
+// These events pause the attention timer
 const ATTENTION_LOST_EVENTS = ['blur'];
 
-// These events will trigger the event data to be sent to Spoor
+// These events will trigger the exit callback
 const PAGE_EXIT_EVENTS = ['beforeunload', 'unload', 'pagehide'];
 
+const defaultOptions = {
+	onExit: () => {},
+	debug: false
+};
+
 export default class AttentionTime {
-	constructor () {
+	constructor (options) {
+		this.options = { ...defaultOptions, ...options };
+
 		this.totalAttentionTime = 0;
-		this.hasSentEvent = false;
+		this.hasExited = false;
 
 		this.init();
 	}
@@ -68,7 +73,7 @@ export default class AttentionTime {
 			ATTENTION_INTERVAL
 		);
 
-		if (this.debug) {
+		if (this.options.debug) {
 			console.log(`start:${event.type}`, event.type); // eslint-disable-line no-console
 		}
 	}
@@ -81,7 +86,7 @@ export default class AttentionTime {
 			this.startAttentionTime = null;
 		}
 
-		if (this.debug) {
+		if (this.options.debug) {
 			console.log(`end:${event.type}`, this.totalAttentionTime); // eslint-disable-line no-console
 		}
 	}
@@ -119,26 +124,18 @@ export default class AttentionTime {
 	}
 
 	handleExit () {
-		if (this.hasSentEvent) {
+		if (this.hasExited) {
 			return;
 		}
 
 		this.endAttention();
 
-		broadcast('oTracking.event', {
-			category: 'page',
-			action: 'interaction',
-			context: {
-				attention: {
-					total: this.totalAttentionTime
-				}
-			}
-		});
-
-		if (this.debug) {
+		if (this.options.debug) {
 			console.log('broadcast', this.totalAttentionTime); // eslint-disable-line no-console
 		}
 
-		this.hasSentEvent = true;
+		this.options.onExit(this.totalAttentionTime);
+
+		this.hasExited = true;
 	}
 }

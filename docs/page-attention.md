@@ -29,7 +29,15 @@ Journalists want to know if visitors are reading their articles. We record  the 
 
 ## How?
 
-There are two components to page attention:
+Import and initialise the tracker from the `n-tracking` library:
+
+```js
+import * as nTracking from '@financial-times/n-tracking';
+
+nTracking.trackers.pageAttention();
+```
+
+This script will initialise two components:
 
 1. ### Attention time
     This sets a timer for each "attention" event detected on the page. Attention events include clicks, mouse movement, and touches. The timer is restarted each time an attention event occurs. The timer will stop either automatically after 15 seconds or by an "attention lost" event. Each time attention ends the total attention time is recalculated. A `page:interaction` event is triggered when the page is unloaded.
