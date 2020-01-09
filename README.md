@@ -40,18 +40,6 @@ nTracking.broadcast('oTracking.event', {
 });
 ```
 
-**Send real-user-monitoring (RUM) performance metrics**
-
-```js
-import * as nTracking from '@financial-times/n-tracking';
-if (flags.get('realUserMonitoringForPerformance')) {
-	nTracking.trackers.realUserMonitoringForPerformance();
-}
-```
-<div><img width="70%" src="https://user-images.githubusercontent.com/224547/71626767-c709c480-2be6-11ea-91a5-506972a3b4d7.png" /></div>
-
-_Above: Real-user-monitoring performance metrics are sent to spoor-api._ 
-
 ### Server-side integration
 
 On the server-side a JSX component embeds tracking pixels into the page which send page view events for any visitors which do not support JS or fail to cut the mustard.
@@ -75,9 +63,9 @@ Configures [o-tracking] with the given [options](#options), triggers a page view
 
 Creates a [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent) with the given name and data and dispatches it from the document `<body>` element. It is intended to be used to trigger `oTracking.event` events.
 
-### `trackers.customTrackerName()`
+### `trackers.{tracker}()`
 
-TODO: custom tracking events to be used across FT.com
+There are several custom tracking features provided by this library. See the [docs folder](./docs) for more information about these.
 
 
 ## Server-side API
