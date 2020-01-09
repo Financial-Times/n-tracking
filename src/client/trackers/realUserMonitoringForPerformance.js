@@ -25,6 +25,10 @@ const requiredMetrics = [
 
 const cohortPercent = 5;
 
+const isContextComplete = (context) => {
+	return requiredMetrics.every((metric) => typeof context[metric] === 'number');
+};
+
 export const realUserMonitoringForPerformance = () => {
 
 	// Check browser support.
@@ -67,10 +71,7 @@ export const realUserMonitoringForPerformance = () => {
 			context.timeToFirstByte = Math.round(data.timeToFirstByte);
 		}
 
-		// Broadcast only if all the metrics are present
-		const contextContainsAllRequiredMetrics = requiredMetrics.every(metric => !isNaN(context[metric]));
-
-		if (contextContainsAllRequiredMetrics) {
+		if (isContextComplete(context)) {
 			console.log({ performanceMetrics: context }); // eslint-disable-line no-console
 
 			broadcast('oTracking.event', {
