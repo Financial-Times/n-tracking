@@ -35,17 +35,16 @@ export const realUserMonitoringForPerformance = () => {
 	if (!userIsInCohort(cohortPercent)) return;
 
 	const navigation = performance.getEntriesByType('navigation')[0];
-	const { type, domInteractive, domComplete } = navigation;
 
 	// Proceed only if the page load event is a "navigate".
 	// @see: https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
-	if (type !== 'navigate') return;
+	if (navigation.type !== 'navigate') return;
 
 	const context = {
-		action: 'performance',
 		category: 'page',
-		domInteractive: Math.round(domInteractive),
-		domComplete: Math.round(domComplete),
+		action: 'performance',
+		domInteractive: Math.round(navigation.domInteractive),
+		domComplete: Math.round(navigation.domComplete),
 	};
 
 	/**
@@ -56,6 +55,7 @@ export const realUserMonitoringForPerformance = () => {
 	 * Once all the metrics are present, it fires a broadcast() to the Spoor API.
 	 */
 	let hasAlreadyBroadcast = false;
+
 	options.analyticsTracker = (({ metricName, duration, data }) => {
 		if (hasAlreadyBroadcast) return;
 
@@ -64,14 +64,16 @@ export const realUserMonitoringForPerformance = () => {
 			// firstPaint, firstContentfulPaint, firstInputDelay and largestContentfulPaint
 			context[metricName] = Math.round(duration);
 		}
-		else if (metricName === 'navigationTiming') {
+
+		if (metricName === 'navigationTiming') {
 			context.timeToFirstByte = Math.round(data.timeToFirstByte);
 		}
 
 		// Broadcast only if all the metrics are present
 		const contextContainsAllRequiredMetrics = requiredMetrics.every(metric => !isNaN(context[metric]));
+
 		if (contextContainsAllRequiredMetrics) {
-			console.log({performanceMetrics:context}); // eslint-disable-line no-console
+			console.log({ performanceMetrics: context }); // eslint-disable-line no-console
 			broadcast('oTracking.event', context);
 			hasAlreadyBroadcast = true;
 		}
