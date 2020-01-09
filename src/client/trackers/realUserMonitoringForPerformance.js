@@ -41,8 +41,6 @@ export const realUserMonitoringForPerformance = () => {
 	if (navigation.type !== 'navigate') return;
 
 	const context = {
-		category: 'page',
-		action: 'performance',
 		domInteractive: Math.round(navigation.domInteractive),
 		domComplete: Math.round(navigation.domComplete),
 	};
@@ -74,7 +72,13 @@ export const realUserMonitoringForPerformance = () => {
 
 		if (contextContainsAllRequiredMetrics) {
 			console.log({ performanceMetrics: context }); // eslint-disable-line no-console
-			broadcast('oTracking.event', context);
+
+			broadcast('oTracking.event', {
+				action: 'performance',
+				category: 'page',
+				context
+			});
+
 			hasAlreadyBroadcast = true;
 		}
 	});
