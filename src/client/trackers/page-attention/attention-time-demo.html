@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>attention time demo</title>
+	</head>
+	<body>
+		<div class="target">
+			<p style="text-align: center;">
+				Open your browser console to view logs<br>
+				(and then click about, move around, etc.)
+			</p>
+		</div>
+
+		<script type="module">
+			import AttentionTime from './AttentionTime.js';
+
+			const attentionTime = new AttentionTime({
+				onExit: (time) => alert(`Your total attention time was ${time}s`),
+				debug: true
+			});
+		</script>
+	</body>
+</html>
