@@ -2,12 +2,12 @@
 
 ## What?
 
-Listens for text highlight and copy events on content pages.
+Listens for copy events on content pages and captures information about the selected text.
 
 
 ## Why?
 
-We want to know how many subscribers appear to be copying above the threshold defined in our the [copyright policy] and stop those that are offending. The [Prospector project] aims to turn this potentially negative behaviour from B2C subs into an opportunity for B2B business.
+We want to know how many subscribers appear to be copying above the threshold defined in our [copyright policy] and stop those that may be offending. The [Prospector project] also aims to turn this potentially negative behaviour from B2C subs into an opportunity for B2B business.
 
 [copyright policy]: https://help.ft.com/help/legal-privacy/copyright/copyright-policy/
 [Prospector project]: https://github.com/Financial-Times/ip-prospector
