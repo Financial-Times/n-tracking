@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>get text excerpt demo</title>
+	</head>
+	<body>
+		<div class="target">
+			<textarea>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sed finibus dui, in hendrerit elit. Cras arcu mi, ultrices in porta et, rhoncus quis tortor. Nulla venenatis eros vel vehicula molestie. In eu libero et neque convallis sodales. Sed quis mi nec nulla eleifend dignissim. In lectus tortor, venenatis eget nulla a, vulputate accumsan diam. Etiam luctus volutpat feugiat. Aenean id malesuada arcu. Nulla quis convallis diam, quis tempus elit. Curabitur leo massa, tempus a sapien quis, pharetra egestas velit.</textarea>
+			<br>
+			<button type="button">Generate excerpt</button>
+			<hr>
+			<p>Output:</p>
+			<div class="output"></div>
+		</div>
+
+		<style>
+			.target {
+				max-width: 640px;
+				margin: auto;
+			}
+
+			.target textarea {
+				width: 100%;
+				height: 10em;
+			}
+		</style>
+
+		<script type="module">
+			import getTextExcerpt from './getTextExcerpt.js';
+
+			const textarea = document.querySelector('textarea');
+			const button = document.querySelector('button');
+			const output = document.querySelector('.output');
+
+			button.onclick = () => {
+				output.innerHTML = getTextExcerpt(textarea.value.trim());
+			};
+		</script>
+	</body>
+</html>
