@@ -9,6 +9,7 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "npm run clean && rollup -c",
+    "prepare": "npm run build",
     "precommit": "secret-squirrel",
     "commitmsg": "secret-squirrel-commitmsg",
     "prepush": "make verify -j3",
