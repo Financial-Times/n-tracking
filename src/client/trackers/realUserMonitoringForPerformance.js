@@ -2,13 +2,14 @@ import Perfume from 'perfume.js';
 import { broadcast } from '../broadcast';
 import { seedIsInSample } from '../utils/seedIsInSample';
 import { getSpoorId } from '../utils/getSpoorId';
+import addDocumentReadyData from './real-user-performance/addDocumentReadyData';
 
 // Perfume.js is a web performance package.
 // @see https://zizzamia.github.io/perfume/#/default-options/
 const options = {
 	logging: false,
 	firstPaint: true,
-	largestContentfulPaint: true,
+	firstContentfulPaint: true,
 	firstInputDelay: true,
 	largestContentfulPaint: true,
 	navigationTiming: true,
@@ -47,10 +48,10 @@ export const realUserMonitoringForPerformance = () => {
 	// @see: https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
 	if (navigation.type !== 'navigate') return;
 
-	const context = {
-		domInteractive: Math.round(navigation.domInteractive),
-		domComplete: Math.round(navigation.domComplete),
-	};
+	const context = {};
+
+	// Ensure we wait for the document to be complete before reading DOM ready timings
+	addDocumentReadyData(navigation, context);
 
 	/**
 	 * analyticsTracker()
