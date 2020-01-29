@@ -1,6 +1,7 @@
 import Perfume from 'perfume.js';
 import { broadcast } from '../broadcast';
-import { userIsInCohort } from '../utils/userIsInCohort';
+import { seedIsInSample } from '../utils/seedIsInSample';
+import { getSpoorId } from '../utils/getSpoorId';
 
 // Perfume.js is a web performance package.
 // @see https://zizzamia.github.io/perfume/#/default-options/
@@ -23,7 +24,7 @@ const requiredMetrics = [
 	'firstInputDelay'
 ];
 
-const cohortPercent = 5;
+const samplePercentage = 5;
 
 const isContextComplete = (context) => {
 	return requiredMetrics.every((metric) => typeof context[metric] === 'number');
@@ -35,8 +36,10 @@ export const realUserMonitoringForPerformance = () => {
 	// @see https://developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming
 	if (!'PerformanceLongTaskTiming' in window) return;
 
+	const spoorId = getSpoorId();
+
 	// Gather metrics for only a cohort of users.
-	if (!userIsInCohort(cohortPercent)) return;
+	if (!seedIsInSample(spoorId, samplePercentage)) return;
 
 	const navigation = performance.getEntriesByType('navigation')[0];
 
