@@ -2,7 +2,7 @@ import Perfume from 'perfume.js';
 import { broadcast } from '../broadcast';
 import { seedIsInSample } from '../utils/seedIsInSample';
 import { getSpoorId } from '../utils/getSpoorId';
-import addDocumentReadyData from './real-user-performance/addDocumentReadyData';
+import { documentReady } from './real-user-performance/documentReady';
 
 // @see "Important metrics to measure" https://web.dev/metrics
 const requiredMetrics = [
@@ -39,8 +39,12 @@ export const realUserMonitoringForPerformance = () => {
 
 	const context = {};
 
-	// Ensure we wait for the document to be complete before reading DOM ready timings
-	addDocumentReadyData(navigation, context);
+	documentReady.then(() => {
+		// <https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/domInteractive>
+		context.domInteractive = Math.round(navigation.domInteractive);
+		// <https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/domComplete>
+		context.domComplete = Math.round(navigation.domComplete);
+	});
 
 	/**
 	 * analyticsTracker()
