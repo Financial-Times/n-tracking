@@ -4,17 +4,6 @@ import { seedIsInSample } from '../utils/seedIsInSample';
 import { getSpoorId } from '../utils/getSpoorId';
 import addDocumentReadyData from './real-user-performance/addDocumentReadyData';
 
-// Perfume.js is a web performance package.
-// @see https://zizzamia.github.io/perfume/#/default-options/
-const options = {
-	logging: false,
-	firstPaint: true,
-	firstContentfulPaint: true,
-	firstInputDelay: true,
-	largestContentfulPaint: true,
-	navigationTiming: true,
-};
-
 // @see "Important metrics to measure" https://web.dev/metrics
 const requiredMetrics = [
 	'domInteractive',
@@ -62,7 +51,7 @@ export const realUserMonitoringForPerformance = () => {
 	 */
 	let hasAlreadyBroadcast = false;
 
-	options.analyticsTracker = (({ metricName, duration, data }) => {
+	const analyticsTracker = (({ metricName, duration, data }) => {
 		if (hasAlreadyBroadcast) return;
 
 		if (duration) {
@@ -71,6 +60,8 @@ export const realUserMonitoringForPerformance = () => {
 			context[metricName] = Math.round(duration);
 		}
 
+		// Metrics with "data":
+		// navigationTiming, networkInformation
 		if (metricName === 'navigationTiming') {
 			context.timeToFirstByte = Math.round(data.timeToFirstByte);
 		}
@@ -88,5 +79,9 @@ export const realUserMonitoringForPerformance = () => {
 		}
 	});
 
-	new Perfume(options);
+	new Perfume({
+		analyticsTracker,
+		logging: false,
+		largestContentfulPaint: true
+	});
 };
