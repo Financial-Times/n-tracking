@@ -2,17 +2,7 @@ import Perfume from 'perfume.js';
 import { broadcast } from '../broadcast';
 import { seedIsInSample } from '../utils/seedIsInSample';
 import { getSpoorId } from '../utils/getSpoorId';
-
-// Perfume.js is a web performance package.
-// @see https://zizzamia.github.io/perfume/#/default-options/
-const options = {
-	logging: false,
-	firstPaint: true,
-	largestContentfulPaint: true,
-	firstInputDelay: true,
-	largestContentfulPaint: true,
-	navigationTiming: true,
-};
+import { documentReady } from './real-user-performance/documentReady';
 
 // @see "Important metrics to measure" https://web.dev/metrics
 const requiredMetrics = [
@@ -47,10 +37,14 @@ export const realUserMonitoringForPerformance = () => {
 	// @see: https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
 	if (navigation.type !== 'navigate') return;
 
-	const context = {
-		domInteractive: Math.round(navigation.domInteractive),
-		domComplete: Math.round(navigation.domComplete),
-	};
+	const context = {};
+
+	documentReady.then(() => {
+		// <https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/domInteractive>
+		context.domInteractive = Math.round(navigation.domInteractive);
+		// <https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/domComplete>
+		context.domComplete = Math.round(navigation.domComplete);
+	});
 
 	/**
 	 * analyticsTracker()
@@ -61,7 +55,7 @@ export const realUserMonitoringForPerformance = () => {
 	 */
 	let hasAlreadyBroadcast = false;
 
-	options.analyticsTracker = (({ metricName, duration, data }) => {
+	const analyticsTracker = (({ metricName, duration, data }) => {
 		if (hasAlreadyBroadcast) return;
 
 		if (duration) {
@@ -70,6 +64,8 @@ export const realUserMonitoringForPerformance = () => {
 			context[metricName] = Math.round(duration);
 		}
 
+		// Metrics with "data":
+		// navigationTiming, networkInformation
 		if (metricName === 'navigationTiming') {
 			context.timeToFirstByte = Math.round(data.timeToFirstByte);
 		}
@@ -87,5 +83,9 @@ export const realUserMonitoringForPerformance = () => {
 		}
 	});
 
-	new Perfume(options);
+	new Perfume({
+		analyticsTracker,
+		logging: false,
+		largestContentfulPaint: true
+	});
 };
