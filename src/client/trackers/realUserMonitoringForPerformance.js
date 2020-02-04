@@ -1,8 +1,8 @@
 import Perfume from 'perfume.js';
+import readyState from 'ready-state';
 import { broadcast } from '../broadcast';
 import { seedIsInSample } from '../utils/seedIsInSample';
 import { getSpoorId } from '../utils/getSpoorId';
-import { documentReady } from './real-user-performance/documentReady';
 
 // @see "Important metrics to measure" https://web.dev/metrics
 const requiredMetrics = [
@@ -39,7 +39,7 @@ export const realUserMonitoringForPerformance = () => {
 
 	const context = {};
 
-	documentReady.then(() => {
+	readyState.complete.then(() => {
 		// <https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/domInteractive>
 		context.domInteractive = Math.round(navigation.domInteractive);
 		// <https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/domComplete>
