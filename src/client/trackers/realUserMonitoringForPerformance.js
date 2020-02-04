@@ -39,7 +39,7 @@ export const realUserMonitoringForPerformance = () => {
 
 	const context = {};
 
-	documentReady.then(() => {
+	documentReady().then(() => {
 		// <https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/domInteractive>
 		context.domInteractive = Math.round(navigation.domInteractive);
 		// <https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/domComplete>
