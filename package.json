@@ -20,6 +20,8 @@
     "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/preset-env": "^7.5.5",
     "@financial-times/n-gage": "^3.10.0",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
     "babel-jest": "^24.8.0",
     "eslint-plugin-react": "^7.14.3",
     "jest": "^24.8.0",
