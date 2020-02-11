@@ -1,4 +1,6 @@
 import babel from 'rollup-plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
 import pkg from './package.json';
 
 // Packages which are used only by this component should be bundled along with it
@@ -10,10 +12,13 @@ const external = [
 	...Object.keys(pkg.peerDependencies)
 ].filter((pkg) => !internal.includes(pkg));
 
+const plugins = [resolve(), commonjs()]
+
 export default [
 	{
 		input: 'src/client/index.js',
 		external,
+		plugins,
 		output: {
 			file: pkg.browser,
 			format: 'es'
@@ -27,6 +32,7 @@ export default [
 			format: 'cjs'
 		},
 		plugins: [
+			...plugins,
 			babel({
 				exclude: ['node_modules/**']
 			})
