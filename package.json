@@ -27,11 +27,12 @@
     "jest": "^24.8.0",
     "jest-environment-jsdom-fifteen": "^1.0.0",
     "jsdom": "^15.1.0",
+    "perfume.js": "^4.6.0",
     "react": "^16.9.0",
     "rollup": "^1.31.0",
-    "rollup-plugin-babel": "^4.3.3"
+    "rollup-plugin-babel": "^4.3.3",
+    "seed-random": "^2.2.0"
   },
-  "config": {},
   "engines": {
     "node": ">=8.16.0"
   },
@@ -39,9 +40,7 @@
     "@financial-times/o-grid": "^5.0.0",
     "@financial-times/o-tracking": "^2.0.3",
     "@financial-times/o-viewport": "^4.0.0",
-    "perfume.js": "^4.6.0",
-    "ready-state": "^2.0.5",
-    "seed-random": "^2.2.0"
+    "ready-state": "^2.0.5"
   },
   "peerDependencies": {
     "react": "^16.9.0"
