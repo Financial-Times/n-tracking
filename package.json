@@ -19,7 +19,7 @@
     "@babel/core": "^7.5.5",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/preset-env": "^7.5.5",
-    "@financial-times/n-gage": "^4.0.0",
+    "@financial-times/n-gage": "^5.0.0",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "babel-jest": "^25.0.0",
