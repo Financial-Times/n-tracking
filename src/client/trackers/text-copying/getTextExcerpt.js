@@ -8,7 +8,7 @@ export default (text) => {
 		const left = Math.floor(newLength / 2);
 		const right = Math.ceil(newLength / 2);
 
-		return text.substr(0, left) + ' … ' + text.substr(right * -1);
+		return text.substr(0, left) + TRUNCATED_TEXT + text.substr(right * -1);
 	} else {
 		return text;
 	}
