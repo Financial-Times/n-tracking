@@ -17,6 +17,7 @@ Journalists want to know if visitors are reading their articles. To do this we r
 
 Attention timing:
 
+- Since July 2014 (as [this gist](https://gist.github.com/adgad/7c0244f491618a7f6078))
 - Since August 2015 (as `n-instrumentation`)
 - Since July 2016 (as [`n-ui`])
 - Since January 2020 (as [`n-tracking`])
@@ -37,7 +38,7 @@ Scroll depth:
 
 - Chris Brown
 - Matt Hinchliffe
-- Tom Parker/Matt Chadburn (first implementation)
+- Tom Parker/Arjun Gadhia/Matt Chadburn (first implementation)
 
 
 ## How?
