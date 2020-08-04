@@ -18,8 +18,8 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 			...extraContext
 		}),
 		user: getUserData(),
-		// Using the Beacon API ensures that no tracking event data is lost 
-		// when the document is being unloaded, which happens when navigating 
+		// Using the Beacon API ensures that no tracking event data is lost
+		// when the document is being unloaded, which happens when navigating
 		// to a different page.
 		useSendBeacon: true
 	};
