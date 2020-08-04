@@ -18,8 +18,10 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 			...extraContext
 		}),
 		user: getUserData(),
-		// TODO: This should be safe to enable, find out why it hasn't been
-		useSendBeacon: false
+		// Using the Beacon API ensures that no tracking event data is lost 
+		// when the document is being unloaded, which happens when navigating 
+		// to a different page.
+		useSendBeacon: true
 	};
 
 	oTracking.init(options);
