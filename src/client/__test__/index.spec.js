@@ -34,7 +34,7 @@ describe('src/index', () => {
 			expect(oTracking.init).toHaveBeenCalledWith(
 				expect.objectContaining({
 					server: SPOOR_API_INGEST_URL,
-					useSendBeacon: false
+					useSendBeacon: true
 				})
 			);
 		});
