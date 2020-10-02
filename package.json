@@ -34,7 +34,7 @@
     "seed-random": "^2.2.0"
   },
   "engines": {
-    "node": "14.x"
+    "node": "12.x"
   },
   "dependencies": {
     "@financial-times/o-grid": "^5.0.0",
