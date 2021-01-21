@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@financial-times/o-grid": "^5.0.0",
-    "@financial-times/o-tracking": "^2.0.3",
+    "@financial-times/o-tracking": "^3.0.0",
     "@financial-times/o-viewport": "^4.0.0",
     "ready-state": "^2.0.5"
   },
