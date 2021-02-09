@@ -1,4 +1,4 @@
-# @financial-times/n-tracking [![CircleCI](https://circleci.com/gh/Financial-Times/n-tracking/tree/master.svg?style=svg)](https://circleci.com/gh/Financial-Times/n-tracking/tree/master)
+# @financial-times/n-tracking [![CircleCI](https://circleci.com/gh/Financial-Times/n-tracking/tree/main.svg?style=svg)](https://circleci.com/gh/Financial-Times/n-tracking/tree/main)
 
 This package provides tracking initialisation and custom events for FT.com. On the client-side it configures [o-tracking] (which is used to capture and send tracking events to [Spoor]) and for the server-side it provides components which render fallback tracking pixels .
 
