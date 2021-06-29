@@ -9,7 +9,7 @@ const external = [
 	...Object.keys(pkg.peerDependencies)
 ];
 
-const plugins = [resolve(), commonjs()]
+const plugins = [resolve(), commonjs()];
 
 export default [
 	{
