@@ -10,9 +10,6 @@
     "clean": "rm -rf ./dist",
     "build": "npm run clean && rollup -c",
     "prepare": "npm run build",
-    "precommit": "secret-squirrel",
-    "commitmsg": "secret-squirrel-commitmsg",
-    "prepush": "make verify -j3",
     "test": "jest --config jest.config.js"
   },
   "devDependencies": {
@@ -38,11 +35,18 @@
   },
   "dependencies": {
     "@financial-times/o-grid": "^5.0.0",
-    "@financial-times/o-tracking": "^3.0.0",
+    "@financial-times/o-tracking": "^4.0.0",
     "@financial-times/o-viewport": "^4.0.0",
     "ready-state": "^2.0.5"
   },
   "peerDependencies": {
     "react": "^16.9.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "secret-squirrel-commitmsg",
+      "pre-commit": "secret-squirrel",
+      "pre-push": "make verify -j3"
+    }
   }
 }
