@@ -34,7 +34,7 @@
   },
   "engines": {
     "node": "12.x",
-    "npm": "7.x"
+    "npm": "7.x || 8.x"
   },
   "dependencies": {
     "@financial-times/o-grid": "^5.0.0",
