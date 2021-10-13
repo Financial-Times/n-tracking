@@ -11,7 +11,7 @@
     "build": "npm run clean && rollup -c",
     "prepare": "npm run build",
     "test": "jest --config jest.config.js",
-    "preinstall": "[[ \"$INIT_CWD\" != \"$PWD\" ]] || npm_config_yes=true npx check-engine"
+    "preinstall": "[ \"$INIT_CWD\" != \"$PWD\" ] || npm_config_yes=true npx check-engine"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
