@@ -9,6 +9,7 @@ const requiredMetrics = [
 	'domInteractive',
 	'domComplete',
 	'timeToFirstByte',
+	'cumulativeLayoutShift',
 	'firstPaint',
 	'largestContentfulPaint',
 	'firstInputDelay'
