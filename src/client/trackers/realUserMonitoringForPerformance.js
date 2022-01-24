@@ -1,43 +1,38 @@
-import Perfume from 'perfume.js';
+import {getLCP, getFID, getCLS} from 'web-vitals';
 import readyState from 'ready-state';
 import { broadcast } from '../broadcast';
 import { seedIsInSample } from '../utils/seedIsInSample';
 import { getSpoorId } from '../utils/getSpoorId';
 
 // @see "Important metrics to measure" https://web.dev/metrics
-const requiredMetrics = [
-	'domInteractive',
-	'domComplete',
-	'timeToFirstByte',
-	'firstPaint',
-	'largestContentfulPaint',
-	'firstInputDelay'
-];
+// @see https://github.com/GoogleChrome/web-vitals#batch-multiple-reports-together
 
-const samplePercentage = 5;
+const queue = new Set();
 
-const isContextComplete = (context) => {
-	return requiredMetrics.every((metric) => typeof context[metric] === 'number');
-};
+const samplePercentage = 100;
 
 export const realUserMonitoringForPerformance = () => {
 
-	// Check browser support.
-	// @see https://developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming
-	if (!'PerformanceLongTaskTiming' in window) return;
-
-	const spoorId = getSpoorId();
-
 	// Gather metrics for only a cohort of users.
+	const spoorId = getSpoorId();
 	if (!seedIsInSample(spoorId, samplePercentage)) return;
+
+	//Add the web-vitals stats we want to the queue ready for the page to be unloaded or hidden
+	//at which point we will send them
+	function addToQueue (metric) {
+		queue.add(metric);
+	}
+	getCLS(addToQueue);
+	getFID(addToQueue);
+	getLCP(addToQueue);
+
+	let context = {};
 
 	const navigation = performance.getEntriesByType('navigation')[0];
 
 	// Proceed only if the page load event is a "navigate".
 	// @see: https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
 	if (navigation.type !== 'navigate') return;
-
-	const context = {};
 
 	readyState.complete.then(() => {
 		// <https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/domInteractive>
@@ -46,46 +41,40 @@ export const realUserMonitoringForPerformance = () => {
 		context.domComplete = Math.round(navigation.domComplete);
 	});
 
-	/**
-	 * analyticsTracker()
-	 *
-	 * This function is called every time one of the performance events occurs.
-	 * The "final" event should be `firstInputDelay`, which is triggered by any "input" event (most likely to be a click.)
-	 * Once all the metrics are present, it fires a broadcast() to the Spoor API.
-	 */
-	let hasAlreadyBroadcast = false;
-
-	const analyticsTracker = (({ metricName, duration, data }) => {
-		if (hasAlreadyBroadcast) return;
-
-		if (duration) {
-			// Metrics with "duration":
-			// firstPaint, firstContentfulPaint, firstInputDelay and largestContentfulPaint
-			context[metricName] = Math.round(duration);
+	// Report all available metrics whenever the page is backgrounded or unloaded.
+	addEventListener('visibilitychange', () => {
+		if (document.visibilityState === 'hidden') {
+			flushQueue();
 		}
+	});
 
-		// Metrics with "data":
-		// navigationTiming, networkInformation
-		if (metricName === 'navigationTiming') {
-			context.timeToFirstByte = Math.round(data.timeToFirstByte);
-		}
+	// NOTE: Safari does not reliably fire the `visibilitychange` event when the
+	// page is being unloaded. If Safari support is needed, you should also flush
+	// the queue in the `pagehide` event.
+	addEventListener('pagehide', flushQueue);
 
-		if (isContextComplete(context)) {
-			console.log({ performanceMetrics: context }); // eslint-disable-line no-console
+	function flushQueue () {
+		if (queue.size > 0) {
 
+			for (const metric of queue) {
+				if(metric.name === 'FID') {
+					context.firstInputDelay = Math.round(metric.value);
+				} else if (metric.name === 'CLS') {
+					//as this can be a very long floating number, am rounding to 4 decimal places
+					context.cumulativeLayoutShift = +((metric.value).toFixed(4));
+				} else if (metric.name === 'LCP') {
+					context.largestContentfulPaint = Math.round(metric.value);
+				}
+			}
+
+			//at this point, send metrics
 			broadcast('oTracking.event', {
 				action: 'performance',
 				category: 'page',
 				context
 			});
-
-			hasAlreadyBroadcast = true;
+			queue.clear();
 		}
-	});
+	}
 
-	new Perfume({
-		analyticsTracker,
-		logging: false,
-		largestContentfulPaint: true
-	});
 };
