@@ -15,7 +15,8 @@ const requiredMetrics = [
 	'cumulativeLayoutShift'
 ];
 
-const samplePercentage = 5;
+//TODO reduce this to 5 again (else 100% of users will gather data)
+const samplePercentage = 100;
 
 const isContextComplete = (context) => {
 	return requiredMetrics.every((metric) => typeof context[metric] === 'number');
