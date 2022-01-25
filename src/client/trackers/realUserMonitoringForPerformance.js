@@ -44,16 +44,16 @@ export const realUserMonitoringForPerformance = () => {
 	// Report all available metrics whenever the page is backgrounded or unloaded.
 	addEventListener('visibilitychange', () => {
 		if (document.visibilityState === 'hidden') {
-			sendMetrics();
+			flushQueue();
 		}
 	});
 
 	// NOTE: Safari does not reliably fire the `visibilitychange` event when the
 	// page is being unloaded. If Safari support is needed, you should also flush
 	// the queue in the `pagehide` event.
-	addEventListener('pagehide', sendMetrics);
+	addEventListener('pagehide', flushQueue);
 
-	function sendMetrics () {
+	function flushQueue () {
 		if (queue.size > 0) {
 
 			for (const metric of queue) {
