@@ -35,8 +35,8 @@ export const realUserMonitoringForPerformance = () => {
 	// Proceed only if the page load event is a "navigate".
 	// @see: https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
 	// When testing, you will need to open a new browser window and paste the URL in i.e. simply reloading the page will not work.
-	const navigation = performance.getEntriesByType('navigation')[0];
-	if (navigation.type !== 'navigate') return;
+	const navigation = performance.getEntriesByType('navigation') && performance.getEntriesByType('navigation')[0];
+	if (!navigation || navigation.type !== 'navigate') return;
 
 	const context = {};
 
@@ -62,17 +62,13 @@ export const realUserMonitoringForPerformance = () => {
 		if (metricName === 'fid') {
 			context.firstInputDelay = Math.round(data);
 		} else if (metricName === 'lcp') {
-			//This fires at two points - when FID is fired and when the page's lifecycle is changed to 'hidden'
-			//this records the first, TODO: determine if that is the 'best' point or not.
+			//This fires twice, we are collecting the 'first firing' - see PR notes for more context https://github.com/Financial-Times/n-tracking/pull/86
 			context.largestContentfulPaint = Math.round(data);
 		} else if (metricName === 'ttfb') {
 			context.timeToFirstByte = Math.round(data);
 		} else if (metricName === 'fp') {
 			context.firstPaint = Math.round(data);
 		} else if (metricName === 'cls') {
-			//This fires at two points - when FID is fired and when the page's lifecycle is changed to 'hidden'
-			//this records the first, TODO: determine if that is the 'best' point or not.
-			//CLS is below 1 (ideally below 0.1) so am not rounding this data point
 			context.cumulativeLayoutShift = data;
 		}
 
@@ -91,7 +87,6 @@ export const realUserMonitoringForPerformance = () => {
 
 	new Perfume({
 		analyticsTracker,
-		logging: false,
-		largestContentfulPaint: true
+		logging: false
 	});
 };
