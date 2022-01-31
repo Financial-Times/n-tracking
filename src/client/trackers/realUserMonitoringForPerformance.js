@@ -12,7 +12,9 @@ const requiredMetrics = [
 	'firstPaint',
 	'largestContentfulPaint',
 	'firstInputDelay',
-	'cumulativeLayoutShift'
+	'cumulativeLayoutShift',
+	'firstContentfulPaint',
+	'totalBlockingTime'
 ];
 
 const samplePercentage = 5;
@@ -68,8 +70,12 @@ export const realUserMonitoringForPerformance = () => {
 			context.timeToFirstByte = Math.round(data);
 		} else if (metricName === 'fp') {
 			context.firstPaint = Math.round(data);
+		} else if (metricName === 'fcp'){
+			context.firstContentfulPaint = Math.round(data);
 		} else if (metricName === 'cls') {
 			context.cumulativeLayoutShift = data;
+		} else if (metricName === 'tbt') {
+			context.totalBlockingTime = Math.round(data);
 		}
 
 		if (isContextComplete(context)) {
