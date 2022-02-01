@@ -17,7 +17,7 @@ const requiredMetrics = [
 	'totalBlockingTime'
 ];
 
-const samplePercentage = 5;
+const samplePercentage = 10;
 
 const isContextComplete = (context) => {
 	return requiredMetrics.every((metric) => typeof context[metric] === 'number');
