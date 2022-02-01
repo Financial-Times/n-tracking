@@ -17,7 +17,7 @@ const requiredMetrics = [
 	'totalBlockingTime'
 ];
 
-const samplePercentage = 5;
+const samplePercentage = 10;
 
 const isContextComplete = (context) => {
 	return requiredMetrics.every((metric) => typeof context[metric] === 'number');
@@ -84,7 +84,7 @@ export const realUserMonitoringForPerformance = () => {
 			broadcast('oTracking.event', {
 				action: 'performance',
 				category: 'page',
-				context
+				...context
 			});
 
 			hasAlreadyBroadcast = true;
