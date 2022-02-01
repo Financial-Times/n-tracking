@@ -84,7 +84,7 @@ export const realUserMonitoringForPerformance = () => {
 			broadcast('oTracking.event', {
 				action: 'performance',
 				category: 'page',
-				context
+				...context
 			});
 
 			hasAlreadyBroadcast = true;
