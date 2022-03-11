@@ -78,6 +78,8 @@ export const realUserMonitoringForPerformance = () => {
 			context.totalBlockingTime = Math.round(data);
 		}
 
+		context.url = window.document.location.href || null;
+
 		if (isContextComplete(context)) {
 			console.log({ performanceMetrics: context }); // eslint-disable-line no-console
 
