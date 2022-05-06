@@ -17,13 +17,13 @@ const requiredMetrics = [
 	'totalBlockingTime'
 ];
 
-const samplePercentage = 10;
+const defaultSampleRate = 10;
 
 const isContextComplete = (context) => {
 	return requiredMetrics.every((metric) => typeof context[metric] === 'number');
 };
 
-export const realUserMonitoringForPerformance = () => {
+export const realUserMonitoringForPerformance = ({ sampleRate } = {}) => {
 
 	// Check browser support.
 	// @see https://developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming
@@ -31,8 +31,10 @@ export const realUserMonitoringForPerformance = () => {
 
 	const spoorId = getSpoorId();
 
+	sampleRate = Number.isFinite(sampleRate) && sampleRate <= 100 && sampleRate >= 0 ? sampleRate : defaultSampleRate;
+
 	// Gather metrics for only a cohort of users.
-	if (!seedIsInSample(spoorId, samplePercentage)) return;
+	if (!seedIsInSample(spoorId, sampleRate)) return;
 
 	// Proceed only if the page load event is a "navigate".
 	// @see: https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
