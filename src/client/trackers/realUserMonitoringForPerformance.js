@@ -3,6 +3,7 @@ import readyState from 'ready-state';
 import { broadcast } from '../broadcast';
 import { seedIsInSample } from '../utils/seedIsInSample';
 import { getSpoorId } from '../utils/getSpoorId';
+import { getCookie } from '../utils/getCookie';
 
 // @see "Important metrics to measure" https://web.dev/metrics
 const requiredMetrics = [
@@ -33,8 +34,13 @@ export const realUserMonitoringForPerformance = ({ sampleRate } = {}) => {
 
 	sampleRate = Number.isFinite(sampleRate) && sampleRate <= 100 && sampleRate >= 0 ? sampleRate : defaultSampleRate;
 
-	// Gather metrics for only a cohort of users.
-	if (!seedIsInSample(spoorId, sampleRate)) return;
+	// Gather metrics for only a percentage sample of users.
+	// Also if a staff member has any flags set in Toggler then send RUM data to spoor. Especially useful for engineers.
+	const captureRumData = seedIsInSample(spoorId, sampleRate) || Boolean(getCookie('next-flags'))
+
+	if (!captureRumData) {
+		return;
+	}
 
 	// Proceed only if the page load event is a "navigate".
 	// @see: https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/type
