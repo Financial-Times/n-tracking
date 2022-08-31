@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`src/client/trackers/realUserMonitoringForPerformance .realUserMonitoringForPerformance() analyticsTracker(options) when all metrics are sent broadcasts an o-tracking event with the formatted metrics data 1`] = `
+exports[`src/client/trackers/realUserMonitoringForPerformance .realUserMonitoringForPerformance() recordMetric(metric) when all metrics are sent broadcasts an o-tracking event with the formatted metrics data 1`] = `
 Object {
   "action": "performance",
   "category": "page",
@@ -9,10 +9,8 @@ Object {
   "domInteractive": 679,
   "firstContentfulPaint": 14,
   "firstInputDelay": 14,
-  "firstPaint": 14,
   "largestContentfulPaint": 14,
   "timeToFirstByte": 14,
-  "totalBlockingTime": 14,
   "url": "http://localhost/",
 }
 `;

@@ -1,4 +1,4 @@
-import Perfume from 'perfume.js';
+import {onCLS, onFCP, onFID, onLCP, onTTFB} from 'web-vitals';
 import readyState from 'ready-state';
 import { broadcast } from '../broadcast';
 import { seedIsInSample } from '../utils/seedIsInSample';
@@ -9,12 +9,10 @@ const requiredMetrics = [
 	'domInteractive',
 	'domComplete',
 	'timeToFirstByte',
-	'firstPaint',
 	'largestContentfulPaint',
 	'firstInputDelay',
 	'cumulativeLayoutShift',
-	'firstContentfulPaint',
-	'totalBlockingTime'
+	'firstContentfulPaint'
 ];
 
 const defaultSampleRate = 10;
@@ -52,7 +50,7 @@ export const realUserMonitoringForPerformance = ({ sampleRate } = {}) => {
 	});
 
 	/**
-	 * analyticsTracker()
+	 * recordMetric()
 	 *
 	 * This function is called every time one of the performance events occurs.
 	 * The "final" event should be `firstInputDelay`, which is triggered by any "input" event (most likely to be a click.)
@@ -60,8 +58,13 @@ export const realUserMonitoringForPerformance = ({ sampleRate } = {}) => {
 	 */
 	let hasAlreadyBroadcast = false;
 
-	const analyticsTracker = (({ metricName, data}) => {
+	const recordMetric = ((metric) => {
 		if (hasAlreadyBroadcast) return;
+
+		// @see https://github.com/GoogleChrome/web-vitals#metric
+		// for available properties of `metric`
+		const metricName = metric.name.toLowerCase();
+		const data = metric.value;
 
 		if (metricName === 'fid') {
 			context.firstInputDelay = Math.round(data);
@@ -70,14 +73,10 @@ export const realUserMonitoringForPerformance = ({ sampleRate } = {}) => {
 			context.largestContentfulPaint = Math.round(data);
 		} else if (metricName === 'ttfb') {
 			context.timeToFirstByte = Math.round(data);
-		} else if (metricName === 'fp') {
-			context.firstPaint = Math.round(data);
 		} else if (metricName === 'fcp'){
 			context.firstContentfulPaint = Math.round(data);
 		} else if (metricName === 'cls') {
 			context.cumulativeLayoutShift = data;
-		} else if (metricName === 'tbt') {
-			context.totalBlockingTime = Math.round(data);
 		}
 
 		context.url = window.document.location.href || null;
@@ -95,8 +94,9 @@ export const realUserMonitoringForPerformance = ({ sampleRate } = {}) => {
 		}
 	});
 
-	new Perfume({
-		analyticsTracker,
-		logging: false
-	});
+	onCLS(recordMetric);
+	onFCP(recordMetric);
+	onFID(recordMetric);
+	onLCP(recordMetric);
+	onTTFB(recordMetric);
 };
