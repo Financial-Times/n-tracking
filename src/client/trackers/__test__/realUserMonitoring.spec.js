@@ -68,10 +68,11 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 		});
 
 		it('uses the same handler for all metrics', () => {
-			expect(onCLS.mock.calls[0][0] === onFCP.mock.calls[0][0]).toBe(true);
-			expect(onCLS.mock.calls[0][0] === onFID.mock.calls[0][0]).toBe(true);
-			expect(onCLS.mock.calls[0][0] === onLCP.mock.calls[0][0]).toBe(true);
-			expect(onCLS.mock.calls[0][0] === onTTFB.mock.calls[0][0]).toBe(true);
+			const clsHandler = onCLS.mock.calls[0][0];
+			expect(onFCP.mock.calls[0][0]).toStrictEqual(clsHandler);
+			expect(onFID.mock.calls[0][0]).toStrictEqual(clsHandler);
+			expect(onLCP.mock.calls[0][0]).toStrictEqual(clsHandler);
+			expect(onTTFB.mock.calls[0][0]).toStrictEqual(clsHandler);
 		});
 
 		describe('recordMetric(metric)', () => {
