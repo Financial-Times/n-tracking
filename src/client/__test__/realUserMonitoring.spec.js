@@ -2,7 +2,7 @@
 // Mock the ready-state module
 jest.mock('ready-state', () => ({
 	complete: {
-		// We want readstate to complete immediately
+		// We want ready-state to complete immediately
 		then: (fn) => fn()
 	}
 }));
@@ -76,7 +76,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 				global.console = oldConsole;
 			});
 
-			describe('with only one type of metric', () => {
+			describe('when only one metric type is sent', () => {
 				beforeEach(() => {
 					analyticsTracker({ metricName: 'fid', data: 13.7 });
 				});
@@ -125,7 +125,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 
 		describe('when the seed is not in the sample', () => {
 
-			beforeEach(async () => {
+			beforeEach(() => {
 				Perfume.mockReset();
 				seedIsInSample.mockReturnValue(false);
 				realUserMonitoringForPerformance();
@@ -137,9 +137,9 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 
 		});
 
-		describe('when no "navigation" peformance entries are available', () => {
+		describe('when no "navigation" performance entries are available', () => {
 
-			beforeEach(async () => {
+			beforeEach(() => {
 				Perfume.mockReset();
 				Performance.prototype.getEntriesByType.mockReturnValue([]);
 				realUserMonitoringForPerformance();
