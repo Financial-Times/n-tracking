@@ -104,15 +104,9 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 					expect(broadcastArguments[1]).toMatchSnapshot();
 				});
 
-				describe('when all metrics are sent a second time', () => {
+				describe('when any one of the metrics are sent a second time', () => {
 					beforeEach(() => {
 						analyticsTracker({ metricName: 'fid', data: 13.7 });
-						analyticsTracker({ metricName: 'lcp', data: 13.7 });
-						analyticsTracker({ metricName: 'ttfb', data: 13.7 });
-						analyticsTracker({ metricName: 'fp', data: 13.7 });
-						analyticsTracker({ metricName: 'fcp', data: 13.7 });
-						analyticsTracker({ metricName: 'cls', data: 13.7 });
-						analyticsTracker({ metricName: 'tbt', data: 13.7 });
 					});
 
 					it('does not broadcast a second o-tracking event', () => {
