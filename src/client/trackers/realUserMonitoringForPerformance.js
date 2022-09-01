@@ -94,7 +94,7 @@ export const realUserMonitoringForPerformance = ({ sampleRate } = {}) => {
 		}
 	});
 
-	onCLS(recordMetric);
+	onCLS(recordMetric, { reportAllChanges: true });
 	onFCP(recordMetric);
 	onFID(recordMetric);
 	onLCP(recordMetric);

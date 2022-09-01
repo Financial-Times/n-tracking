@@ -60,6 +60,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 		it('listens to metrics with the web-vitals package', () => {
 			expect(onCLS).toHaveBeenCalledTimes(1);
 			expect(typeof onCLS.mock.calls[0][0]).toBe('function');
+			expect(onCLS.mock.calls[0][1]).toEqual({ reportAllChanges: true });
 			expect(onFCP).toHaveBeenCalledTimes(1);
 			expect(typeof onFCP.mock.calls[0][0]).toBe('function');
 			expect(onFID).toHaveBeenCalledTimes(1);
