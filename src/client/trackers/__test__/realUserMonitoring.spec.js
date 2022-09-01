@@ -8,21 +8,21 @@ jest.mock('ready-state', () => ({
 }));
 
 // Mock the utility to check whether the seed is in the sample
-jest.mock('../utils/seedIsInSample', () => ({
+jest.mock('../../utils/seedIsInSample', () => ({
 	seedIsInSample: jest.fn().mockReturnValue(true)
 }));
-import {seedIsInSample} from '../utils/seedIsInSample';
+import {seedIsInSample} from '../../utils/seedIsInSample';
 
 // Mock the utility to get a spoor ID from the cookie
-jest.mock('../utils/getSpoorId', () => ({
+jest.mock('../../utils/getSpoorId', () => ({
 	getSpoorId: jest.fn().mockReturnValue('mock-spoor-id')
 }));
 
 // Mock the broadcast method which fires an o-tracking event
-jest.mock('../broadcast', () => ({
+jest.mock('../../broadcast', () => ({
 	broadcast: jest.fn()
 }));
-import {broadcast} from '../broadcast';
+import {broadcast} from '../../broadcast';
 
 // Mock Perfume
 jest.mock('perfume.js', () => {
@@ -43,7 +43,7 @@ Performance.prototype.getEntriesByType = jest.fn().mockReturnValue([
 // sent by Perfume
 window.requestIdleCallback = jest.fn();
 
-import {realUserMonitoringForPerformance} from '../trackers/realUserMonitoringForPerformance';
+import {realUserMonitoringForPerformance} from '../realUserMonitoringForPerformance';
 
 describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 
