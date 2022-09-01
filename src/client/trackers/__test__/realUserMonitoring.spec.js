@@ -24,7 +24,7 @@ jest.mock('../../broadcast', () => ({
 }));
 import {broadcast} from '../../broadcast';
 
-// Mock Perfume
+// Mock web-vitals
 jest.mock('web-vitals', () => ({
 	onCLS: jest.fn(),
 	onFCP: jest.fn(),
@@ -42,10 +42,6 @@ Performance.prototype.getEntriesByType = jest.fn().mockReturnValue([
 		domInteractive: 678.90
 	}
 ]);
-
-// Mock requestIdleCallback so we can capture metrics
-// sent by Perfume
-window.requestIdleCallback = jest.fn();
 
 import {realUserMonitoringForPerformance} from '../realUserMonitoringForPerformance';
 
