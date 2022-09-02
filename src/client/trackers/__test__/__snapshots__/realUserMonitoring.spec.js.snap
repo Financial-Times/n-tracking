@@ -4,7 +4,7 @@ exports[`src/client/trackers/realUserMonitoringForPerformance .realUserMonitorin
 Object {
   "action": "performance",
   "category": "page",
-  "cumulativeLayoutShift": 13.7,
+  "cumulativeLayoutShift": 13.7654,
   "domComplete": 123,
   "domInteractive": 679,
   "firstContentfulPaint": 14,

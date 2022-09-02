@@ -76,7 +76,7 @@ export const realUserMonitoringForPerformance = ({ sampleRate } = {}) => {
 		} else if (metricName === 'fcp'){
 			context.firstContentfulPaint = Math.round(data);
 		} else if (metricName === 'cls') {
-			context.cumulativeLayoutShift = data;
+			context.cumulativeLayoutShift = Number(data.toFixed(4));
 		}
 
 		context.url = window.document.location.href || null;

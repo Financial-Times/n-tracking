@@ -107,7 +107,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 					recordMetric({ name: 'LCP', value: 13.7 });
 					recordMetric({ name: 'TTFB', value: 13.7 });
 					recordMetric({ name: 'FCP', value: 13.7 });
-					recordMetric({ name: 'CLS', value: 13.7 });
+					recordMetric({ name: 'CLS', value: 13.76539 });
 				});
 
 				it('broadcasts an o-tracking event with the formatted metrics data', () => {
@@ -115,6 +115,12 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 					const broadcastArguments = broadcast.mock.calls[0];
 					expect(broadcastArguments[0]).toBe('oTracking.event');
 					expect(broadcastArguments[1]).toMatchSnapshot();
+				});
+
+				it('rounds the CLS metric to four decimal places', () => {
+					expect(broadcast).toHaveBeenCalledTimes(1);
+					const {cumulativeLayoutShift} = broadcast.mock.calls[0][1];
+					expect(cumulativeLayoutShift).toBe(13.7654);
 				});
 
 				describe('when any one of the metrics are sent a second time', () => {
