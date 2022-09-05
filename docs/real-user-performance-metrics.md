@@ -38,7 +38,7 @@ if (flags.get('realUserMonitoringForPerformance')) {
 }
 ```
 
-This script will detect whether the browser supports performance timing, sample users based on their allocated Spoor ID, and initialise [Perfume.js](https://www.npmjs.com/package/perfume.js) to calculate the metrics.
+This script will detect whether the browser supports performance timing, sample users based on their allocated Spoor ID, and initialise [web-vitals](https://www.npmjs.com/package/web-vitals) to calculate the metrics.
 
 Once all metrics have been collected a `page:performance` event will be triggered and sent to Spoor.
 

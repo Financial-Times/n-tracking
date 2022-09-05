@@ -24,11 +24,15 @@ jest.mock('../../broadcast', () => ({
 }));
 import {broadcast} from '../../broadcast';
 
-// Mock Perfume
-jest.mock('perfume.js', () => {
-	return jest.fn();
-});
-import Perfume from 'perfume.js';
+// Mock web-vitals
+jest.mock('web-vitals', () => ({
+	onCLS: jest.fn(),
+	onFCP: jest.fn(),
+	onFID: jest.fn(),
+	onLCP: jest.fn(),
+	onTTFB: jest.fn()
+}));
+import {onCLS, onFCP, onFID, onLCP, onTTFB} from 'web-vitals';
 
 // Mock global performance metrics
 Performance.prototype.getEntriesByType = jest.fn().mockReturnValue([
@@ -38,10 +42,6 @@ Performance.prototype.getEntriesByType = jest.fn().mockReturnValue([
 		domInteractive: 678.90
 	}
 ]);
-
-// Mock requestIdleCallback so we can capture metrics
-// sent by Perfume
-window.requestIdleCallback = jest.fn();
 
 import {realUserMonitoringForPerformance} from '../realUserMonitoringForPerformance';
 
@@ -53,15 +53,30 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 			realUserMonitoringForPerformance();
 		});
 
-		it('creates a Perfume instance with a custom analytics tracker', () => {
-			expect(Perfume).toHaveBeenCalledTimes(1);
-			const perfumeOptions = Perfume.mock.calls[0][0];
-			expect(typeof perfumeOptions).toBe('object');
-			expect(typeof perfumeOptions.analyticsTracker).toBe('function');
+		it('listens to metrics with the web-vitals package', () => {
+			expect(onCLS).toHaveBeenCalledTimes(1);
+			expect(typeof onCLS.mock.calls[0][0]).toBe('function');
+			expect(onCLS.mock.calls[0][1]).toEqual({ reportAllChanges: true });
+			expect(onFCP).toHaveBeenCalledTimes(1);
+			expect(typeof onFCP.mock.calls[0][0]).toBe('function');
+			expect(onFID).toHaveBeenCalledTimes(1);
+			expect(typeof onFID.mock.calls[0][0]).toBe('function');
+			expect(onLCP).toHaveBeenCalledTimes(1);
+			expect(typeof onLCP.mock.calls[0][0]).toBe('function');
+			expect(onTTFB).toHaveBeenCalledTimes(1);
+			expect(typeof onTTFB.mock.calls[0][0]).toBe('function');
 		});
 
-		describe('analyticsTracker(options)', () => {
-			let analyticsTracker;
+		it('uses the same handler for all metrics', () => {
+			const clsHandler = onCLS.mock.calls[0][0];
+			expect(onFCP.mock.calls[0][0]).toStrictEqual(clsHandler);
+			expect(onFID.mock.calls[0][0]).toStrictEqual(clsHandler);
+			expect(onLCP.mock.calls[0][0]).toStrictEqual(clsHandler);
+			expect(onTTFB.mock.calls[0][0]).toStrictEqual(clsHandler);
+		});
+
+		describe('recordMetric(metric)', () => {
+			let recordMetric;
 			let oldConsole;
 
 			beforeEach(() => {
@@ -69,7 +84,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 				// make it hard to read the test output
 				oldConsole = global.console;
 				global.console = {log: jest.fn()};
-				analyticsTracker = Perfume.mock.calls[0][0].analyticsTracker;
+				recordMetric = onCLS.mock.calls[0][0];
 			});
 
 			afterEach(() => {
@@ -78,7 +93,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 
 			describe('when only one metric type is sent', () => {
 				beforeEach(() => {
-					analyticsTracker({ metricName: 'fid', data: 13.7 });
+					recordMetric({ name: 'FID', value: 13.7 });
 				});
 
 				it('does not broadcast an o-tracking event', () => {
@@ -88,13 +103,11 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 
 			describe('when all metrics are sent', () => {
 				beforeEach(() => {
-					analyticsTracker({ metricName: 'fid', data: 13.7 });
-					analyticsTracker({ metricName: 'lcp', data: 13.7 });
-					analyticsTracker({ metricName: 'ttfb', data: 13.7 });
-					analyticsTracker({ metricName: 'fp', data: 13.7 });
-					analyticsTracker({ metricName: 'fcp', data: 13.7 });
-					analyticsTracker({ metricName: 'cls', data: 13.7 });
-					analyticsTracker({ metricName: 'tbt', data: 13.7 });
+					recordMetric({ name: 'FID', value: 13.7 });
+					recordMetric({ name: 'LCP', value: 13.7 });
+					recordMetric({ name: 'TTFB', value: 13.7 });
+					recordMetric({ name: 'FCP', value: 13.7 });
+					recordMetric({ name: 'CLS', value: 13.76539 });
 				});
 
 				it('broadcasts an o-tracking event with the formatted metrics data', () => {
@@ -104,9 +117,15 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 					expect(broadcastArguments[1]).toMatchSnapshot();
 				});
 
+				it('rounds the CLS metric to four decimal places', () => {
+					expect(broadcast).toHaveBeenCalledTimes(1);
+					const {cumulativeLayoutShift} = broadcast.mock.calls[0][1];
+					expect(cumulativeLayoutShift).toBe(13.7654);
+				});
+
 				describe('when any one of the metrics are sent a second time', () => {
 					beforeEach(() => {
-						analyticsTracker({ metricName: 'fid', data: 13.7 });
+						recordMetric({ name: 'FID', value: 13.7 });
 					});
 
 					it('does not broadcast a second o-tracking event', () => {
@@ -120,13 +139,21 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 		describe('when the seed is not in the sample', () => {
 
 			beforeEach(() => {
-				Perfume.mockReset();
+				onCLS.mockReset();
+				onFCP.mockReset();
+				onFID.mockReset();
+				onLCP.mockReset();
+				onTTFB.mockReset();
 				seedIsInSample.mockReturnValue(false);
 				realUserMonitoringForPerformance();
 			});
 
-			it('does not create a Perfume instance', () => {
-				expect(Perfume).toHaveBeenCalledTimes(0);
+			it('does not listen for performance metrics', () => {
+				expect(onCLS).toHaveBeenCalledTimes(0);
+				expect(onFCP).toHaveBeenCalledTimes(0);
+				expect(onFID).toHaveBeenCalledTimes(0);
+				expect(onLCP).toHaveBeenCalledTimes(0);
+				expect(onTTFB).toHaveBeenCalledTimes(0);
 			});
 
 		});
@@ -134,13 +161,21 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 		describe('when no "navigation" performance entries are available', () => {
 
 			beforeEach(() => {
-				Perfume.mockReset();
+				onCLS.mockReset();
+				onFCP.mockReset();
+				onFID.mockReset();
+				onLCP.mockReset();
+				onTTFB.mockReset();
 				Performance.prototype.getEntriesByType.mockReturnValue([]);
 				realUserMonitoringForPerformance();
 			});
 
-			it('does not create a Perfume instance', () => {
-				expect(Perfume).toHaveBeenCalledTimes(0);
+			it('does not listen for performance metrics', () => {
+				expect(onCLS).toHaveBeenCalledTimes(0);
+				expect(onFCP).toHaveBeenCalledTimes(0);
+				expect(onFID).toHaveBeenCalledTimes(0);
+				expect(onLCP).toHaveBeenCalledTimes(0);
+				expect(onTTFB).toHaveBeenCalledTimes(0);
 			});
 
 		});
