@@ -39,6 +39,13 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 	//  Initialise click event tracking for interactive elements
 	oTracking.click.init('cta');
 
+	if (window.oTracking) {
+		// eslint-disable-next-line no-console
+		console.warn("An oTracking instance already exists on window, skipping", { currentInstance: window.oTracking, ourInstance: oTracking });
+	} else {
+		window.oTracking = oTracking;
+	}
+
 	return oTracking;
 }
 
