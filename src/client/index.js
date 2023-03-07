@@ -39,8 +39,11 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 	//  Initialise click event tracking for interactive elements
 	oTracking.click.init('cta');
 
-	// Make the oTracking instance available globally
-	window.oTracking = oTracking;
+	if (window.oTracking) {
+		console.warn("An oTracking instance already exists on window, skipping");
+	} else {
+		window.oTracking = oTracking;
+	}
 
 	return oTracking;
 }
