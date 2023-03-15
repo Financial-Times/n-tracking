@@ -3,6 +3,7 @@ import getUserData from './tracking/getUserData';
 import getQueryParams from './tracking/getQueryParams';
 import getErrorPageParams from './tracking/getErrorPageParams';
 import transformContextData from './utils/transformContextData';
+import getConsentDataFromCookies from "./utils/getConsentDataFromCookies";
 
 export const SPOOR_API_INGEST_URL = 'https://spoor-api.ft.com/ingest';
 
@@ -29,10 +30,10 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 	// Automatically trigger the page view event unless we're in an iframe
 	if (window === window.top || window.location.hostname === 'errors-next.ft.com') {
 		const errorPageParams = getErrorPageParams();
-
 		oTracking.page({
 			...errorPageParams,
 			...pageViewContext,
+			consents: { ...getConsentDataFromCookies() } ,
 		});
 	}
 
