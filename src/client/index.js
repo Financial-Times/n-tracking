@@ -44,6 +44,7 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 				});
 			})
 			.catch((err) => {
+				// eslint-disable-next-line no-console
 				console.warn("Could not get consent data", err);
 				oTracking.page(pageViewEventParams);
 			});
