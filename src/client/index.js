@@ -3,6 +3,7 @@ import getUserData from './tracking/getUserData';
 import getQueryParams from './tracking/getQueryParams';
 import getErrorPageParams from './tracking/getErrorPageParams';
 import transformContextData from './utils/transformContextData';
+import getConsentData from './utils/getConsentData';
 
 export const SPOOR_API_INGEST_URL = 'https://spoor-api.ft.com/ingest';
 
@@ -15,7 +16,7 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 		context: transformContextData({
 			...queryParams,
 			...appContext,
-			...extraContext
+			...extraContext,
 		}),
 		user: getUserData(),
 		// Using the Beacon API ensures that no tracking event data is lost
@@ -30,10 +31,22 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 	if (window === window.top || window.location.hostname === 'errors-next.ft.com') {
 		const errorPageParams = getErrorPageParams();
 
-		oTracking.page({
+		const pageViewEventParams = {
 			...errorPageParams,
 			...pageViewContext,
-		});
+		};
+
+		getConsentData()
+			.then((consents) => {
+				oTracking.page({
+					...pageViewEventParams,
+					consents,
+				});
+			})
+			.catch((err) => {
+				console.warn("Could not get consent data", err);
+				oTracking.page(pageViewEventParams);
+			});
 	}
 
 	//  Initialise click event tracking for interactive elements
