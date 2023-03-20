@@ -7,10 +7,12 @@ jest.mock('@financial-times/o-tracking', () => {
 }, { virtual: true });
 jest.mock('@financial-times/o-viewport', () => ({ getOrientation: jest.fn() }), { virtual: true });
 jest.mock('@financial-times/o-grid', () => ({ getCurrentLayout: jest.fn() }), { virtual: true });
+jest.mock('../utils/getConsentData', () => jest.fn());
 
 import oTracking from '@financial-times/o-tracking';
 import oViewport from '@financial-times/o-viewport';
 import oGrid from '@financial-times/o-grid';
+import getConsentData from '../utils/getConsentData';
 import { init, SPOOR_API_INGEST_URL } from '..';
 
 const appContext = {
@@ -23,7 +25,16 @@ const appContext = {
 };
 
 describe('src/index', () => {
-	afterEach(() => jest.clearAllMocks());
+	beforeAll(() => {
+		getConsentData.mockResolvedValue({});
+		window.console.warn = jest.fn()
+	})
+
+	afterEach(() => {
+		jest.clearAllMocks();
+		// Clean global instance left on the window after each init() call
+		delete window.oTracking
+	});
 
 	describe('.init()', () => {
 		it('initialises o-tracking', () => {
@@ -37,6 +48,24 @@ describe('src/index', () => {
 					useSendBeacon: true
 				})
 			);
+		});
+
+		it('attaches the o-tracking instance to the window', () => {
+			const oTrackingInstance = init({ appContext });
+			expect(window.oTracking).toBe(oTrackingInstance);
+		});
+
+		it("warns the user in case an instance of o-tracking is already attached to the window without overriding the value", () => {
+			window.oTracking = "initialValue";
+			const ourInstance = init({ appContext });
+			expect(window.console.warn).toHaveBeenCalledWith(
+				"An oTracking instance already exists on window, skipping",
+				{
+					currentInstance: 'initialValue',
+					ourInstance,
+				}
+			);
+			expect(window.oTracking).toBe("initialValue");
 		});
 
 		it('configures o-tracking with context data', () => {
@@ -74,14 +103,35 @@ describe('src/index', () => {
 			);
 		});
 
-		it('triggers a page view with page view context', () => {
+		it('triggers a page view with page view context and consents', async () => {
+			getConsentData.mockResolvedValue({ some: 'consentData' });
+
 			init({ appContext, pageViewContext: { foo: 'bar' } });
 
-			expect(oTracking.page).toHaveBeenCalledTimes(1);
+			// We don't await the promise returned while getting consent data.
+			// The line below lets us wait for the mocked getConsentData promise to resolve.
+			await new Promise(process.nextTick);
 
+			expect(oTracking.page).toHaveBeenCalledTimes(1);
 			expect(oTracking.page).toHaveBeenCalledWith(
 				expect.objectContaining({
-					foo: 'bar'
+					foo: 'bar',
+					consents: {
+						some: 'consentData'
+					},
+				})
+			);
+		});
+
+		it('Does not pass consents down if getting consents fails', async () => {
+			getConsentData.mockRejectedValueOnce(new Error('no consent data'));
+			init({ appContext, pageViewContext: { foo: 'bar' } });
+			await new Promise(process.nextTick);
+
+			expect(oTracking.page).toHaveBeenCalledTimes(1);
+			expect(oTracking.page).toHaveBeenCalledWith(
+				expect.objectContaining({
+					foo: 'bar',
 				})
 			);
 		});
