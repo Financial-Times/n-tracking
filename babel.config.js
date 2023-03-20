@@ -1,13 +1,13 @@
-module.exports ={
-  "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "targets": {
-          "node": 8
-        }
-      }
-    ]
-  ],
-  "plugins": ["@babel/plugin-transform-react-jsx"]
-}
+module.exports = {
+	presets: [
+		[
+			"@babel/preset-env",
+			{
+				targets: {
+					node: 8,
+				},
+			},
+		],
+	],
+	plugins: ["@babel/plugin-transform-react-jsx"],
+};
