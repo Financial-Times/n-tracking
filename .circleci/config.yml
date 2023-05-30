@@ -173,7 +173,7 @@ workflows:
           filters:
             <<: *filters_version_tag
           requires:
-            - test
+            - test-v18.16
 
   renovate-nori-build-test:
     when:
