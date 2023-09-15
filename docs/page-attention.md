@@ -55,10 +55,12 @@ if (flags.get('pageAttentionTracking')) {
 
 The `pageAttention()` method accepts an options object with the following properties:
 
-| Option | Required | Type    | Description                                               |
-|--------|----------|---------|-----------------------------------------------------------|
-| target | No       | String  | Target element selector to apply scroll depth markers to. |
-| debug  | No       | Boolean | Enable verbose logs for attention events                  |
+| Option               | Required | Type    | Description                                               |
+|----------------------|----------|---------|-----------------------------------------------------------|
+| target               | No       | String  | Target element selector to apply scroll depth markers to. |
+| debug                | No       | Boolean | Enable verbose logs for attention events                  |
+| excludeAttentionTime | No       | Boolean | Disables attention time tracking                          |
+| excludeScrollDepth   | No       | Boolean | Disables scroll depth tracking                            |
 
 This will initialise two sub-components:
 
@@ -67,6 +69,8 @@ This will initialise two sub-components:
 
 2. ### Scroll depth
     This creates a number of marker elements at equal intervals down the length of the page. The first time a marker moves into the browser's viewport a `page:scrolldepth` event is triggered. Each scroll depth event also includes the current attention time.
+
+If only one of these features is needed, use the `excludeAttentionTime` or `excludeScrollDepth` options to achieve this.
 
 
 ## More details
