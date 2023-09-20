@@ -9,6 +9,7 @@ Object {
   "domInteractive": 679,
   "firstContentfulPaint": 14,
   "firstInputDelay": 14,
+  "interactionToNextPaint": 14,
   "largestContentfulPaint": 14,
   "timeToFirstByte": 14,
   "url": "http://localhost/",

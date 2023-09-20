@@ -112,6 +112,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 					recordMetric({ name: 'TTFB', value: 13.7 });
 					recordMetric({ name: 'FCP', value: 13.7 });
 					recordMetric({ name: 'CLS', value: 13.76539 });
+					recordMetric({ name: 'INP', value: 13.7 });
 				});
 
 				it('broadcasts an o-tracking event with the formatted metrics data', () => {
