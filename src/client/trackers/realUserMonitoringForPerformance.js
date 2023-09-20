@@ -1,8 +1,9 @@
-import {onCLS, onFCP, onFID, onLCP, onTTFB} from 'web-vitals';
+import { onCLS, onFCP, onFID, onLCP, onTTFB, onINP } from 'web-vitals';
 import readyState from 'ready-state';
 import { broadcast } from '../broadcast';
 import { seedIsInSample } from '../utils/seedIsInSample';
 import { getSpoorId } from '../utils/getSpoorId';
+
 
 // @see "Important metrics to measure" https://web.dev/metrics
 const requiredMetrics = [
@@ -12,7 +13,8 @@ const requiredMetrics = [
 	'largestContentfulPaint',
 	'firstInputDelay',
 	'cumulativeLayoutShift',
-	'firstContentfulPaint'
+	'firstContentfulPaint',
+	'interactionToNextPaint'
 ];
 
 const defaultSampleRate = 10;
@@ -73,10 +75,12 @@ export const realUserMonitoringForPerformance = ({ sampleRate } = {}) => {
 			context.largestContentfulPaint = Math.round(data);
 		} else if (metricName === 'ttfb') {
 			context.timeToFirstByte = Math.round(data);
-		} else if (metricName === 'fcp'){
+		} else if (metricName === 'fcp') {
 			context.firstContentfulPaint = Math.round(data);
 		} else if (metricName === 'cls') {
 			context.cumulativeLayoutShift = Number(data.toFixed(4));
+		} else if (metricName === 'inp') {
+			context.interactionToNextPaint = Math.round(data);
 		}
 
 		context.url = window.document.location.href || null;
@@ -99,4 +103,5 @@ export const realUserMonitoringForPerformance = ({ sampleRate } = {}) => {
 	onFID(recordMetric);
 	onLCP(recordMetric);
 	onTTFB(recordMetric);
+	onINP(recordMetric);
 };

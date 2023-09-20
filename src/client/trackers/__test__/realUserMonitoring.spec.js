@@ -30,9 +30,10 @@ jest.mock('web-vitals', () => ({
 	onFCP: jest.fn(),
 	onFID: jest.fn(),
 	onLCP: jest.fn(),
-	onTTFB: jest.fn()
+	onTTFB: jest.fn(),
+	onINP: jest.fn(),
 }));
-import {onCLS, onFCP, onFID, onLCP, onTTFB} from 'web-vitals';
+import { onCLS, onFCP, onFID, onLCP, onTTFB, onINP } from 'web-vitals';
 
 // Mock global performance metrics
 Performance.prototype.getEntriesByType = jest.fn().mockReturnValue([
@@ -65,6 +66,8 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 			expect(typeof onLCP.mock.calls[0][0]).toBe('function');
 			expect(onTTFB).toHaveBeenCalledTimes(1);
 			expect(typeof onTTFB.mock.calls[0][0]).toBe('function');
+			expect(onINP).toHaveBeenCalledTimes(1);
+			expect(typeof onINP.mock.calls[0][0]).toBe('function');
 		});
 
 		it('uses the same handler for all metrics', () => {
@@ -73,6 +76,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 			expect(onFID.mock.calls[0][0]).toStrictEqual(clsHandler);
 			expect(onLCP.mock.calls[0][0]).toStrictEqual(clsHandler);
 			expect(onTTFB.mock.calls[0][0]).toStrictEqual(clsHandler);
+			expect(onINP.mock.calls[0][0]).toStrictEqual(clsHandler);
 		});
 
 		describe('recordMetric(metric)', () => {
@@ -144,6 +148,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 				onFID.mockReset();
 				onLCP.mockReset();
 				onTTFB.mockReset();
+				onINP.mockReset();
 				seedIsInSample.mockReturnValue(false);
 				realUserMonitoringForPerformance();
 			});
@@ -154,6 +159,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 				expect(onFID).toHaveBeenCalledTimes(0);
 				expect(onLCP).toHaveBeenCalledTimes(0);
 				expect(onTTFB).toHaveBeenCalledTimes(0);
+				expect(onINP).toHaveBeenCalledTimes(0);
 			});
 
 		});
@@ -166,6 +172,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 				onFID.mockReset();
 				onLCP.mockReset();
 				onTTFB.mockReset();
+				onINP.mockReset();
 				Performance.prototype.getEntriesByType.mockReturnValue([]);
 				realUserMonitoringForPerformance();
 			});
@@ -176,6 +183,7 @@ describe('src/client/trackers/realUserMonitoringForPerformance', () => {
 				expect(onFID).toHaveBeenCalledTimes(0);
 				expect(onLCP).toHaveBeenCalledTimes(0);
 				expect(onTTFB).toHaveBeenCalledTimes(0);
+				expect(onINP).toHaveBeenCalledTimes(0);
 			});
 
 		});
