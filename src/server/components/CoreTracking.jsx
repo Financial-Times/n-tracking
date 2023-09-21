@@ -47,7 +47,7 @@ export function CoreTracking({ appContext }) {
 				}}
 			/>
 			<noscript>
-				<img src={pixel + encodedTrackingData.replace(placeholder, 'no-js')} />
+				<img src={pixel + encodedTrackingData.replace(placeholder, 'no-js')} alt="" />
 			</noscript>
 		</React.Fragment>
 	);
