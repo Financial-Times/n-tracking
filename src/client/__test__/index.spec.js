@@ -27,13 +27,13 @@ const appContext = {
 describe('src/index', () => {
 	beforeAll(() => {
 		getConsentData.mockResolvedValue({});
-		window.console.warn = jest.fn()
-	})
+		window.console.warn = jest.fn();
+	});
 
 	afterEach(() => {
 		jest.clearAllMocks();
 		// Clean global instance left on the window after each init() call
-		delete window.oTracking
+		delete window.oTracking;
 	});
 
 	describe('.init()', () => {
@@ -55,17 +55,17 @@ describe('src/index', () => {
 			expect(window.oTracking).toBe(oTrackingInstance);
 		});
 
-		it("warns the user in case an instance of o-tracking is already attached to the window without overriding the value", () => {
-			window.oTracking = "initialValue";
+		it('warns the user in case an instance of o-tracking is already attached to the window without overriding the value', () => {
+			window.oTracking = 'initialValue';
 			const ourInstance = init({ appContext });
 			expect(window.console.warn).toHaveBeenCalledWith(
-				"An oTracking instance already exists on window, skipping",
+				'An oTracking instance already exists on window, skipping',
 				{
 					currentInstance: 'initialValue',
 					ourInstance,
 				}
 			);
-			expect(window.oTracking).toBe("initialValue");
+			expect(window.oTracking).toBe('initialValue');
 		});
 
 		it('configures o-tracking with context data', () => {

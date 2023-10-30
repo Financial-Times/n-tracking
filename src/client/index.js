@@ -45,7 +45,7 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 			})
 			.catch((err) => {
 				// eslint-disable-next-line no-console
-				console.warn("Could not get consent data", err);
+				console.warn('Could not get consent data', err);
 				oTracking.page(pageViewEventParams);
 			});
 	}
@@ -55,7 +55,7 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 
 	if (window.oTracking) {
 		// eslint-disable-next-line no-console
-		console.warn("An oTracking instance already exists on window, skipping", { currentInstance: window.oTracking, ourInstance: oTracking });
+		console.warn('An oTracking instance already exists on window, skipping', { currentInstance: window.oTracking, ourInstance: oTracking });
 	} else {
 		window.oTracking = oTracking;
 	}
