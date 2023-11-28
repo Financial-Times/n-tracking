@@ -30,7 +30,7 @@ export function CoreTracking({ appContext }) {
 		if (/\bcore\b/.test(document.documentElement.className)) {
 			var currentScript = document.scripts[document.scripts.length - 1];
 			var img = new Image();
-
+			img.alt = ""
 			img.src = currentScript.getAttribute('data-pixel-src');
 		}
 	}
