@@ -35,7 +35,7 @@
     "npm": "7.x || 8.x || 9.x"
   },
   "dependencies": {
-    "@financial-times/ads-personalised-consent": "^5.2.8",
+    "@financial-times/ads-personalised-consent": "^5.3.3",
     "@financial-times/o-grid": "^5.0.0",
     "@financial-times/o-tracking": "^4.5.0",
     "@financial-times/o-viewport": "^4.0.0",
