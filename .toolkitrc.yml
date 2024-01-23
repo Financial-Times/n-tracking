@@ -1,0 +1,23 @@
+plugins:
+  - "@dotcom-tool-kit/babel"
+  - "@dotcom-tool-kit/component"
+  - "@dotcom-tool-kit/jest"
+  - "@dotcom-tool-kit/eslint"
+  - "@dotcom-tool-kit/lint-staged"
+  - "./toolkit/rollup"
+hooks:
+  build:local:
+    - Rollup
+  build:ci:
+    - Rollup
+  test:local:
+    - Eslint
+    - JestLocal
+  test:ci:
+    - Eslint
+    - JestCI
+options:
+  "@dotcom-tool-kit/circleci":
+    nodeVersion:
+      - '18.16'
+      - '16.20'

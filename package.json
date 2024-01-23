@@ -7,9 +7,7 @@
   "license": "MIT",
   "repository": "Financial-Times/n-tracking.git",
   "scripts": {
-    "clean": "rm -rf ./dist",
     "build": "dotcom-tool-kit build:local",
-    "prepare": "npm run build",
     "test": "dotcom-tool-kit test:local",
     "start": "dotcom-tool-kit run:local"
   },
@@ -33,7 +31,7 @@
     "jest-environment-jsdom-fifteen": "^1.0.0",
     "jsdom": "^15.1.0",
     "react": "^16.9.0",
-    "rollup": "^1.31.0",
+    "rollup": "^2.71.1",
     "rollup-plugin-babel": "^4.3.3",
     "seed-random": "^2.2.0"
   },
