@@ -28,6 +28,7 @@
     "dotcom-tool-kit": "^3.4.0",
     "eslint-plugin-react": "^7.14.3",
     "jest": "^25.0.0",
+    "jest-environment-jsdom": "^27.5.1",
     "jest-environment-jsdom-fifteen": "^1.0.0",
     "jsdom": "^15.1.0",
     "react": "^16.9.0",
