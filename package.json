@@ -18,8 +18,9 @@
     "@dotcom-tool-kit/babel": "^3.1.6",
     "@dotcom-tool-kit/component": "^4.1.0",
     "@dotcom-tool-kit/eslint": "^3.2.0",
+    "@dotcom-tool-kit/husky-npm": "^4.2.0",
     "@dotcom-tool-kit/jest": "^3.4.0",
-    "@dotcom-tool-kit/lint-staged": "^4.2.0",
+    "@dotcom-tool-kit/lint-staged-npm": "^3.2.0",
     "@financial-times/eslint-config-next": "^7.1.0",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
@@ -53,12 +54,14 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "secret-squirrel-commitmsg",
-      "pre-commit": "secret-squirrel",
-      "pre-push": "make verify -j3"
+      "commit-msg": "dotcom-tool-kit git:commitmsg",
+      "pre-commit": "dotcom-tool-kit git:precommit"
     }
   },
   "volta": {
     "node": "18.16.0"
+  },
+  "lint-staged": {
+    "**/*.js": "dotcom-tool-kit format:staged test:staged --"
   }
 }
