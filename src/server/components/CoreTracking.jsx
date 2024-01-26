@@ -5,7 +5,7 @@ const pixel = 'https://spoor-api.ft.com/px.gif?data=';
 
 const placeholder = '[SOURCE]';
 
-export function CoreTracking({ appContext }) {
+export function CoreTracking ({ appContext }) {
 	// We only need the basics as the full data cannot be assembled
 	// on the server without the client-side JS.
 	const context = formatAppContext(appContext);
@@ -26,11 +26,13 @@ export function CoreTracking({ appContext }) {
 	const encodedTrackingData = encodeURIComponent(JSON.stringify(trackingData));
 
 	// NOTE: This function will be stringified and embedded so use ES5 only!
-	function coreExperience() {
+	function coreExperience () {
 		if (/\bcore\b/.test(document.documentElement.className)) {
+			// eslint-disable-next-line no-var
 			var currentScript = document.scripts[document.scripts.length - 1];
+			// eslint-disable-next-line no-var
 			var img = new Image();
-			img.alt = ""
+			img.alt = '';
 			img.src = currentScript.getAttribute('data-pixel-src');
 		}
 	}
