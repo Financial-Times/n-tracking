@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`src/client/trackers/realUserMonitoringForPerformance .realUserMonitoringForPerformance() recordMetric(metric) when all metrics are sent broadcasts an o-tracking event with the formatted metrics data 1`] = `
-Object {
+{
   "action": "performance",
   "category": "page",
   "cumulativeLayoutShift": 13.7654,

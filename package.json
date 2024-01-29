@@ -7,26 +7,32 @@
   "license": "MIT",
   "repository": "Financial-Times/n-tracking.git",
   "scripts": {
-    "clean": "rm -rf ./dist",
-    "build": "npm run clean && rollup -c",
-    "prepare": "npm run build",
-    "test": "jest --config jest.config.js"
+    "build": "dotcom-tool-kit build:local",
+    "test": "dotcom-tool-kit test:local",
+    "start": "dotcom-tool-kit run:local"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
-    "@babel/preset-env": "^7.5.5",  
-    "@financial-times/n-gage": "^8.3.2",
+    "@babel/preset-env": "^7.5.5",
+    "@dotcom-tool-kit/babel": "^3.1.6",
+    "@dotcom-tool-kit/component": "^4.1.0",
+    "@dotcom-tool-kit/eslint": "^3.2.0",
+    "@dotcom-tool-kit/husky-npm": "^4.2.0",
+    "@dotcom-tool-kit/jest": "^3.4.0",
+    "@dotcom-tool-kit/lint-staged-npm": "^3.2.0",
+    "@financial-times/eslint-config-next": "^7.1.0",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
-    "babel-jest": "^25.0.0",
+    "babel-jest": "^27.5.1",
     "check-engine": "^1.10.1",
+    "dotcom-tool-kit": "^3.4.0",
     "eslint-plugin-react": "^7.14.3",
-    "jest": "^25.0.0",
-    "jest-environment-jsdom-fifteen": "^1.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "jsdom": "^15.1.0",
     "react": "^16.9.0",
-    "rollup": "^1.31.0",
+    "rollup": "^2.71.1",
     "rollup-plugin-babel": "^4.3.3",
     "seed-random": "^2.2.0"
   },
@@ -48,12 +54,14 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "secret-squirrel-commitmsg",
-      "pre-commit": "secret-squirrel",
-      "pre-push": "make verify -j3"
+      "commit-msg": "dotcom-tool-kit git:commitmsg",
+      "pre-commit": "dotcom-tool-kit git:precommit"
     }
   },
   "volta": {
     "node": "18.16.0"
+  },
+  "lint-staged": {
+    "**/*.js": "dotcom-tool-kit format:staged test:staged --"
   }
 }
