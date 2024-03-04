@@ -47,3 +47,24 @@ Once all metrics have been collected a `page:performance` event will be triggere
 
 A methodology and event data spec can be found here:
 https://docs.google.com/document/d/1jG9f2DHs1AH-5kiV2cscpcheOckPM5EbzGA17uEGm9M/edit#
+
+## With attribution
+
+The above approach has a few issues: Firstly it takes the first bunch of events and sends them, whereas you want to capture the last events if possible.
+
+Secondly, it doesn't tell us _why_ these values are what they are.
+
+The workaround is to provide a more comprehensive real user monitoring option, which can be used simultaneously with the previous option.
+
+The workaround utilises Web vital [attribution](https://www.npmjs.com/package/web-vitals#send-attribution-data) to these events, which helps determine what causes the scores, and can send multiple events of the same type per user.
+
+To use this, alongside the previous option:
+
+```js
+import * as nTracking from '@financial-times/n-tracking';
+
+if (flags.get('realUserMonitoringForPerformance')) {
+  nTracking.trackers.realUserMonitoringForPerformance();
+  nTracking.trackers.realUserMonitoringWithAttribution();
+}
+```
