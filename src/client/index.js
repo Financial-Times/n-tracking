@@ -22,7 +22,13 @@ export function init ({ appContext, extraContext, pageViewContext }) {
 		// Using the Beacon API ensures that no tracking event data is lost
 		// when the document is being unloaded, which happens when navigating
 		// to a different page.
-		useSendBeacon: true
+		useSendBeacon: true,
+		device: {
+			dimensions: {
+				width: window.screen.width,
+				height: window.screen.height
+			}
+		}
 	};
 
 	oTracking.init(options);
