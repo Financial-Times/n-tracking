@@ -20,7 +20,8 @@ hooks:
 options:
   "@dotcom-tool-kit/circleci":
     nodeVersion:
-      - '18.16'
-      - '16.20'
+      - '22.3-browsers'
+      - '20.15-browsers'
+      - '18.20-browsers'
   "@dotcom-tool-kit/eslint":
     files: "**/*.{js,jsx}"
