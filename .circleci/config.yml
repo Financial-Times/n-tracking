@@ -5,10 +5,13 @@ orbs:
 executors:
   node:
     docker:
-      - image: cimg/node:18.16
-  node16_20:
+      - image: cimg/node:22.3-browsers
+  node20_15-browsers:
     docker:
-      - image: cimg/node:16.20
+      - image: cimg/node:20.15-browsers
+  node18_20-browsers:
+    docker:
+      - image: cimg/node:18.20-browsers
 jobs:
   checkout:
     docker:
@@ -34,8 +37,6 @@ workflows:
           filters:
             branches:
               only: /(^renovate-.*|^nori/.*)/
-            tags:
-              only: /^v\d+\.\d+\.\d+(-.+)?/
       - tool-kit/setup:
           name: tool-kit/setup-<< matrix.executor >>
           requires:
@@ -45,7 +46,8 @@ workflows:
             parameters:
               executor:
                 - node
-                - node16_20
+                - node20_15-browsers
+                - node18_20-browsers
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
@@ -57,7 +59,8 @@ workflows:
             parameters:
               executor:
                 - node
-                - node16_20
+                - node20_15-browsers
+                - node18_20-browsers
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
@@ -69,7 +72,8 @@ workflows:
             parameters:
               executor:
                 - node
-                - node16_20
+                - node20_15-browsers
+                - node18_20-browsers
           filters:
             tags:
               only: /^v\d+\.\d+\.\d+(-.+)?/
@@ -103,7 +107,8 @@ workflows:
             parameters:
               executor:
                 - node
-                - node16_20
+                - node20_15-browsers
+                - node18_20-browsers
       - tool-kit/build:
           name: tool-kit/build-<< matrix.executor >>
           requires:
@@ -112,7 +117,8 @@ workflows:
             parameters:
               executor:
                 - node
-                - node16_20
+                - node20_15-browsers
+                - node18_20-browsers
       - tool-kit/test:
           name: tool-kit/test-<< matrix.executor >>
           requires:
@@ -121,4 +127,5 @@ workflows:
             parameters:
               executor:
                 - node
-                - node16_20
+                - node20_15-browsers
+                - node18_20-browsers
