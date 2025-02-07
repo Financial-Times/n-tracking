@@ -30,7 +30,7 @@
     "eslint-plugin-react": "^7.14.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "jsdom": "^15.1.0",
+    "jsdom": "^25.0.1",
     "react": "^16.9.0",
     "rollup": "^2.71.1",
     "rollup-plugin-babel": "^4.3.3",
